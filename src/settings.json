@@ -1,0 +1,11 @@
+{
+    "DHT1": {
+        "simulated": true,
+        "pin": 17
+    },
+    "UDS1": {
+        "simulated": true,
+        "echo": 14,
+        "trig": 15
+    }
+}
