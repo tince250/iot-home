@@ -1,12 +1,14 @@
 import RPi.GPIO as GPIO
 import time
+from locks import print_lock
 
 class Button(object):
     def __init__(self, port_pin):
         self.port_button = port_pin
 
     def button_callback(self, event):
-        print("Button is clicked!")
+        with print_lock: 
+            print("Button is clicked!")
 
     def detect_button_press(self):
         GPIO.setmode(GPIO.BCM)

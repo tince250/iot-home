@@ -5,6 +5,7 @@ from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
 from components.dl import run_dl
+from components.ms import run_ms
 import time
 from queue import Queue
 from locks import print_lock
