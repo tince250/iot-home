@@ -1,4 +1,5 @@
 import threading
+from components.pir import run_pir
 from components.button import run_button
 from settings import load_settings
 from components.dht import run_dht
@@ -48,6 +49,8 @@ if __name__ == "__main__":
     try:
         # dht1_settings = settings['DHT1']
         # run_dht(dht1_settings, threads, stop_event)
+#         pir_settings = settings['PIR']
+#         run_pir(pir_settings, threads, stop_event)
 #       button_settings = settings['button']
 #       run_button(button_settings, threads, stop_event)
         dms_settings = settings["DMS"]

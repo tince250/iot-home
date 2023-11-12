@@ -7,6 +7,10 @@
         "simulated": true,
         "echo": 14,
         "trig": 15
+    },
+    "PIR":
+    {
+        "simulated": true
     }, 
     "button":
     {
