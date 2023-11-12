@@ -1,4 +1,5 @@
 import threading
+from components.button import run_button
 from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
@@ -19,10 +20,10 @@ if __name__ == "__main__":
     try:
         # dht1_settings = settings['DHT1']
         # run_dht(dht1_settings, threads, stop_event)
-        # button_settings = settings['button']
-        # run_button(button_settings, threads, stop_event)
-        uds1_settings = settings["UDS1"]
-        run_uds("UDS1", uds1_settings, threads, stop_event)
+        button_settings = settings['button']
+        run_button(button_settings, threads, stop_event)
+        # uds1_settings = settings["UDS1"]
+        # run_uds("UDS1", uds1_settings, threads, stop_event)
         while True:
             time.sleep(1)
 
