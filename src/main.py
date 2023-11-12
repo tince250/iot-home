@@ -4,6 +4,7 @@ from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
 import time
+from queue import Queue
 
 try:
     import RPi.GPIO as GPIO
