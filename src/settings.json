@@ -10,6 +10,7 @@
     },
     "buzzer":
     {
-        "simulated": true
+        "simulated": true,
+        "pin": 17
     }
 }
