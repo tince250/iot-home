@@ -1,6 +1,6 @@
 import time
 from queue import Empty
-
+from locks import print_lock
 # def get_user_input(input_queue, delay, stop_event):
 #     while True:
 #         try:
@@ -12,7 +12,7 @@ from queue import Empty
 #             if stop_event.is_set():
 #                 break
 
-def run_buzzer_simulator(buzzer_queue, pitch, duration, stop_event):
+def run_buzzer_simulator(buzzer_queue, pitch, duration, sensor_name, stop_event):
     while not stop_event.is_set():
         try:
             action = buzzer_queue.get(timeout=1)
@@ -30,6 +30,7 @@ def run_buzzer_simulator(buzzer_queue, pitch, duration, stop_event):
                     time.sleep(delay)
                     if stop_event.is_set():
                         break
-                print("Sound off.")
+                with print_lock:
+                    print("Sound off.")
         except Empty:
             pass

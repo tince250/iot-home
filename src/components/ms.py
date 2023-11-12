@@ -3,21 +3,24 @@ import time
 from simulators.ms import run_ms_simulator
 from locks import print_lock
 
-def ms_callback(pressed_key):
+def ms_callback(pressed_key, sensor_name = ""):
     t = time.localtime()
-    with print_lock: 
-        print("="*20)
+    with print_lock:
+        print("="*10, end=" ")
+        print(sensor_name, end=" ")
+        print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         if pressed_key is not None:
             print(f'Pressed key: {pressed_key}')
         else:
             print('No keys pressed')
 
-def run_ms(sensor_name, settings, threads, stop_event):
+def run_ms(settings, threads, stop_event):
+    sensor_name = settings["name"]
     if settings['simulated']:
         with print_lock: 
             print(f"Starting {sensor_name} sumilator")
-        ms_thread = threading.Thread(target = run_ms_simulator, args=(2, ms_callback, stop_event))
+        ms_thread = threading.Thread(target = run_ms_simulator, args=(2, ms_callback, sensor_name, stop_event))
         ms_thread.start()
         threads.append(ms_thread)
         with print_lock: 
@@ -26,7 +29,7 @@ def run_ms(sensor_name, settings, threads, stop_event):
         from sensors.ms import run_ms_loop, MS
         with print_lock: 
             print(f"Starting {sensor_name} loop")
-        ms = MS(R1=settings["R1"], R2=settings["R2"],  R3=settings["R3"],  R4=settings["R4"], C1=settings["C1"], C2=settings["C2"], C3=settings["C3"], C4=settings["C4"])
+        ms = MS(R1=settings["R1"], R2=settings["R2"],  R3=settings["R3"],  R4=settings["R4"], C1=settings["C1"], C2=settings["C2"], C3=settings["C3"], C4=settings["C4"], sensor_name=sensor_name)
         ms_thread = threading.Thread(target=run_ms_loop, args=(ms, 2, ms_callback, stop_event))
         ms_thread.start()
         threads.append(ms_thread)

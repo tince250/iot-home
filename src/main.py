@@ -61,23 +61,21 @@ if __name__ == "__main__":
     try:
         # dht1_settings = settings['DHT1']
         # run_dht(dht1_settings, threads, stop_event)
-#         pir_settings = settings['PIR']
-#         run_pir(pir_settings, threads, stop_event)
-#       button_settings = settings['button']
-#       run_button(button_settings, threads, stop_event)
+        pir_settings = settings['PIR']
+        run_pir(pir_settings, threads, stop_event)
+        # button_settings = settings['button']
+        # run_button(button_settings, threads, stop_event)
         # dms_settings = settings["DMS"]
-        # run_ms("DMS", dms_settings, threads, stop_event)
+        # run_ms(dms_settings, threads, stop_event)
         # uds1_settings = settings["UDS1"]
-        # run_uds("UDS1", uds1_settings, threads, stop_event)
+        # run_uds(uds1_settings, threads, stop_event)
         # dl_settings = settings["DL"]
-        # run_dl("DL", dl_settings, threads, stop_event, queues_dict["door_light_queue"])
+        # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
 
         run_user_input_thread(queues_dict, stop_event, threads)
         
-        # uds1_settings = settings["UDS1"]
-        # run_uds("UDS1", uds1_settings, threads, stop_event)
-        buzzer_settings = settings['buzzer']
-        run_buzzer(buzzer_settings, threads, stop_event, queues_dict["buzzer_queue"])
+        # buzzer_settings = settings['buzzer']
+        # run_buzzer(buzzer_settings, threads, stop_event, queues_dict["buzzer_queue"])
         while True:
             time.sleep(1)
 

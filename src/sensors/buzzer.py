@@ -1,9 +1,11 @@
 import RPi.GPIO as GPIO
 import time
+from queue import Empty
 
 class Buzzer(object):
-    def __init__(self, pin):
+    def __init__(self, pin, sensor_name=""):
         self.pin = pin
+        self.name = sensor_name
 
     def buzz(self, pitch, duration):
         GPIO.setmode(GPIO.BCM)
@@ -21,9 +23,14 @@ class Buzzer(object):
             #     GPIO.cleanup()
             # break
 
-def run_buzzer_loop(buzzer, pitch, duration, delay, stop_event):
+def run_buzzer_loop(buzzer_queue, buzzer, pitch, duration, delay, stop_event):
     while True:
-        buzzer.buzz(pitch, duration)
+        try:
+            action = buzzer_queue.get(timeout=1)
+            if action == "turn_sound_on":
+                buzzer.buzz(pitch, duration)
+        except Empty:
+            pass
         if stop_event.is_set():
             GPIO.cleanup()
             break

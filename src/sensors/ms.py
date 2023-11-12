@@ -12,6 +12,7 @@ class MS(object):
         self.c2 = kwargs["C2"]
         self.c3 = kwargs["C3"]
         self.c4 = kwargs["C4"]
+        self.name = kwargs["sensor_name"]
 
     # TODO: moze li odjednom vise tastera da pritisne?
     # TODO: ako nista ne pritisne da kazemo da nis nije pritisnuto ili nista da ne prikazujemo?
@@ -53,7 +54,7 @@ class MS(object):
 def run_ms_loop(ms, delay, callback, stop_event):
     while True:
         pressed_key = ms.get_pressed_key()
-        callback(pressed_key)
+        callback(pressed_key, ms.name)
         if stop_event.is_set():
             break
         time.sleep(delay)

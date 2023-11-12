@@ -1,21 +1,26 @@
 {
     "DHT1": {
         "simulated": true,
-        "pin": 17
+        "pin": 17,
+        "name": "DHT1"
     },
     "UDS1": {
         "simulated": true,
         "echo": 14,
-        "trig": 15
+        "trig": 15,
+        "name": "UDS1"
     },
     "PIR":
     {
-        "simulated": true
+        "simulated": true,
+        "port": 4,
+        "name": "PIR"
     }, 
     "button":
     {
         "simulated": true,
-        "port_pin": 17
+        "port": 17,
+        "name": "button"
     },
     "DMS": {
         "simulated": true,
@@ -26,15 +31,18 @@
         "C1": 12,
         "C2": 16,
         "C3": 20,
-        "C4": 21
+        "C4": 21,
+        "name": "DMS"
     },
     "DL": {
         "simulated": true,
-        "port": 18
+        "port": 18,
+        "name": "DL"
     },
     "buzzer":
     {
         "simulated": true,
-        "pin": 17
+        "pin": 17,
+        "name": "buzzer"
     }
 }

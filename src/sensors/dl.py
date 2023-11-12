@@ -3,8 +3,9 @@ import time
 from queue import Empty
 
 class DL(object):
-    def __init__(self, pin) -> None:
+    def __init__(self, pin, sensor_name="") -> None:
         self.pin = pin
+        self.name = sensor_name
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUT)
     
@@ -26,7 +27,7 @@ def run_dl_loop(input_queue, dl, delay, callback, stop_event):
             elif action == "turn_off":
                 dl.turn_off()
 
-            callback(status)
+            callback(status, dl.name)
         except Empty:
             pass
 

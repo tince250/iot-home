@@ -1,27 +1,34 @@
 import threading
 from locks import print_lock
+import time
 
-def button_callback():
+def button_callback(sensor_name=""):
+    t = time.localtime()
     with print_lock:
-        print("Button is clicked!")
+        print("="*10, end=" ")
+        print(sensor_name, end=" ")
+        print("="*10)
+        print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
+        print(f"{sensor_name} is clicked!")
 
 def run_button(settings, threads, stop_event):
+    sensor_name = settings["name"]
     if settings["simulated"]:
         from simulators.button import run_button_simulator
         with print_lock:    
-            print("Starting button simulator")
-        button_thread = threading.Thread(target=run_button_simulator, args=(2, button_callback, stop_event))
+            print(f"Starting {sensor_name} simulator")
+        button_thread = threading.Thread(target=run_button_simulator, args=(2, button_callback, sensor_name, stop_event))
         button_thread.start()
         threads.append(button_thread)
         with print_lock: 
-            print("Button simulator started")
+            print(f"{sensor_name} simulator started")
     else:
         from sensors.button import Button, run_button_loop
         with print_lock: 
-            print(f"Starting button loop")
-        button = Button(settings['port_pin'])
+            print(f"Starting {sensor_name} loop")
+        button = Button(settings['port'], sensor_name)
         button_thread = threading.Thread(target=run_button_loop, args=(button, stop_event))
         button_thread.start()
         threads.append(button_thread)
         with print_lock: 
-            print(f"Button loop started")
+            print(f"{sensor_name} loop started")
