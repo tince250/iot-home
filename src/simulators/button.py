@@ -1,32 +1,21 @@
 import random
 import time
 
-# second idea because of rising and falling:
-# def generate_values(initial_value=0):
-#     while True:
-#         initial_value += random.randint(-1, 1)
-#         if initial_value < 0:
-#             initial_value = 0
-#         if initial_value > 1:
-#             initial_value = 1
-#         yield initial_value
-
-# def run_pir_simulator(delay, callback, stop_event, threshold=0.8):
-#     previous_move = False
-#     for value in generate_values():
-#         time.sleep(2)
-#         if initial_value >= threshold:
-            # callback()
-        # initial_value = random.random()
-        # if stop_event.is_set():
-        #     break
-
-def run_button_simulator(delay, callback, stop_event, threshold=0.8):
-    initial_value = 0
+def generate_values(threshold, initial_value=0):
+    value = initial_value
     while True:
+        if value < 0:
+            value = 0
+        if value > 1:
+            value = threshold
+        value += random.uniform(-0.5, 0.5)
+        yield value
+
+def run_button_simulator(delay, callback, stop_event, threshold=0.6):
+    for value in generate_values(threshold=threshold):
         time.sleep(delay)
-        if initial_value >= threshold:
+        print(value)
+        if value >= threshold:
             callback()
-        initial_value = random.random()
         if stop_event.is_set():
             break
