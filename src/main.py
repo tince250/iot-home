@@ -2,6 +2,7 @@ import threading
 from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
+from components.ms import run_ms
 import time
 
 try:
@@ -19,8 +20,10 @@ if __name__ == "__main__":
     try:
         # dht1_settings = settings['DHT1']
         # run_dht(dht1_settings, threads, stop_event)
-        uds1_settings = settings["UDS1"]
-        run_uds("UDS1", uds1_settings, threads, stop_event)
+        # uds1_settings = settings["UDS1"]
+        # run_uds("UDS1", uds1_settings, threads, stop_event)
+        dms_settings = settings["DMS"]
+        run_ms("DMS", dms_settings, threads, stop_event)
         while True:
             time.sleep(1)
 
