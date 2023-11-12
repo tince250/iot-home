@@ -31,5 +31,10 @@
     "DL": {
         "simulated": true,
         "port": 18
+    },
+    "buzzer":
+    {
+        "simulated": true,
+        "pin": 17
     }
 }
