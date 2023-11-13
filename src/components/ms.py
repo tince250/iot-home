@@ -11,9 +11,9 @@ def ms_callback(pressed_key, sensor_name = ""):
         print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         if pressed_key is not None:
-            print(f'Pressed key: {pressed_key}')
+            print(f'Pressed key: {pressed_key}\n')
         else:
-            print('No keys pressed')
+            print('No keys pressed\n')
 
 def run_ms(settings, threads, stop_event):
     sensor_name = settings["name"]

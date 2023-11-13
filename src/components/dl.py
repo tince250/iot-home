@@ -10,7 +10,7 @@ def dl_callback(status, sensor_name = ""):
         print(sensor_name, end=" ")
         print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print(f"Status: {status}")
+        print(f"Status: {status}\n")
 
 
 def run_dl(settings, threads, stop_event, input_queue):

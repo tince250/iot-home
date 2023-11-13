@@ -24,7 +24,7 @@ def user_input_thread(queues_dict, stop_event):
         try:
             user_action = input()
             if user_action.upper() == "X":
-                queues_dict["door_light_queue"].put("turn_on")
+                led_queue.put("turn_on")
             elif user_action.upper() == "Y":
                 led_queue.put("turn_off")
             elif user_action.upper() == "B":
@@ -44,6 +44,36 @@ def get_queues_dict():
                    "buzzer_queue": Queue()}
     return queues_dict
 
+def run_pi1(settings):
+    rdht1_settings = settings['RDHT1']
+    run_dht(rdht1_settings, threads, stop_event)
+
+    rdht2_settings = settings['RDHT2']
+    run_dht(rdht2_settings, threads, stop_event)
+
+    uds1_settings = settings["UDS1"]
+    run_uds(uds1_settings, threads, stop_event)
+    
+    dpir1_settings = settings['DPIR1']
+    run_pir(dpir1_settings, threads, stop_event)
+    pir1_settings = settings['RPIR1']
+    run_pir(pir1_settings, threads, stop_event)
+    pir2_settings = settings['RPIR2']
+    run_pir(pir2_settings, threads, stop_event)
+
+    ds1_settings = settings['DS1']
+    run_button(ds1_settings, threads, stop_event)
+    
+    dms_settings = settings["DMS"]
+    run_ms(dms_settings, threads, stop_event)
+    
+    dl_settings = settings["DL"]
+    run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
+    
+    db_settings = settings['DB']
+    run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
+
+
 if __name__ == "__main__":
     with print_lock:
         print('Starting app')
@@ -56,26 +86,10 @@ if __name__ == "__main__":
     threads = []
     stop_event = threading.Event()
     queues_dict = get_queues_dict()
-    
 
     try:
-        # dht1_settings = settings['DHT1']
-        # run_dht(dht1_settings, threads, stop_event)
-        pir_settings = settings['PIR']
-        run_pir(pir_settings, threads, stop_event)
-        # button_settings = settings['button']
-        # run_button(button_settings, threads, stop_event)
-        # dms_settings = settings["DMS"]
-        # run_ms(dms_settings, threads, stop_event)
-        # uds1_settings = settings["UDS1"]
-        # run_uds(uds1_settings, threads, stop_event)
-        # dl_settings = settings["DL"]
-        # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
-
+        run_pi1(settings)
         run_user_input_thread(queues_dict, stop_event, threads)
-        
-        # buzzer_settings = settings['buzzer']
-        # run_buzzer(buzzer_settings, threads, stop_event, queues_dict["buzzer_queue"])
         while True:
             time.sleep(1)
 

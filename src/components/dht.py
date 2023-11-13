@@ -12,7 +12,7 @@ def dht_callback(humidity, temperature, code="DHTLIB_OK", sensor_name = ""):
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         print(f"Code: {code}")
         print(f"Humidity: {humidity}%")
-        print(f"Temperature: {temperature}°C")
+        print(f"Temperature: {temperature}°C\n")
 
 
 def run_dht(settings, threads, stop_event):

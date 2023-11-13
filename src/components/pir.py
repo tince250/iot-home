@@ -10,7 +10,7 @@ def motion_detected_callback(sensor_name=""):
         print(sensor_name, end=" ")
         print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print("You moved!")
+        print("You moved!\n")
 
 def no_motion_detected_callback(sensor_name=""):
     t = time.localtime()
@@ -19,7 +19,7 @@ def no_motion_detected_callback(sensor_name=""):
         print(sensor_name, end=" ")
         print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print("You stopped moving!")
+        print("You stopped moving!\n")
 
 def run_pir(settings, threads, stop_event):
     sensor_name = settings["name"]

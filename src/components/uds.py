@@ -11,9 +11,9 @@ def uds_callback(distance, sensor_name = ""):
         print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
         if distance is not None:
-            print(f'Distance: {distance} cm')
+            print(f'Distance: {distance} cm\n')
         else:
-            print('Measurement timed out')
+            print('Measurement timed out\n')
 
 def run_uds(settings, threads, stop_event):
     sensor_name = settings["name"]

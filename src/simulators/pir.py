@@ -23,8 +23,8 @@ def run_pir_simulator(delay, sensor_name, motion_detected_callback, no_motion_de
                 motion_detected_callback(sensor_name)
                 previous_move = True
         else:
-            # if previous_move:
+            if previous_move:
                 no_motion_detected_callback(sensor_name)
-                # previous_move = False
+                previous_move = False
         if stop_event.is_set():
                   break
