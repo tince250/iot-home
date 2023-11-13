@@ -14,8 +14,9 @@ class DHT(object):
 	humidity = 0
 	temperature = 0
 	
-	def __init__(self,pin):
+	def __init__(self,pin, sensor_name=""):
 		self.pin = pin
+		self.name = sensor_name
 		self.bits = [0,0,0,0,0]
 	#Read DHT sensor, store the original data in bits[]	
 	def readSensor(self,pin,wakeupDelay):
@@ -93,7 +94,8 @@ def run_dht_loop(dht, delay, callback, stop_event):
 			check = dht.readDHT11()
 			code = parseCheckCode(check)
 			humidity, temperature = dht.humidity, dht.temperature
-			callback(humidity, temperature, code)
+			callback(humidity, temperature, code=code, sensor_name=dht.name)
 			if stop_event.is_set():
+					GPIO.cleanup()
 					break
 			time.sleep(delay)  # Delay between readings

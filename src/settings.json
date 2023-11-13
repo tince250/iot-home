@@ -1,21 +1,43 @@
 {
-    "DHT1": {
+    "RDHT1": {
         "simulated": true,
-        "pin": 17
+        "pin": 17,
+        "name": "Room DHT1"
+    },
+    "RDHT2": {
+        "simulated": true,
+        "pin": 18,
+        "name": "Room DHT2"
     },
     "UDS1": {
         "simulated": true,
         "echo": 14,
-        "trig": 15
+        "trig": 15,
+        "name": "Door Ultrasonic Sensor"
     },
-    "PIR":
-    {
-        "simulated": true
-    }, 
-    "button":
+    "DPIR1":
     {
         "simulated": true,
-        "port_pin": 17
+        "port": 4,
+        "name": "Door Motion Sensor"
+    }, 
+    "RPIR1":
+    {
+        "simulated": true,
+        "port": 5,
+        "name": "Room PIR1"
+    },
+    "RPIR2":
+    {
+        "simulated": true,
+        "port": 6,
+        "name": "Room PIR2"
+    },
+    "DS1":
+    {
+        "simulated": true,
+        "port": 17,
+        "name": "Door Sensor 1"
     },
     "DMS": {
         "simulated": true,
@@ -26,10 +48,18 @@
         "C1": 12,
         "C2": 16,
         "C3": 20,
-        "C4": 21
+        "C4": 21,
+        "name": "Door Membrane Switch"
     },
     "DL": {
         "simulated": true,
-        "port": 18
+        "port": 18,
+        "name": "Door Light"
+    },
+    "DB":
+    {
+        "simulated": true,
+        "pin": 17,
+        "name": "Door Buzzer"
     }
 }
