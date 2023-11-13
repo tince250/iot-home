@@ -14,7 +14,6 @@ class MS(object):
         self.c4 = kwargs["C4"]
         self.name = kwargs["sensor_name"]
 
-    # TODO: moze li odjednom vise tastera da pritisne?
     # TODO: ako nista ne pritisne da kazemo da nis nije pritisnuto ili nista da ne prikazujemo?
     def check_row(self, row, characters):
         GPIO.output(row, GPIO.HIGH)
@@ -44,17 +43,20 @@ class MS(object):
         GPIO.setup(self.c3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.c4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-        self.check_row(self.r1, ["1","2","3","A"])
-        self.check_row(self.r2, ["4","5","6","B"])
-        self.check_row(self.r3, ["7","8","9","C"])
-        self.check_row(self.r4, ["*","0","#","D"])
+        pressed_key = (
+            self.check_row(self.r1, ["1", "2", "3", "A"]) or
+            self.check_row(self.r2, ["4", "5", "6", "B"]) or
+            self.check_row(self.r3, ["7", "8", "9", "C"]) or
+            self.check_row(self.r4, ["*", "0", "#", "D"])
+        )
 
-        time.sleep(0.2)
+        return pressed_key
 
 def run_ms_loop(ms, delay, callback, stop_event):
     while True:
         pressed_key = ms.get_pressed_key()
         callback(pressed_key, ms.name)
         if stop_event.is_set():
+            GPIO.cleanup()
             break
         time.sleep(delay)

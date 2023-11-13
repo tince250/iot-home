@@ -21,4 +21,5 @@ def run_pir_loop(pir, stop_event):
     while True:
         if stop_event.is_set():
             GPIO.remove_event_detect(pir.pin)
+            GPIO.cleanup()
             break

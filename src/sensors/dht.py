@@ -96,5 +96,6 @@ def run_dht_loop(dht, delay, callback, stop_event):
 			humidity, temperature = dht.humidity, dht.temperature
 			callback(humidity, temperature, code=code, sensor_name=dht.name)
 			if stop_event.is_set():
+					GPIO.cleanup()
 					break
 			time.sleep(delay)  # Delay between readings
