@@ -40,26 +40,26 @@
         "name": "Door Sensor 1"
     },
     "DMS": {
-        "simulated": true,
-        "R1": 25,
-        "R2": 8,
-        "R3": 7,
-        "R4": 1,
-        "C1": 12,
-        "C2": 16,
-        "C3": 20,
-        "C4": 21,
+        "simulated": false,
+        "R1": 14,
+        "R2": 15,
+        "R3": 18,
+        "R4": 23,
+        "C1": 24,
+        "C2": 25,
+        "C3": 8,
+        "C4": 7,
         "name": "Door Membrane Switch"
     },
     "DL": {
         "simulated": true,
-        "port": 18,
+        "port": 14,
         "name": "Door Light"
     },
     "DB":
     {
-        "simulated": true,
-        "pin": 17,
+        "simulated": false,
+        "pin": 14,
         "name": "Door Buzzer"
     }
 }

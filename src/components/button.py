@@ -9,7 +9,7 @@ def button_callback(sensor_name=""):
         print(sensor_name, end=" ")
         print("="*10)
         print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print(f"{sensor_name} is clicked!\n")
+        print(f"{sensor_name} is pressed!\n")
 
 def run_button(settings, threads, stop_event):
     sensor_name = settings["name"]
