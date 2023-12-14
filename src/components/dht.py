@@ -49,7 +49,9 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         "simulated": dht_settings['simulated'],
         "runs_on": dht_settings["runs_on"],
         "name": dht_settings["name"],
-        "value": temperature
+        "value": temperature,
+        "field": dht_settings["influxdb_field"],
+        "bucket": dht_settings["influxdb_bucket"]
     }
 
     humidity_payload = {
@@ -57,7 +59,9 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         "simulated": dht_settings['simulated'],
         "runs_on": dht_settings["runs_on"],
         "name": dht_settings["name"],
-        "value": humidity
+        "value": humidity,
+        "field": dht_settings["influxdb_field"],
+        "bucket": dht_settings["influxdb_bucket"]
     }
 
     with counter_lock:

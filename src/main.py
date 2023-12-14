@@ -45,11 +45,11 @@ def get_queues_dict():
     return queues_dict
 
 def run_pi1(settings):
-    rdht1_settings = settings['RDHT1']
-    run_dht(rdht1_settings, threads, stop_event)
+    # rdht1_settings = settings['RDHT1']
+    # run_dht(rdht1_settings, threads, stop_event)
 
-    rdht2_settings = settings['RDHT2']
-    run_dht(rdht2_settings, threads, stop_event)
+    # rdht2_settings = settings['RDHT2']
+    # run_dht(rdht2_settings, threads, stop_event)
 
     # uds1_settings = settings["UDS1"]
     # run_uds(uds1_settings, threads, stop_event)
@@ -61,8 +61,8 @@ def run_pi1(settings):
     # pir2_settings = settings['RPIR2']
     # run_pir(pir2_settings, threads, stop_event)
 
-    # ds1_settings = settings['DS1']
-    # run_button(ds1_settings, threads, stop_event)
+    ds1_settings = settings['DS1']
+    run_button(ds1_settings, threads, stop_event)
     
     # dms_settings = settings["DMS"]
     # run_ms(dms_settings, threads, stop_event)
