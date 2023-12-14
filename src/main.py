@@ -56,8 +56,8 @@ def run_pi1(settings):
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)
-    # pir1_settings = settings['RPIR1']
-    # run_pir(pir1_settings, threads, stop_event)
+    pir1_settings = settings['RPIR1']
+    run_pir(pir1_settings, threads, stop_event)
     # pir2_settings = settings['RPIR2']
     # run_pir(pir2_settings, threads, stop_event)
 
@@ -70,8 +70,8 @@ def run_pi1(settings):
     # dl_settings = settings["DL"]
     # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
     
-    db_settings = settings['DB']
-    run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
+    # db_settings = settings['DB']
+    # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
 
 
 if __name__ == "__main__":
