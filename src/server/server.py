@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 
 app = Flask(__name__)
 
-token = ""
+token = "7HPyHiQ_zy7TDUrO7p-i1POQsIt1ydQn-PZhUjnYzdKpPxn3jyaWdaWrQxuyO-glMHyfO9rp_mhh1vqJ2kMavA=="
 org = "iot"
 url = "http://localhost:8086"
 bucket = "measurements"

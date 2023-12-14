@@ -30,11 +30,26 @@ services:
       - .env
     entrypoint: ["./entrypoint.sh"]
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana:/var/lib/grafana
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    networks:
+      - iot-network
+
 volumes:
   config:
   data:
   log:
   influxdb:
+  grafana:
 
 networks:
   iot-network:
