@@ -85,7 +85,7 @@
     },
     "DB":
     {
-        "simulated": false,
+        "simulated": true,
         "pin": 14,
         "name": "Door Buzzer",
         "runs_on": "PI1",

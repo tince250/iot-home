@@ -12,12 +12,12 @@ from locks import print_lock
 #             if stop_event.is_set():
 #                 break
 
-def run_buzzer_simulator(buzzer_queue, pitch, duration, sensor_name, buzzer_print_callback, stop_event):
+def run_buzzer_simulator(buzzer_queue, pitch, duration, buzzer_print_callback, stop_event, publish_event, settings):
     while not stop_event.is_set():
         try:
             action = buzzer_queue.get(timeout=1)
             if action == "turn_sound_on":
-                buzzer_print_callback("ON", sensor_name)
+                buzzer_print_callback(publish_event, settings, status="ON")
                 period = 1.0 / pitch
                 delay = period / 2
                 cycles = int(duration * pitch) 
@@ -28,12 +28,11 @@ def run_buzzer_simulator(buzzer_queue, pitch, duration, sensor_name, buzzer_prin
                         while True:
                             if time.time()-start > delay:
                                 break
-                            print("A", end="")
-                        print("\n")
+                        # print("\n")
                         time.sleep(delay)
                         if stop_event.is_set():
                             break
                 # with print_lock:
-                buzzer_print_callback("OFF", sensor_name)
+                buzzer_print_callback(publish_event, settings, status="OFF")
         except Empty:
             pass

@@ -20,6 +20,7 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/dht/temperature")
     client.subscribe("topic/dht/humidity")
     client.subscribe("topic/button/press")
+    client.subscribe("topic/buzzer/sound")
 
 def save_to_db(data, verbose=True):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)

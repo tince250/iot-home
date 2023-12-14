@@ -23,7 +23,7 @@ class Buzzer(object):
             #     GPIO.cleanup()
             # break
 
-def run_buzzer_loop(buzzer_queue, buzzer, pitch, duration, delay, buzzer_print_callback, stop_event):
+def run_buzzer_loop(buzzer_queue, buzzer, pitch, duration, delay, buzzer_print_callback, stop_event, publish_event, settings):
     while True:
         try:
             action = buzzer_queue.get(timeout=1)
