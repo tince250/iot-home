@@ -14,8 +14,8 @@ from locks import print_lock
 try:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
-except:
-    pass
+except ImportError:
+    GPIO = None
 
 def user_input_thread(queues_dict, stop_event):
     led_queue = queues_dict["door_light_queue"]

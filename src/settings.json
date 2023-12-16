@@ -52,8 +52,8 @@
         "name": "Door Membrane Switch"
     },
     "DL": {
-        "simulated": true,
-        "port": 18,
+        "simulated": false,
+        "port": 14,
         "name": "Door Light"
     },
     "DB":
