@@ -39,10 +39,10 @@ class UDS(object):
         distance = (pulse_duration * 34300)/2
         return distance
     
-def run_uds_loop(uds, delay, callback, stop_event):
+def run_uds_loop(uds, delay, callback, settings, publish_event, stop_event):
     while True:
         distance = uds.get_distance()
-        callback(distance, uds.name)
+        callback(distance, publish_event, settings)
         if stop_event.is_set():
             GPIO.cleanup()
             break
