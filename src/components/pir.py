@@ -5,28 +5,28 @@ import paho.mqtt.publish as publish
 import json
 from simulators.pir import run_pir_simulator
 
-button_batch = []
+pir_batch = []
 publish_data_counter = 0
 publish_data_limit = 2
 counter_lock = threading.Lock()
 
-def publisher_task(event, button_batch):
+def publisher_task(event, pir_batch):
     global publish_data_counter, publish_data_limit
     while True:
         event.wait()
         with counter_lock:
-            local_button_batch = button_batch.copy()
+            local_pir_batch = pir_batch.copy()
             publish_data_counter = 0
-            button_batch.clear()
+            pir_batch.clear()
         try:
-            publish.multiple(local_button_batch, hostname="localhost", port=1883)
-            print(f'Published {publish_data_limit} button values')
+            publish.multiple(local_pir_batch, hostname="localhost", port=1883)
+            print(f'Published {publish_data_limit} pir values')
         except:
             print("greska")
         event.clear()
 
 publish_event = threading.Event()
-publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, button_batch,))
+publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, pir_batch,))
 publisher_thread.daemon = True
 publisher_thread.start()
 
@@ -53,7 +53,7 @@ def motion_detected_callback(publish_event, settings,verbose=False):
     }
 
     with counter_lock:
-        button_batch.append(('topic/pir/move', json.dumps(move_payload), 0, True))
+        pir_batch.append(('topic/pir/move', json.dumps(move_payload), 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:
@@ -83,7 +83,7 @@ def no_motion_detected_callback(publish_event, settings,verbose=False):
     }
 
     with counter_lock:
-        button_batch.append(('topic/pir/move', json.dumps(move_payload), 0, True))
+        pir_batch.append(('topic/pir/move', json.dumps(move_payload), 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:

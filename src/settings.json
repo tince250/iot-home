@@ -31,7 +31,7 @@
         "name": "Door Motion Sensor",
         "runs_on": "PI1",
         "influxdb_field": "event",
-        "influxdb_bucket": "measurements"
+        "influxdb_bucket": "events"
     }, 
     "RPIR1":
     {

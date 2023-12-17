@@ -45,24 +45,25 @@ def get_queues_dict():
     return queues_dict
 
 def run_pi1(settings):
-    # rdht1_settings = settings['RDHT1']
-    # run_dht(rdht1_settings, threads, stop_event)
+    rdht1_settings = settings['RDHT1']
+    run_dht(rdht1_settings, threads, stop_event)
 
-    # rdht2_settings = settings['RDHT2']
-    # run_dht(rdht2_settings, threads, stop_event)
+    rdht2_settings = settings['RDHT2']
+    run_dht(rdht2_settings, threads, stop_event)
 
     uds1_settings = settings["UDS1"]
     run_uds(uds1_settings, threads, stop_event)
     
-    # dpir1_settings = settings['DPIR1']
-    # run_pir(dpir1_settings, threads, stop_event)
-    # pir1_settings = settings['RPIR1']
-    # run_pir(pir1_settings, threads, stop_event)
-    # pir2_settings = settings['RPIR2']
-    # run_pir(pir2_settings, threads, stop_event)
+    dpir1_settings = settings['DPIR1']
+    run_pir(dpir1_settings, threads, stop_event)
+    
+    pir1_settings = settings['RPIR1']
+    run_pir(pir1_settings, threads, stop_event)
+    pir2_settings = settings['RPIR2']
+    run_pir(pir2_settings, threads, stop_event)
 
-    # ds1_settings = settings['DS1']
-    # run_button(ds1_settings, threads, stop_event)
+    ds1_settings = settings['DS1']
+    run_button(ds1_settings, threads, stop_event)
     
     dms_settings = settings["DMS"]
     run_ms(dms_settings, threads, stop_event)
@@ -70,8 +71,8 @@ def run_pi1(settings):
     dl_settings = settings["DL"]
     run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
     
-    # db_settings = settings['DB']
-    # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
+    db_settings = settings['DB']
+    run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
 
 
 if __name__ == "__main__":

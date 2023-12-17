@@ -58,7 +58,6 @@ def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
     with counter_lock:
         buzzer_batch.append(('topic/buzzer/sound', json.dumps(sound_payload), 0, True))
         publish_data_counter += 1
-        print(publish_data_counter)
 
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
