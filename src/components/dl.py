@@ -33,8 +33,8 @@ publisher_thread.start()
 def dl_callback(status, publish_event, settings, verbose=False):
     global publish_data_counter, publish_data_limit
 
-    t = time.localtime()
     if verbose:
+        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings['name'], end=" ")

@@ -61,7 +61,7 @@
         "influxdb_bucket": "events"
     },
     "DMS": {
-        "simulated": false,
+        "simulated": true,
         "R1": 14,
         "R2": 15,
         "R3": 18,
@@ -72,8 +72,8 @@
         "C4": 7,
         "name": "Door Membrane Switch",
         "runs_on": "PI1",
-        "influxdb_field": "measurement",
-        "influxdb_bucket": "measurements"
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
     },
     "DL": {
         "simulated": true,

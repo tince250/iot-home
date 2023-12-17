@@ -52,10 +52,11 @@ class MS(object):
 
         return pressed_key
 
-def run_ms_loop(ms, delay, callback, stop_event):
+def run_ms_loop(ms, delay, callback, stop_event, settings, publish_event):
     while True:
         pressed_key = ms.get_pressed_key()
-        callback(pressed_key, ms.name)
+        if pressed_key:
+            callback(pressed_key, settings, publish_event)
         if stop_event.is_set():
             GPIO.cleanup()
             break

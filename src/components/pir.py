@@ -33,13 +33,14 @@ publisher_thread.start()
 def motion_detected_callback(publish_event, settings,verbose=False):
     global publish_data_counter, publish_data_limit
 
-    t = time.localtime()
     if verbose:
-        print("="*10, end=" ")
-        print(settings["name"], end=" ")
-        print("="*10)
-        print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print("You moved!\n")
+        t = time.localtime()
+        with print_lock:
+            print("="*10, end=" ")
+            print(settings["name"], end=" ")
+            print("="*10)
+            print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
+            print("You moved!\n")
 
     move_payload = {
         "measurement": "pir_move",
@@ -62,13 +63,14 @@ def motion_detected_callback(publish_event, settings,verbose=False):
 def no_motion_detected_callback(publish_event, settings,verbose=False):
     global publish_data_counter, publish_data_limit
 
-    t = time.localtime()
     if verbose:
-        print("="*10, end=" ")
-        print(settings["name"], end=" ")
-        print("="*10)
-        print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-        print("You stopped moving!\n")
+        t = time.localtime()
+        with print_lock:
+            print("="*10, end=" ")
+            print(settings["name"], end=" ")
+            print("="*10)
+            print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
+            print("You stopped moving!\n")
 
     move_payload = {
         "measurement": "pir_move",

@@ -64,11 +64,11 @@ def run_pi1(settings):
     # ds1_settings = settings['DS1']
     # run_button(ds1_settings, threads, stop_event)
     
-    # dms_settings = settings["DMS"]
-    # run_ms(dms_settings, threads, stop_event)
+    dms_settings = settings["DMS"]
+    run_ms(dms_settings, threads, stop_event)
     
-    # dl_settings = settings["DL"]
-    # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
+    dl_settings = settings["DL"]
+    run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])

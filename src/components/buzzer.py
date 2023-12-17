@@ -36,8 +36,8 @@ publisher_thread.start()
 def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
     global publish_data_counter, publish_data_limit
 
-    t = time.localtime()
     if verbose:
+        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings["name"], end=" ")

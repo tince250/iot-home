@@ -20,9 +20,10 @@ def generate_values():
                 
             yield pressed_key
 
-def run_ms_simulator(delay, callback, sensor_name, stop_event):
+def run_ms_simulator(delay, callback, stop_event, settings, publish_event):
         for pressed_key in generate_values():
             time.sleep(delay)  # Delay between readings (adjust as needed)
-            callback(pressed_key, sensor_name)
+            if pressed_key:
+                callback(pressed_key, settings, publish_event)
             if stop_event.is_set():
                   break
