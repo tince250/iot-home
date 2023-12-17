@@ -80,8 +80,8 @@
         "port": 14,
         "name": "Door Light",
         "runs_on": "PI1",
-        "influxdb_field": "measurement",
-        "influxdb_bucket": "measurements"
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
     },
     "DB":
     {
