@@ -61,7 +61,7 @@
         "influxdb_bucket": "events"
     },
     "DMS": {
-        "simulated": true,
+        "simulated": false,
         "R1": 14,
         "R2": 15,
         "R3": 18,

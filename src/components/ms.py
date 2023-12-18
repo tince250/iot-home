@@ -4,6 +4,7 @@ from simulators.ms import run_ms_simulator
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+import traceback
 
 ms_batch = []
 publish_data_counter = 0
@@ -19,10 +20,10 @@ def publisher_task(event, ms_batch):
             publish_data_counter = 0
             ms_batch.clear()
         try:
-            publish.multiple(local_dht_batch, hostname="localhost", port=1883)
+            publish.multiple(local_dht_batch, hostname="10.1.121.69", port=1883)
             print(f'Published {publish_data_limit} ms values')
         except:
-            print("greska")
+            traceback.print_exc() 
         event.clear()
 
 publish_event = threading.Event()
@@ -79,7 +80,7 @@ def run_ms(settings, threads, stop_event):
         with print_lock: 
             print(f"Starting {sensor_name} loop")
         ms = MS(R1=settings["R1"], R2=settings["R2"],  R3=settings["R3"],  R4=settings["R4"], C1=settings["C1"], C2=settings["C2"], C3=settings["C3"], C4=settings["C4"], sensor_name=sensor_name)
-        ms_thread = threading.Thread(target=run_ms_loop, args=(ms, 2, ms_callback, stop_event, settings, publish_event))
+        ms_thread = threading.Thread(target=run_ms_loop, args=(ms, 0.2, ms_callback, stop_event, settings, publish_event))
         ms_thread.start()
         threads.append(ms_thread)
         with print_lock: 
