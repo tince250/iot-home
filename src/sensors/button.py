@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+from components.button import button_callback
 from locks import print_lock
 
 class Button(object):
@@ -14,7 +15,7 @@ class Button(object):
     def detect_button_press(self, publish_event, settings):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-        GPIO.add_event_detect(self.pin, GPIO.FALLING, callback = lambda x: self.button_callback(self.name), bouncetime = 100)
+        GPIO.add_event_detect(self.pin, GPIO.FALLING, callback = lambda x: button_callback(publish_event, settings), bouncetime = 100)
 
 def run_button_loop(button, stop_event, publish_event, settings):
     button.detect_button_press(publish_event, settings)
