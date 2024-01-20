@@ -7,6 +7,7 @@ from components.dht import run_dht
 from components.uds import run_uds
 from components.dl import run_dl
 from components.ms import run_ms
+from components.b4sd import run_b4sd
 import time
 from queue import Queue
 from locks import print_lock
@@ -51,8 +52,8 @@ def run_pi1(settings):
     # rdht2_settings = settings['RDHT2']
     # run_dht(rdht2_settings, threads, stop_event)
 
-    uds1_settings = settings["UDS1"]
-    run_uds(uds1_settings, threads, stop_event)
+    # uds1_settings = settings["UDS1"]
+    # run_uds(uds1_settings, threads, stop_event)
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)
@@ -73,6 +74,9 @@ def run_pi1(settings):
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
+
+    b4sd_settings = settings["B4SD"]
+    run_b4sd(b4sd_settings, threads, stop_event)
 
 
 if __name__ == "__main__":
