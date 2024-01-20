@@ -16,7 +16,7 @@
         "influxdb_bucket": "measurements"
     },
     "UDS1": {
-        "simulated": true,
+        "simulated": false,
         "echo": 14,
         "trig": 15,
         "name": "Door Ultrasonic Sensor",
@@ -27,7 +27,7 @@
     "DPIR1":
     {
         "simulated": true,
-        "port": 4,
+        "port": 17,
         "name": "Door Motion Sensor",
         "runs_on": "PI1",
         "influxdb_field": "event",
@@ -61,7 +61,7 @@
         "influxdb_bucket": "events"
     },
     "DMS": {
-        "simulated": false,
+        "simulated": true,
         "R1": 14,
         "R2": 15,
         "R3": 18,

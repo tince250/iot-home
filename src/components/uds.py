@@ -30,7 +30,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def uds_callback(distance, publish_event, settings, verbose=False):
+def uds_callback(distance, publish_event, settings, verbose=True):
     global publish_data_counter, publish_data_limit
     
     if verbose:
