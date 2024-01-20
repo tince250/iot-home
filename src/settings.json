@@ -9,7 +9,15 @@
         "influxdb_field": "measurement",
         "influxdb_bucket": "measurements"
     },
-
+    "BIR":
+    {
+        "simulated": true,
+        "pin": 17,
+        "name": "Bedrom Infrared",
+        "runs_on": "PI3",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
     "RDHT1": {
         "simulated": true,
         "pin": 17,
