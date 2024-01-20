@@ -30,11 +30,11 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLIB_OK", verbose=False):
+def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLIB_OK", verbose=True):
     global publish_data_counter, publish_data_limit
 
-    t = time.localtime()
     if verbose:
+        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(dht_settings['name'], end=" ")

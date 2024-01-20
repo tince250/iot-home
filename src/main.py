@@ -14,8 +14,8 @@ from locks import print_lock
 try:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
-except:
-    pass
+except ImportError:
+    GPIO = None
 
 def user_input_thread(queues_dict, stop_event):
     led_queue = queues_dict["door_light_queue"]
@@ -51,13 +51,14 @@ def run_pi1(settings):
     # rdht2_settings = settings['RDHT2']
     # run_dht(rdht2_settings, threads, stop_event)
 
-    # uds1_settings = settings["UDS1"]
-    # run_uds(uds1_settings, threads, stop_event)
+    uds1_settings = settings["UDS1"]
+    run_uds(uds1_settings, threads, stop_event)
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)
-    pir1_settings = settings['RPIR1']
-    run_pir(pir1_settings, threads, stop_event)
+    
+    # pir1_settings = settings['RPIR1']
+    # run_pir(pir1_settings, threads, stop_event)
     # pir2_settings = settings['RPIR2']
     # run_pir(pir2_settings, threads, stop_event)
 

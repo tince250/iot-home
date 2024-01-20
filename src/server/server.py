@@ -3,10 +3,11 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import json
 import paho.mqtt.client as mqtt
+from env import INFLUXDB_TOKEN
 
 app = Flask(__name__)
 
-token = "7HPyHiQ_zy7TDUrO7p-i1POQsIt1ydQn-PZhUjnYzdKpPxn3jyaWdaWrQxuyO-glMHyfO9rp_mhh1vqJ2kMavA=="
+token = INFLUXDB_TOKEN
 org = "iot"
 url = "http://localhost:8086"
 bucket = "measurements"
@@ -22,6 +23,9 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/button/press")
     client.subscribe("topic/buzzer/sound")
     client.subscribe("topic/pir/move")
+    client.subscribe("topic/doorlight/toggle")
+    client.subscribe("topic/uds/distance")
+    client.subscribe("topic/ms/key-pressed")
 
 def save_to_db(data, verbose=True):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -41,7 +45,6 @@ def save_to_db(data, verbose=True):
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
-
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 

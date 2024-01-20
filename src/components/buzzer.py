@@ -36,8 +36,8 @@ publisher_thread.start()
 def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
     global publish_data_counter, publish_data_limit
 
-    t = time.localtime()
     if verbose:
+        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings["name"], end=" ")
@@ -58,7 +58,6 @@ def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
     with counter_lock:
         buzzer_batch.append(('topic/buzzer/sound', json.dumps(sound_payload), 0, True))
         publish_data_counter += 1
-        print(publish_data_counter)
 
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
@@ -69,20 +68,24 @@ def run_buzzer(settings, threads, stop_event, buzzer_queue):
     sensor_name = settings["name"]
     
     if settings["simulated"]:
-        print(f"Starting {sensor_name} simulator")
+        with print_lock:
+            print(f"Starting {sensor_name} simulator")
         buzzer_thread = threading.Thread(target=run_buzzer_simulator, args=(buzzer_queue, pitch, duration,
                                                                              buzzer_print_callback, stop_event,
                                                                             publish_event, settings))
         buzzer_thread.start()
         threads.append(buzzer_thread)
-        print(f"{sensor_name} simulator started")
+        with print_lock:
+            print(f"{sensor_name} simulator started")
     else:
         from sensors.buzzer import Buzzer, run_buzzer_loop
-        print(f"Starting {sensor_name} loop")
+        with print_lock:
+            print(f"Starting {sensor_name} loop")
         buzzer = Buzzer(settings['pin'], sensor_name)
         buzzer_thread = threading.Thread(target=run_buzzer_loop, args=(buzzer_queue, buzzer, pitch, duration,
                                                                         delay, buzzer_print_callback, stop_event,
                                                                         publish_event, settings))
         buzzer_thread.start()
         threads.append(buzzer_thread)
-        print(f"{sensor_name} loop started")
+        with print_lock:
+            print(f"{sensor_name} loop started")
