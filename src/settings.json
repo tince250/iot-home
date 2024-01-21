@@ -193,5 +193,16 @@
         "runs_on": "PI2",
         "influxdb_field": "measurement",
         "influxdb_bucket": "measurements"
+    },
+    "BRGB":
+    {
+        "simulated": true,
+        "name": "Bedroom RGB diode",
+        "RED": 12,
+        "GREEN": 13,
+        "BLUE": 19,
+        "runs_on": "PI3",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
     }
 }

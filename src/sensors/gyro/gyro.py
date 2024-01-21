@@ -26,7 +26,6 @@ def run_gyro_loop(gyro, delay, callback, stop_event, publish_event, settings):
         callback(angle, publish_event, settings)
 
         if stop_event.is_set():
-            GPIO.cleanup()
             break
         time.sleep(delay)  # Delay between readings
         
