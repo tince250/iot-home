@@ -1,5 +1,5 @@
 .navbar-container {
-    height: 60px;
+    height: 50px;
     color: white !important;
     margin: 0;
     padding: 0 20px; 
@@ -23,13 +23,14 @@
     border: 2px solid rgba(255, 255, 0, 0);
     border-radius: 5px;
     padding: 5px;
+    width: 30px;
+    text-align: center;
 }
 
 
 .nav-title {
     font-weight: bold;
     font-size: 1.4em;
-    
 }
 
 .nav-item:hover {
@@ -39,3 +40,4 @@
 .nav-item-selected {
     border: 2px solid #FFCB52 !important;
 }
+

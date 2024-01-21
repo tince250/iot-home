@@ -8,6 +8,11 @@
     z-index: 1100 !important;
 }
 
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, dl, dd, dt {
+    margin: 0;
+    padding: 0;
+  }
+
 
 html, body { height: 100%; width: 100%; margin: 0; font-family: "Poppins", sans-serif; }
 
