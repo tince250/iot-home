@@ -10,6 +10,7 @@ from components.ms import run_ms
 from components.b4sd import run_b4sd
 from components.bir import run_bir
 from components.lcd import run_lcd
+from components.gyro import run_gyro
 
 import time
 from queue import Queue
@@ -101,8 +102,11 @@ def run_pi1(settings):
     # bir_settings = settings["BIR"]
     # run_bir(bir_settings, threads, stop_event)
 
-    lcd_settings = settings["GLCD"]
-    run_lcd(lcd_settings, threads, stop_event)
+    # lcd_settings = settings["GLCD"]
+    # run_lcd(lcd_settings, threads, stop_event)
+    
+    gyro_settings = settings["GSG"]
+    run_gyro(gyro_settings, threads, stop_event)
 
 
 if __name__ == "__main__":
