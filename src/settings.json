@@ -1,4 +1,31 @@
 {
+    "B4SD":
+    {
+        "simulated": true,
+        "segments": [1,4,23,8,7,10,18,25],
+        "digits": [22,27,17,24],
+        "name": "Bedroom 4 Digit 7 Segment Display",
+        "runs_on": "PI3",
+        "influxdb_field": "measurement",
+        "influxdb_bucket": "measurements"
+    },
+    "BIR":
+    {
+        "simulated": true,
+        "pin": 17,
+        "name": "Bedrom Infrared",
+        "runs_on": "PI3",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
+    "GDHT": {
+        "simulated": true,
+        "pin": 12,
+        "name": "Garage DHT",
+        "runs_on": "PI2",
+        "influxdb_field": "measurement",
+        "influxdb_bucket": "measurements"
+    },
     "RDHT1": {
         "simulated": true,
         "pin": 17,
@@ -15,6 +42,22 @@
         "influxdb_field": "measurement",
         "influxdb_bucket": "measurements"
     },
+    "RDHT3": {
+        "simulated": true,
+        "pin": 11,
+        "name": "Room DHT3",
+        "runs_on": "PI2",
+        "influxdb_field": "measurement",
+        "influxdb_bucket": "measurements"
+    },
+    "RDHT4": {
+        "simulated": true,
+        "pin": 10,
+        "name": "Room DHT4",
+        "runs_on": "PI3",
+        "influxdb_field": "measurement",
+        "influxdb_bucket": "measurements"
+    },
     "UDS1": {
         "simulated": false,
         "echo": 14,
@@ -28,8 +71,17 @@
     {
         "simulated": true,
         "port": 17,
-        "name": "Door Motion Sensor",
+        "name": "Door Motion Sensor 1",
         "runs_on": "PI1",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    }, 
+    "DPIR2":
+    {
+        "simulated": true,
+        "port": 13,
+        "name": "Door Motion Sensor 2",
+        "runs_on": "PI2",
         "influxdb_field": "event",
         "influxdb_bucket": "events"
     }, 
@@ -51,12 +103,39 @@
         "influxdb_field": "event",
         "influxdb_bucket": "events"
     },
+    "RPIR3":
+    {
+        "simulated": true,
+        "port": 5,
+        "name": "Room PIR3",
+        "runs_on": "PI2",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
+    "RPIR4":
+    {
+        "simulated": true,
+        "port": 4,
+        "name": "Room PIR4",
+        "runs_on": "PI3",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
     "DS1":
     {
         "simulated": true,
         "port": 17,
         "name": "Door Sensor 1",
         "runs_on": "PI1",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
+    "DS2":
+    {
+        "simulated": true,
+        "port": 14,
+        "name": "Door Sensor 2",
+        "runs_on": "PI2",
         "influxdb_field": "event",
         "influxdb_bucket": "events"
     },
@@ -89,6 +168,15 @@
         "pin": 14,
         "name": "Door Buzzer",
         "runs_on": "PI1",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
+    "BB":
+    {
+        "simulated": true,
+        "pin": 15,
+        "name": "Bedroom Buzzer",
+        "runs_on": "PI3",
         "influxdb_field": "event",
         "influxdb_bucket": "events"
     }

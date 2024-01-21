@@ -7,6 +7,9 @@ from components.dht import run_dht
 from components.uds import run_uds
 from components.dl import run_dl
 from components.ms import run_ms
+from components.b4sd import run_b4sd
+from components.bir import run_bir
+
 import time
 from queue import Queue
 from locks import print_lock
@@ -50,20 +53,35 @@ def run_pi1(settings):
 
     # rdht2_settings = settings['RDHT2']
     # run_dht(rdht2_settings, threads, stop_event)
+    # rdht3_settings = settings['RDHT3']
+    # run_dht(rdht3_settings, threads, stop_event)
+    # rdht4_settings = settings['RDHT4']
+    # run_dht(rdht4_settings, threads, stop_event)
+    # gdht_settings = settings['GDHT']
+    # run_dht(gdht_settings, threads, stop_event)
 
-    uds1_settings = settings["UDS1"]
-    run_uds(uds1_settings, threads, stop_event)
+    # uds1_settings = settings["UDS1"]
+    # run_uds(uds1_settings, threads, stop_event)
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)
+    # dpir2_settings = settings['DPIR2']
+    # run_pir(dpir2_settings, threads, stop_event)
     
     # pir1_settings = settings['RPIR1']
     # run_pir(pir1_settings, threads, stop_event)
     # pir2_settings = settings['RPIR2']
     # run_pir(pir2_settings, threads, stop_event)
+    # pir3_settings = settings['RPIR3']
+    # run_pir(pir3_settings, threads, stop_event)
+    # pir4_settings = settings['RPIR4']
+    # run_pir(pir4_settings, threads, stop_event)
 
     # ds1_settings = settings['DS1']
     # run_button(ds1_settings, threads, stop_event)
+
+    # ds2_settings = settings['DS2']
+    # run_button(ds2_settings, threads, stop_event)
     
     # dms_settings = settings["DMS"]
     # run_ms(dms_settings, threads, stop_event)
@@ -73,6 +91,14 @@ def run_pi1(settings):
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
+    # bb_settings = settings['BB']
+    # run_buzzer(bb_settings, threads, stop_event, queues_dict["buzzer_queue"])
+
+    # b4sd_settings = settings["B4SD"]
+    # run_b4sd(b4sd_settings, threads, stop_event)
+
+    bir_settings = settings["BIR"]
+    run_bir(bir_settings, threads, stop_event)
 
 
 if __name__ == "__main__":
