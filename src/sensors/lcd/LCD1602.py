@@ -5,6 +5,7 @@ from Adafruit_LCD1602 import Adafruit_CharLCD
 
 from time import sleep, strftime
 from datetime import datetime
+from queue import Empty
 
 class LCD(object):
     def __init__(self, **kwargs) -> None:
@@ -31,30 +32,31 @@ class LCD(object):
     def get_time_now(self):     # get system time
         return datetime.now().strftime('    %H:%M:%S')
         
-    def show_text(self, text):
+    def show_text(self, temperature, humidity):
         self.mcp.output(3,1)     # turn on LCD backlight
         self.lcd.begin(16,2)     # set number of LCD lines and columns
         
         self.lcd.setCursor(0,0)  # set cursor position
-        self.lcd.message( 'CPU: ' + self.get_cpu_temp()+'\n' )# display CPU temperature
-        self.lcd.message( self.get_time_now() )   # display the time
+        self.lcd.message('TEMP: {:.2f}\n'.format(temperature))
+        self.lcd.message('HUM: {:.2f}'.format(humidity))
         
-        sleep(2)
-        self.lcd.clear()
+        # sleep(2)
+        # self.lcd.clear()
         
     def destroy(self):
         self.lcd.clear()
 
-def run_lcd_loop(lcd, delay, callback, stop_event, settings, publish_event):
-    print("tu sam")
-    # while True:
-    #     pressed_key = ms.get_pressed_key()
-    #     if pressed_key:
-    #         print(pressed_key)
-    #         callback(pressed_key, settings, publish_event, True)
-    #     if stop_event.is_set():
-    #         lcd.destroy()
-    #         GPIO.cleanup()
-    #         break
-    #     time.sleep(delay)
+def run_lcd_loop(data_queue, lcd, delay, callback, stop_event, settings):
+    while True:
+        try:
+            temperature, humidity = data_queue.get(timeout=1)
+            lcd.show_text(temperature, humidity)
+            callback(temperature, humidity, settings)
+        except Empty:
+            pass
+        
+        if stop_event.is_set():
+            lcd.destroy()
+            break
+        sleep(delay)
 

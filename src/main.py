@@ -9,6 +9,9 @@ from components.dl import run_dl
 from components.ms import run_ms
 from components.b4sd import run_b4sd
 from components.bir import run_bir
+from components.lcd import run_lcd
+from components.gyro import run_gyro
+from components.rgb import run_rgb
 
 import time
 from queue import Queue
@@ -23,6 +26,7 @@ except ImportError:
 def user_input_thread(queues_dict, stop_event):
     led_queue = queues_dict["door_light_queue"]
     buzzer_queue = queues_dict["buzzer_queue"]
+    rgb_queue = queues_dict["rgb_queue"]
     while True:
         try:
             user_action = input()
@@ -32,6 +36,12 @@ def user_input_thread(queues_dict, stop_event):
                 led_queue.put("turn_off")
             elif user_action.upper() == "B":
                 buzzer_queue.put("turn_sound_on")
+            elif user_action.upper() == "R":
+                rgb_queue.put("red")
+            elif user_action.upper() == "G":
+                rgb_queue.put("green")
+            elif user_action.upper() == "O":
+                rgb_queue.put("off")
         except:
             time.sleep(0.001)
             if stop_event.is_set():
@@ -44,7 +54,8 @@ def run_user_input_thread(queues_dict : dict, stop_event, threads):
 
 def get_queues_dict():
     queues_dict = {"door_light_queue" : Queue(), 
-                   "buzzer_queue": Queue()}
+                   "buzzer_queue": Queue(),
+                   "rgb_queue": Queue()}
     return queues_dict
 
 def run_pi1(settings):
@@ -97,9 +108,20 @@ def run_pi1(settings):
     # b4sd_settings = settings["B4SD"]
     # run_b4sd(b4sd_settings, threads, stop_event)
 
-    bir_settings = settings["BIR"]
-    run_bir(bir_settings, threads, stop_event)
+    # bir_settings = settings["BIR"]
+    # run_bir(bir_settings, threads, stop_event)
 
+    # lcd_settings = settings["GLCD"]
+    # run_lcd(lcd_settings, threads, stop_event)
+    
+    gyro_settings = settings["GSG"]
+    run_gyro(gyro_settings, threads, stop_event)
+
+    # rgb_settings = settings["BRGB"]
+    # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])
+
+    # dus2_settings = settings["DUS2"]
+    # run_uds(dus2_settings, threads, stop_event)
 
 if __name__ == "__main__":
     with print_lock:
@@ -107,7 +129,10 @@ if __name__ == "__main__":
         print("""To use actuators, type one of the options:
                 'X' - turn on door light
                 'Y' - turn off door light
-                'B' - buzz """)
+                'B' - buzz 
+                'R' - rgb red 
+                'G' - rgb green
+                'O' - rgb off""")
         
     settings = load_settings()
     threads = []
