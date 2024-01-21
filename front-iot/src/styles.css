@@ -16,7 +16,8 @@ body {
     margin: 0; font-family: 'Poppins', sans-serif;
     position: relative;
     padding: 0;
-    background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5));
+    /* background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)); */
+    background-color: #171A20;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -204,6 +205,10 @@ label.star::before{
 
 
  /* COLORS */
+
+ .bcg-color {
+    color: #171A20 !important;
+ }
 
  .light-blue {
     color: #2C87D7 !important;

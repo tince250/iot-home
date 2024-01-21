@@ -1,0 +1,20 @@
+<div class="navbar-container">
+    <div class="nav-logo">
+        <p class="nav-title">IoT-Home Dashboard</p>
+    </div>
+    <div class="nav-options">
+        <div class="nav-item" [routerLink]="['/pi1']" [ngClass]="url == '/pi1' ? 'nav-item-selected': ''">
+            <i class="fa-solid fa-home" style="cursor: pointer"></i>
+            <p>PI1</p>
+        </div>
+        <div class="nav-item" [routerLink]="['/pi2']" [ngClass]="url == '/pi2' ? 'nav-item-selected': ''">
+            <i class="fa-solid fa-home" style="cursor: pointer"></i>
+            <p>PI2</p>
+        </div>
+        <div class="nav-item" [routerLink]="['/pi3']" [ngClass]="url == '/pi3' ? 'nav-item-selected': ''">
+            <i class="fa-solid fa-home" style="cursor: pointer"></i>
+            <p>PI3</p>
+        </div>
+    </div>
+    
+</div>

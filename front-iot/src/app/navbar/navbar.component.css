@@ -1,0 +1,41 @@
+.navbar-container {
+    height: 60px;
+    color: white !important;
+    margin: 0;
+    padding: 0 20px; 
+    box-sizing: border-box; 
+}
+
+.nav-logo {
+    float: left;
+}
+
+.nav-options {
+    float: right;
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-item {
+    cursor: pointer;
+    margin-left: 15px;
+    font-size: 1.1em;
+    border: 2px solid rgba(255, 255, 0, 0);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+
+.nav-title {
+    font-weight: bold;
+    font-size: 1.4em;
+    
+}
+
+.nav-item:hover {
+    border: 2px solid #ffcb5255;
+}
+
+.nav-item-selected {
+    border: 2px solid #FFCB52 !important;
+}

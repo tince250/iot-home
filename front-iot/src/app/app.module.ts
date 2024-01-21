@@ -12,10 +12,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NavbarComponent } from './navbar/navbar.component';
+import { Pi1DashboardComponent } from './pi1-dashboard/pi1-dashboard.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent,
+    Pi1DashboardComponent
   ],
   imports: [
     BrowserModule,
