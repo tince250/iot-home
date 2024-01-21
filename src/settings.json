@@ -179,5 +179,11 @@
         "runs_on": "PI3",
         "influxdb_field": "event",
         "influxdb_bucket": "events"
+    },
+    "GLCD":
+    {
+        "simulated": true,
+        "name": "Garage LCD",
+        "runs_on": "PI2"
     }
 }
