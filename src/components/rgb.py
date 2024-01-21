@@ -43,7 +43,7 @@ def rgb_callback(status, publish_event, settings, verbose=False):
             print(f"Status: {status}\n")
 
     rgb_payload = {
-        "measurement": "door_light_toggled",
+        "measurement": "rgb_light_changed",
         "simulated": settings['simulated'],
         "runs_on": settings["runs_on"],
         "name": settings["name"],

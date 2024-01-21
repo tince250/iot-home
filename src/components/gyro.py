@@ -44,18 +44,44 @@ def gyro_callback(angle, publish_event, gyro_settings, verbose=True):
             print(f"Rotation y: {angle['rotation_y']}")
             print(f"Rotation z: {angle['rotation_z']}")
 
-    angle_payload = {
-        "measurement": "Temperature",
+    angle_payload_x = {
+        "measurement": "angle",
         "simulated": gyro_settings['simulated'],
         "runs_on": gyro_settings["runs_on"],
         "name": gyro_settings["name"],
-        "value": str(angle)[1:-1],
+        "value": angle["rotation_x"],
         "field": gyro_settings["influxdb_field"],
-        "bucket": gyro_settings["influxdb_bucket"]
+        "bucket": gyro_settings["influxdb_bucket"],
+        "axis": "x" 
+    }
+
+    angle_payload_y = {
+        "measurement": "angle",
+        "simulated": gyro_settings['simulated'],
+        "runs_on": gyro_settings["runs_on"],
+        "name": gyro_settings["name"],
+        "value": angle["rotation_y"],
+        "field": gyro_settings["influxdb_field"],
+        "bucket": gyro_settings["influxdb_bucket"],
+        "axis": "y" 
+    }
+
+
+    angle_payload_z = {
+        "measurement": "angle",
+        "simulated": gyro_settings['simulated'],
+        "runs_on": gyro_settings["runs_on"],
+        "name": gyro_settings["name"],
+        "value": angle["rotation_z"],
+        "field": gyro_settings["influxdb_field"],
+        "bucket": gyro_settings["influxdb_bucket"],
+        "axis": "z" 
     }
 
     with counter_lock:
-        gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload), 0, True))
+        gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload_x), 0, True))
+        gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload_y), 0, True))
+        gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload_z), 0, True))
         publish_data_counter += 1
 
     if publish_data_counter >= publish_data_limit:
