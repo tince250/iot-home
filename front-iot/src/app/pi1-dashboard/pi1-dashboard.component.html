@@ -25,13 +25,13 @@
         <div class="group-container">
             <div class="circle rectangular-container">
                 <p class="device-tag">DHT1</p>
-                <p class="value">25C</p>
-                <p class="value-2">4%</p>
+                <p class="value">{{ dht1[0] ? dht1[0].value : "" }}C</p>
+                <p class="value-2">{{ dht1[1] ? dht1[1].value : ""  }}%</p>
             </div>
             <div class="circle rectangular-container green-border">
                 <p class="device-tag">DHT2</p>
-                <p class="value">25C</p>
-                <p class="value-2">4%</p>
+                <p class="value">{{ dht2[0] ? dht2[0].value : "" }}C</p>
+                <p class="value-2">{{ dht2[1] ? dht2[1].value : ""  }}%</p>
             </div>
         </div>
         
@@ -72,8 +72,8 @@
             <!-- <p class="timestamp">13:00 25.1.2024.</p> -->
             <p class="value font-size-64">CLOSED</p>
             <p class="device-tag bigger-device-tag">DS1</p>
-            <div class="bigger-icon-right"><i class="white fa-solid fa-door-open"></i></div>
-            <!-- <div class="bigger-icon"><i class="white fa-solid fa-door-closed"></i></div> -->
+            <div class="bigger-icon-right"><i class="yellow fa-solid fa-door-open"></i></div>
+            <!-- <div class="bigger-icon"><i class="yellow fa-solid fa-door-closed"></i></div> -->
         </div>
     </div>
 

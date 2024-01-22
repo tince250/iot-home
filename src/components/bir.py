@@ -20,7 +20,7 @@ def publisher_task(event, bir_batch):
             publish_data_counter = 0
             bir_batch.clear()
         try:
-            #publish.multiple(local_bir_batch, hostname="localhost", port=1883)
+            publish.multiple(local_bir_batch, hostname="localhost", port=1883)
             print(f'Published {publish_data_limit} bir values')
         except:
             print("greska")

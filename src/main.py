@@ -48,11 +48,11 @@ def get_queues_dict():
     return queues_dict
 
 def run_pi1(settings):
-    # rdht1_settings = settings['RDHT1']
-    # run_dht(rdht1_settings, threads, stop_event)
+    rdht1_settings = settings['RDHT1']
+    run_dht(rdht1_settings, threads, stop_event)
 
-    # rdht2_settings = settings['RDHT2']
-    # run_dht(rdht2_settings, threads, stop_event)
+    rdht2_settings = settings['RDHT2']
+    run_dht(rdht2_settings, threads, stop_event)
     # rdht3_settings = settings['RDHT3']
     # run_dht(rdht3_settings, threads, stop_event)
     # rdht4_settings = settings['RDHT4']
@@ -97,8 +97,8 @@ def run_pi1(settings):
     # b4sd_settings = settings["B4SD"]
     # run_b4sd(b4sd_settings, threads, stop_event)
 
-    bir_settings = settings["BIR"]
-    run_bir(bir_settings, threads, stop_event)
+    # bir_settings = settings["BIR"]
+    # run_bir(bir_settings, threads, stop_event)
 
 
 if __name__ == "__main__":

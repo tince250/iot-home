@@ -51,7 +51,8 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         "name": dht_settings["name"],
         "value": temperature,
         "field": dht_settings["influxdb_field"],
-        "bucket": dht_settings["influxdb_bucket"]
+        "bucket": dht_settings["influxdb_bucket"],
+        "update_front": False
     }
 
     humidity_payload = {
@@ -61,10 +62,14 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         "name": dht_settings["name"],
         "value": humidity,
         "field": dht_settings["influxdb_field"],
-        "bucket": dht_settings["influxdb_bucket"]
+        "bucket": dht_settings["influxdb_bucket"],
+        "update_front": False
     }
 
     with counter_lock:
+        if publish_data_counter == publish_data_limit - 1:
+            temp_payload["update_front"] = True
+            humidity_payload["update_front"] = True
         dht_batch.append(('topic/dht/temperature', json.dumps(temp_payload), 0, True))
         dht_batch.append(('topic/dht/humidity', json.dumps(humidity_payload), 0, True))
         publish_data_counter += 1

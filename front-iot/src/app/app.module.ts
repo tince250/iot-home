@@ -16,6 +16,9 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { Pi1DashboardComponent } from './pi1-dashboard/pi1-dashboard.component';
 import { Pi2DashboardComponent } from './pi2-dashboard/pi2-dashboard.component';
 import { Pi3DashboardComponent } from './pi3-dashboard/pi3-dashboard.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'localhost:5001', options: {} };
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import { Pi3DashboardComponent } from './pi3-dashboard/pi3-dashboard.component';
     HttpClientModule,
     MatSnackBarModule,
     CommonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

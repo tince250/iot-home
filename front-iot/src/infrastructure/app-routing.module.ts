@@ -5,6 +5,7 @@ import { Pi2DashboardComponent } from 'src/app/pi2-dashboard/pi2-dashboard.compo
 import { Pi3DashboardComponent } from 'src/app/pi3-dashboard/pi3-dashboard.component';
 
 const routes: Routes = [
+  {path: '*', component: Pi1DashboardComponent},
   {path: 'pi1', component: Pi1DashboardComponent},
   {path: 'pi2', component: Pi2DashboardComponent},
   {path: 'pi3', component: Pi3DashboardComponent},
