@@ -1,0 +1,126 @@
+.dashboard-container {
+    padding: 0px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rectangular-container {
+    border: 4px solid #FFCB52;
+    border-radius: 10px;
+    padding: 12px 20px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.circle {
+    width: 110px;
+    height: 120px;
+    border-radius: 50% !important;
+}
+
+.timestamp {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.value {
+    font-weight: bolder;
+    font-size: 1.9em;
+}
+
+.value-2 {
+    margin-top: -12px;
+    font-weight: bold;
+    font-size: 1.7em;
+}
+
+.cont-icon {
+    font-size: 26px;
+}
+
+.device-tag {
+    background-color: #06d69e9e;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.dashboard-row {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    height: 230px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.iframe-cont {
+    display: inline-block !important;
+    height: 100%;
+}
+
+iframe {
+    display: inline-block;
+    height: 100%;
+    width: 620px;
+}
+
+.group-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    justify-content: space-evenly;
+}
+
+.wider {
+    width: 200px;
+}
+
+.frame-wider {
+    flex-grow: 1;
+    min-width: 800px !important;
+}
+
+.light-blue-border{
+    border: 4px solid #2C87D7 !important;
+}
+
+.green-border{
+    border: 4px solid #06d69e9e !important;
+}
+
+.font-size-64 {
+    font-size: 64px;
+}
+
+.bigger-rectangular-width{
+    min-width: 375px !important;
+    flex-direction: row;
+    position: relative;
+}
+
+.bigger-icon-right{
+    font-size: 56px;
+    margin-left: 20px;
+}
+
+.bigger-icon-left{
+    font-size: 56px;
+    margin-right: 20px;
+    margin-bottom: -10px;
+}
+
+.bigger-device-tag {
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 15px;
+    left: 0;
+    top: 0;
+}

@@ -71,8 +71,8 @@ def run_pi1(settings):
     # gdht_settings = settings['GDHT']
     # run_dht(gdht_settings, threads, stop_event)
 
-    # uds1_settings = settings["UDS1"]
-    # run_uds(uds1_settings, threads, stop_event)
+    uds1_settings = settings["UDS1"]
+    run_uds(uds1_settings, threads, stop_event)
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)

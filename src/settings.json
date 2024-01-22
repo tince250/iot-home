@@ -59,7 +59,7 @@
         "influxdb_bucket": "measurements"
     },
     "UDS1": {
-        "simulated": false,
+        "simulated": true,
         "echo": 14,
         "trig": 15,
         "name": "Door Ultrasonic Sensor",

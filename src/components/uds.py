@@ -7,7 +7,7 @@ import json
 
 uds_batch = []
 publish_data_counter = 0
-publish_data_limit = 5
+publish_data_limit = 2
 counter_lock = threading.Lock()
 
 def publisher_task(event, uds_batch):
@@ -52,10 +52,13 @@ def uds_callback(distance, publish_event, settings, verbose=True):
         "name": settings["name"],
         "value": distance,
         "field": settings["influxdb_field"],
-        "bucket": settings["influxdb_bucket"]
+        "bucket": settings["influxdb_bucket"],
+        "update_front": False
     }
 
     with counter_lock:
+        if publish_data_counter == publish_data_limit - 1:
+            distance_payload["update_front"] = True
         uds_batch.append(('topic/uds/distance', json.dumps(distance_payload), 0, True))
         publish_data_counter += 1
 

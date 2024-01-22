@@ -7,7 +7,7 @@ import json
 
 dl_batch = []
 publish_data_counter = 0
-publish_data_limit = 2
+publish_data_limit = 1
 counter_lock = threading.Lock()
 
 def publisher_task(event, dl_batch):
@@ -49,7 +49,8 @@ def dl_callback(status, publish_event, settings, verbose=False):
         "name": settings["name"],
         "value": status,
         "field": settings["influxdb_field"],
-        "bucket": settings["influxdb_bucket"]
+        "bucket": settings["influxdb_bucket"],
+        "update_front": True
     }
 
     with counter_lock:
