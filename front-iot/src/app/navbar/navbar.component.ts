@@ -5,7 +5,7 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css', '../pi1-dashboard/pi1-dashboard.component.css']
 })
 export class NavbarComponent {
   url = "/pi1";

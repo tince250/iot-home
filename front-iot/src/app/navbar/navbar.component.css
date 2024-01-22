@@ -8,6 +8,20 @@
 
 .nav-logo {
     float: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.nav-logo-alarm {
+    float: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    border: 2px solid #ef476f;
+    padding: 5px 10px;
+    border-radius: 10px;
+    height: 35px;
 }
 
 .nav-options {

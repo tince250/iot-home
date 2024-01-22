@@ -15,13 +15,15 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Pi1DashboardComponent } from './pi1-dashboard/pi1-dashboard.component';
 import { Pi2DashboardComponent } from './pi2-dashboard/pi2-dashboard.component';
+import { Pi3DashboardComponent } from './pi3-dashboard/pi3-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     Pi1DashboardComponent,
-    Pi2DashboardComponent
+    Pi2DashboardComponent,
+    Pi3DashboardComponent
   ],
   imports: [
     BrowserModule,
