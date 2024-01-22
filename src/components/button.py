@@ -31,7 +31,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def button_callback(publish_event, settings, verbose=True):
+def button_callback(publish_event, settings, is_pressed, verbose=True):
     global publish_data_counter, publish_data_limit
 
     if verbose:
@@ -48,12 +48,14 @@ def button_callback(publish_event, settings, verbose=True):
         "simulated": settings['simulated'],
         "runs_on": settings["runs_on"],
         "name": settings["name"],
-        "value": "pressed",
+        "value": "pressed" if is_pressed else "none",
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"]
     }
 
     with counter_lock:
+        if publish_data_counter == publish_data_limit - 1:
+            press_payload["update_front"] = True
         button_batch.append(('topic/button/press', json.dumps(press_payload), 0, True))
         publish_data_counter += 1
 

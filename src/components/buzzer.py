@@ -56,6 +56,8 @@ def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
     }
 
     with counter_lock:
+        if publish_data_counter == publish_data_limit - 1:
+            sound_payload["update_front"] = True
         buzzer_batch.append(('topic/buzzer/sound', json.dumps(sound_payload), 0, True))
         publish_data_counter += 1
 

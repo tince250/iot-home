@@ -32,13 +32,13 @@
         <div class="group-container">
             <div class="circle rectangular-container">
                 <p class="device-tag">GDHT</p>
-                <p class="value">25C</p>
-                <p class="value-2">4%</p>
+                <p class="value">{{ dht3[0] ? dht3[0].value : "" }}C</p>
+                <p class="value-2">{{ dht3[1] ? dht3[1].value : ""  }}%</p>
             </div>
             <div class="circle rectangular-container green-border">
                 <p class="device-tag">RDHT3</p>
-                <p class="value">25C</p>
-                <p class="value-2">4%</p>
+                <p class="value">{{ gdht[0] ? gdht[0].value : "" }}C</p>
+                <p class="value-2">{{ gdht[1] ? gdht[1].value : ""  }}%</p>
             </div>
         </div>
         
@@ -47,14 +47,15 @@
         <div class="group-container">
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">MOVED</p>
+                <p class="timestamp">{{  dpir2.time }}</p>
+                <p class="value">{{ dpir2.value ? dpir2.value : "none" }}</p>
+                
                 <p class="device-tag">DPIR2</p>
             </div>
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">MOVED</p>
+                <p class="timestamp">{{  rpir3.time }}</p>
+                <p class="value">{{ rpir3.value ? rpir3.value : "none" }}</p>
                 <p class="device-tag" style="background-color: #FFCB52 !important;">PIR3</p>
             </div>
         </div>
@@ -71,7 +72,7 @@
 
         <div class="rectangular-container wider bigger-rectangular-width">
             <!-- <p class="timestamp">13:00 25.1.2024.</p> -->
-            <p class="value font-size-64">CLOSED</p>
+            <p class="value font-size-64">{{ "ENTERED" ? ds2.value == "pressed" : "CLOSED"}}</p>
             <p class="device-tag bigger-device-tag">DS2</p>
             <div class="bigger-icon-right"><i class="yellow fa-solid fa-door-open"></i></div>
             <!-- <div class="bigger-icon"><i class="yellow fa-solid fa-door-closed"></i></div> -->

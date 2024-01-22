@@ -71,8 +71,8 @@ def run_pi1(settings):
     # gdht_settings = settings['GDHT']
     # run_dht(gdht_settings, threads, stop_event)
 
-    uds1_settings = settings["UDS1"]
-    run_uds(uds1_settings, threads, stop_event)
+    # uds1_settings = settings["UDS1"]
+    # run_uds(uds1_settings, threads, stop_event)
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)
@@ -88,8 +88,8 @@ def run_pi1(settings):
     # pir4_settings = settings['RPIR4']
     # run_pir(pir4_settings, threads, stop_event)
 
-    # ds1_settings = settings['DS1']
-    # run_button(ds1_settings, threads, stop_event)
+    ds1_settings = settings['DS1']
+    run_button(ds1_settings, threads, stop_event)
 
     # ds2_settings = settings['DS2']
     # run_button(ds2_settings, threads, stop_event)
@@ -114,8 +114,8 @@ def run_pi1(settings):
     # lcd_settings = settings["GLCD"]
     # run_lcd(lcd_settings, threads, stop_event)
     
-    gyro_settings = settings["GSG"]
-    run_gyro(gyro_settings, threads, stop_event)
+    # gyro_settings = settings["GSG"]
+    # run_gyro(gyro_settings, threads, stop_event)
 
     # rgb_settings = settings["BRGB"]
     # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])

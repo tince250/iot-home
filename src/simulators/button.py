@@ -15,7 +15,6 @@ def run_button_simulator(delay, callback, stop_event, publish_event, settings, t
     for value in generate_values(threshold=threshold):
         time.sleep(delay)
         # print(value)
-        if value >= threshold:
-            callback(publish_event, settings)
+        callback(publish_event, settings, value >= threshold)
         if stop_event.is_set():
             break
