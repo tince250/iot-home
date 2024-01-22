@@ -92,6 +92,10 @@ iframe {
     border: 4px solid #2C87D7 !important;
 }
 
+.green-border{
+    border: 4px solid #06d69e9e !important;
+}
+
 .font-size-64 {
     font-size: 64px;
 }

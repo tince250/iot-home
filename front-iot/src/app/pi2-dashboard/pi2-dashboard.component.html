@@ -1,18 +1,25 @@
 <div class="dashboard-container">
     <div class="dashboard-row">
-        <div class="rectangular-container">
-            <div class="cont-icon"><i class="yellow fa-solid fa-lightbulb"></i></div>
-            <p class="timestamp">13:00 25.1.2024.</p>
-            <p class="value">ON</p>
-            <p class="device-tag">DL</p>
+        <div class="group-container" style="justify-content: right;">
+            <div class="circle rectangular-container light-blue-border" style="margin-right: 40px;">
+                <p class="device-tag">GSG</p>
+                <p class="value">35</p>
+                <p class="value-2">x axis</p>
+            </div>
+            <div class="circle rectangular-container green-border" style="margin-right: 35px;">
+                <p class="device-tag">GSG</p>
+                <p class="value">3</p>
+                <p class="value-2">y axis</p>
+            </div>
+            <div class="circle rectangular-container">
+                <p class="device-tag">GSG</p>
+                <p class="value">-5</p>
+                <p class="value-2">z axis</p>
+            </div>
         </div>
     
         <div class="iframe-cont">
             <iframe src="http://localhost:3000/d-solo/fbbb7394-4fa6-4bc7-9a7b-7bd062439d90/iot?orgId=1&from=1705850375678&to=1705871975678&panelId=1" width="450" height="200" frameborder="0"></iframe>
-        </div>
-
-        <div class="iframe-cont">
-            <iframe src="http://localhost:3000/d-solo/fbbb7394-4fa6-4bc7-9a7b-7bd062439d90/iot?orgId=1&from=1705851229492&to=1705872829492&panelId=3" width="450" height="200" frameborder="0"></iframe>
         </div>
     </div>
     <div class="dashboard-row">
@@ -24,12 +31,12 @@
         
         <div class="group-container">
             <div class="circle rectangular-container">
-                <p class="device-tag">DHT1</p>
+                <p class="device-tag">GDHT</p>
                 <p class="value">25C</p>
                 <p class="value-2">4%</p>
             </div>
             <div class="circle rectangular-container">
-                <p class="device-tag">DHT2</p>
+                <p class="device-tag">RDHT3</p>
                 <p class="value">25C</p>
                 <p class="value-2">4%</p>
             </div>
@@ -42,13 +49,7 @@
                 <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
                 <p class="timestamp">13:00 25.1.2024.</p>
                 <p class="value">MOVED</p>
-                <p class="device-tag">PIR1</p>
-            </div>
-            <div class="light-blue-border rectangular-container wider">
-                <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">MOVED</p>
-                <p class="device-tag">PIR2</p>
+                <p class="device-tag">DPIR2</p>
             </div>
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
@@ -71,7 +72,7 @@
         <div class="rectangular-container wider bigger-rectangular-width">
             <!-- <p class="timestamp">13:00 25.1.2024.</p> -->
             <p class="value font-size-64">CLOSED</p>
-            <p class="device-tag bigger-device-tag">DS1</p>
+            <p class="device-tag bigger-device-tag">DS2</p>
             <div class="bigger-icon-right"><i class="white fa-solid fa-door-open"></i></div>
             <!-- <div class="bigger-icon"><i class="white fa-solid fa-door-closed"></i></div> -->
 
@@ -84,7 +85,7 @@
         <div class="light-blue-border rectangular-container wider bigger-rectangular-width">
             
             <div class="bigger-icon-left"><i class="light-blue fa-solid fa-person-walking"></i></div>
-            <p class="device-tag bigger-device-tag">DUS1</p>
+            <p class="device-tag bigger-device-tag">DUS2</p>
             <div style="display: flex; flex-direction: column; padding: 12px 20px; align-items: center;">
                 <p class="timestamp">13:00 25.1.2024.</p>
                 <p class="value font-size-64">45 cm</p>

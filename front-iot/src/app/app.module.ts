@@ -14,12 +14,14 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/mat
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Pi1DashboardComponent } from './pi1-dashboard/pi1-dashboard.component';
+import { Pi2DashboardComponent } from './pi2-dashboard/pi2-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    Pi1DashboardComponent
+    Pi1DashboardComponent,
+    Pi2DashboardComponent
   ],
   imports: [
     BrowserModule,
