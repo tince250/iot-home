@@ -88,8 +88,8 @@
             <div class="bigger-icon-left"><i class="light-blue fa-solid fa-person-walking"></i></div>
             <p class="device-tag bigger-device-tag">DUS2</p>
             <div style="display: flex; flex-direction: column; padding: 12px 20px; align-items: center;">
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value font-size-64">45 cm</p>
+                <p class="timestamp">{{  dus2.time }}</p>
+                <p class="value font-size-64">{{ dus2.value ? dus2.value + " cm" : "none" }}</p>
             </div>
             <!-- <p class="device-tag bigger-device-tag">DS1</p> -->
             <!-- <div class="bigger-icon"><i class="white fa-solid fa-door-closed"></i></div> -->

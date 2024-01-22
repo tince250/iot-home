@@ -14,27 +14,16 @@ export class Pi2DashboardComponent implements OnInit{
   ds2: UpdateDTO = {} as UpdateDTO;
   rpir3: UpdateDTO = {} as UpdateDTO;
   dpir2: UpdateDTO = {} as UpdateDTO;
+  dus2: UpdateDTO = {} as UpdateDTO;
 
   constructor(private socket: Socket) {
   }
 
   ngOnInit(): void {
-    this.socket.on('update/PI1', (data: any) => {
+    this.socket.on('update/PI2', (data: any) => {
       data = JSON.parse(data);
       
       switch (data["name"]) {
-        // case "Room DHT1" :
-        //   this.updateDHT(data, this.dht1);
-        //   break;
-        // case "Room DHT2" :
-        //   this.updateDHT(data, this.dht2);
-        //   break;
-        // case "Door Light":
-        //   this.dl = data;
-        //   break;
-        // case "Door Ultrasonic Sensor":
-        //   this.uds1 = data;
-        //   break;
         case "Room DHT3" :
           this.updateDHT(data, this.dht3);
           break;
@@ -53,6 +42,10 @@ export class Pi2DashboardComponent implements OnInit{
             this.rpir3 = data;
             this.rpir3.time = new Date().toLocaleTimeString();
             break;
+        case "Door Ultrasonic Sensor":
+          this.dus2 = data;
+          this.dus2.time = new Date().toLocaleTimeString();
+          break
       }
       // Handle received data
       console.log('Received Socket.IO message:', data);
