@@ -12,12 +12,13 @@ export class Pi3DashboardComponent {
   dht4: UpdateDTO[] = [];
   bb: UpdateDTO = {} as UpdateDTO;
   rpir4: UpdateDTO = {} as UpdateDTO;
+  rgb: UpdateDTO = {} as UpdateDTO;
 
   constructor(private socket: Socket) {
   }
 
   ngOnInit(): void {
-    this.socket.on('update/PI1', (data: any) => {
+    this.socket.on('update/PI3', (data: any) => {
       data = JSON.parse(data);
       
       switch (data["name"]) {
@@ -31,6 +32,10 @@ export class Pi3DashboardComponent {
         case "Bedroom Buzzer":
           this.bb = data;
           this.bb.time = new Date().toLocaleTimeString();
+          break;
+        case "Bedroom RGB diode":
+          this.rgb = data;
+          this.rgb.time = new Date().toLocaleTimeString();
           break;
           
       }

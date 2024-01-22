@@ -35,8 +35,9 @@
     <div class="dashboard-row">
         <div class="group-container">
             <div class="yellow-border rectangular-container wider">
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">YELLOW</p>
+                <div class="cont-icon"><i class="yellow fa-solid fa-lightbulb"></i></div>
+                <p class="timestamp">{{ rgb.time }}</p>
+                <p class="value">{{ rgb.value? rgb.value.toUpperCase(): "" }}</p>
                 <p class="device-tag">BRGB</p>
             </div>
         </div>

@@ -117,11 +117,11 @@ def run_pi1(settings):
     # gyro_settings = settings["GSG"]
     # run_gyro(gyro_settings, threads, stop_event)
 
-    # rgb_settings = settings["BRGB"]
-    # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])
+    rgb_settings = settings["BRGB"]
+    run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])
 
-    dus2_settings = settings["DUS2"]
-    run_uds(dus2_settings, threads, stop_event)
+    # dus2_settings = settings["DUS2"]
+    # run_uds(dus2_settings, threads, stop_event)
 
 if __name__ == "__main__":
     with print_lock:
