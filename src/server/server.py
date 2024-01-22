@@ -46,24 +46,44 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/uds/distance")
     client.subscribe("topic/ms/key-pressed")
     client.subscribe("topic/bir/button")
+    client.subscribe("topic/gyro/angles")
+    client.subscribe("topic/rgbdiode/status")
+
+def get_gyro_point(data):
+    return (
+                Point(data["measurement"])
+                .tag("simulated", data["simulated"])
+                .tag("runs_on", data["runs_on"])
+                .tag("name", data["name"])
+                .tag("axis", data["axis"])
+                .field(data["field"], data["value"])
+            )
 
 def save_to_db(data, verbose=True):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     try:
-        point = (
-            Point(data["measurement"])
-            .tag("simulated", data["simulated"])
-            .tag("runs_on", data["runs_on"])
-            .tag("name", data["name"])
-            .field(data["field"], data["value"])
-        )
+        if (data["measurement"] == "angle"):
+            print("jeste")
+            point = get_gyro_point(data)
+        else:
+            point = (
+                Point(data["measurement"])
+                .tag("simulated", data["simulated"])
+                .tag("runs_on", data["runs_on"])
+                .tag("name", data["name"])
+                .field(data["field"], data["value"])
+            )
+        
         write_api.write(bucket=data["bucket"], org=org, record=point)
+        
         if verbose:
             print("Got message: " + json.dumps(data))
 
         if data["update_front"]:
             send_latest_data_to_frontend(data)
-    except:
+    
+    except Exception as e:
+        print(str(e))
         pass
 
 mqtt_client.on_connect = on_connect

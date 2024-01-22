@@ -179,5 +179,39 @@
         "runs_on": "PI3",
         "influxdb_field": "event",
         "influxdb_bucket": "events"
+    },
+    "GLCD":
+    {
+        "simulated": true,
+        "name": "Garage LCD",
+        "runs_on": "PI2"
+    },
+    "GSG":
+    {
+        "simulated": true,
+        "name": "Gun Safe Gyro",
+        "runs_on": "PI2",
+        "influxdb_field": "measurement",
+        "influxdb_bucket": "measurements"
+    },
+    "BRGB":
+    {
+        "simulated": true,
+        "name": "Bedroom RGB diode",
+        "RED": 12,
+        "GREEN": 13,
+        "BLUE": 19,
+        "runs_on": "PI3",
+        "influxdb_field": "event",
+        "influxdb_bucket": "events"
+    },
+    "DUS2": {
+        "simulated": true,
+        "echo": 14,
+        "trig": 15,
+        "name": "Door Ultrasonic Sensor",
+        "runs_on": "PI2",
+        "influxdb_field": "measurement",
+        "influxdb_bucket": "measurements"
     }
 }
