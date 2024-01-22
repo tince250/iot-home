@@ -11,6 +11,7 @@ export class Pi1DashboardComponent implements OnInit {
   dht1: UpdateDTO[] = [];
   dht2: UpdateDTO[] = [];
   dl: UpdateDTO = {} as UpdateDTO;
+  uds1: UpdateDTO = {} as UpdateDTO;
  
   constructor(private socket: Socket) {
   }
@@ -18,7 +19,7 @@ export class Pi1DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.socket.on('update/PI1', (data: any) => {
       data = JSON.parse(data);
-      console.log(data)
+      
       switch (data["name"]) {
         case "Room DHT1" :
           this.updateDHT(data, this.dht1);
@@ -28,6 +29,9 @@ export class Pi1DashboardComponent implements OnInit {
           break;
         case "Door Light":
           this.dl = data;
+          break;
+        case "Door Ultrasonic Sensor":
+          this.uds1 = data;
           break;
       }
       // Handle received data

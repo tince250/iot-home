@@ -3,7 +3,7 @@
         <div class="rectangular-container">
             <div class="cont-icon"><i class="yellow fa-solid fa-lightbulb"></i></div>
             <p class="timestamp">13:00 25.1.2024.</p>
-            <p class="value">{{ dl.value }}</p>
+            <p class="value">{{ dl ? dl.value : "" }}</p>
             <p class="device-tag">DL</p>
         </div>
     
@@ -103,7 +103,7 @@
             <p class="device-tag bigger-device-tag" style="background-color: #FFCB52 !important;">DUS1</p>
             <div style="display: flex; flex-direction: column; padding: 12px 20px; align-items: center;">
                 <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value font-size-64">45 cm</p>
+                <p class="value font-size-64">{{ uds1.value ? uds1.value + " cm" : "none" }} </p>
             </div>
             <!-- <p class="device-tag bigger-device-tag">DS1</p> -->
             <!-- <div class="bigger-icon"><i class="white fa-solid fa-door-closed"></i></div> -->
