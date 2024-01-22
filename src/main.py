@@ -76,8 +76,8 @@ def run_pi1(settings):
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event)
-    # dpir2_settings = settings['DPIR2']
-    # run_pir(dpir2_settings, threads, stop_event)
+    dpir2_settings = settings['DPIR2']
+    run_pir(dpir2_settings, threads, stop_event)
     
     # pir1_settings = settings['RPIR1']
     # run_pir(pir1_settings, threads, stop_event)
@@ -88,8 +88,8 @@ def run_pi1(settings):
     # pir4_settings = settings['RPIR4']
     # run_pir(pir4_settings, threads, stop_event)
 
-    ds1_settings = settings['DS1']
-    run_button(ds1_settings, threads, stop_event)
+    # ds1_settings = settings['DS1']
+    # run_button(ds1_settings, threads, stop_event)
 
     # ds2_settings = settings['DS2']
     # run_button(ds2_settings, threads, stop_event)

@@ -86,10 +86,49 @@ def save_to_db(data, verbose=True):
         print(str(e))
         pass
 
+def on_receive(data):
+    if data["name"] == "Door Motion Sensor 1" or data["name"] == "Door Motion Sensor 2":
+        check_door_entrance(data["runs_on"])
+    if "Room PIR" in data["name"]:
+        with people_count_lock:
+            if not people_count:
+                print("ALARM!!!")
+    save_to_db(data)
+
+import threading
+people_count = 0
+people_count_lock = threading.Lock()
+
+def check_door_entrance(runs_on):
+    query = f'from(bucket: "measurements") |> range(start: -15s) |> filter(fn: (r) => r._measurement == "Distance" and r.runs_on == "{runs_on}")'
+
+    result = influxdb_client.query_api().query(org=org, query=query)
+    records = []
+
+    for table in result:
+        for record in table.records:
+            records.append((record.get_time(), record.get_value()))
+    if len(records) < 2:
+        return
+    
+    sorted_records = sorted(records, key=lambda record: record[0], reverse=True)
+    sorted_records = sorted_records if len(sorted_records) < 3 else sorted_records[:3]
+    entering_order = all(sorted_records[i][1] < sorted_records[i + 1][1] for i in range(len(sorted_records) - 1))
+    exiting_order = all(sorted_records[i][1] > sorted_records[i + 1][1] for i in range(len(sorted_records) - 1))
+    
+    global people_count
+    with people_count_lock:
+        if entering_order:
+            people_count += 1
+            print(f"Someone entered the house. People count: {people_count}")
+        elif exiting_order:
+            people_count -= 1
+            print(f"Someone left the house. People count: {people_count}")
+
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+mqtt_client.on_message = lambda client, userdata, msg: on_receive(json.loads(msg.payload.decode('utf-8')))
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, port=5001)
+    socketio.run(app, debug=True, use_reloader=False, port=5001)
