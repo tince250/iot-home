@@ -48,11 +48,11 @@ def get_queues_dict():
     return queues_dict
 
 def run_pi1(settings):
-    rdht1_settings = settings['RDHT1']
-    run_dht(rdht1_settings, threads, stop_event)
+    # rdht1_settings = settings['RDHT1']
+    # run_dht(rdht1_settings, threads, stop_event)
 
-    rdht2_settings = settings['RDHT2']
-    run_dht(rdht2_settings, threads, stop_event)
+    # rdht2_settings = settings['RDHT2']
+    # run_dht(rdht2_settings, threads, stop_event)
     # rdht3_settings = settings['RDHT3']
     # run_dht(rdht3_settings, threads, stop_event)
     # rdht4_settings = settings['RDHT4']
@@ -86,8 +86,8 @@ def run_pi1(settings):
     # dms_settings = settings["DMS"]
     # run_ms(dms_settings, threads, stop_event)
     
-    # dl_settings = settings["DL"]
-    # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
+    dl_settings = settings["DL"]
+    run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])

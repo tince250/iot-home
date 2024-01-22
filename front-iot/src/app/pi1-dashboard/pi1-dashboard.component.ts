@@ -10,7 +10,8 @@ export class Pi1DashboardComponent implements OnInit {
 
   dht1: UpdateDTO[] = [];
   dht2: UpdateDTO[] = [];
-
+  dl: UpdateDTO = {} as UpdateDTO;
+ 
   constructor(private socket: Socket) {
   }
 
@@ -24,6 +25,9 @@ export class Pi1DashboardComponent implements OnInit {
           break;
         case "Room DHT2" :
           this.updateDHT(data, this.dht2);
+          break;
+        case "Door Light":
+          this.dl = data;
           break;
       }
       // Handle received data
