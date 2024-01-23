@@ -41,6 +41,21 @@
     text-align: center;
 }
 
+.nav-item-clock {
+    cursor: pointer;
+    margin-left: 15px;
+    font-size: 1.3em;
+    border: 2px solid rgba(255, 255, 0, 0);
+    border-radius: 5px;
+    padding: 5px;
+    width: 30px;
+    text-align: center;
+}
+
+.nav-item-clock:hover {
+    color: #FFCB52;
+}
+
 
 .nav-title {
     font-weight: bold;

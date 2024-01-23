@@ -1,0 +1,60 @@
+
+
+#create-dialog-container {
+    width: 320px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 12px !important;
+    font-size: 1.5em !important;
+}
+
+mat-form-field {
+    width: 100% !important;
+}
+
+#btns {
+    display: flex;
+    flex-direction: row;
+}
+
+button {
+    width: 100px;
+}
+
+.cancel-button {
+    display: inline-block !important;
+    text-align: center;
+    /* margin: 30px auto 12px auto; */
+    padding: 5px 10px !important;
+    border-radius: 17px !important;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #ef476f!important;
+    background-color: white;
+    border: 2px solid #ef476f!important
+}
+
+.conf-button {
+    display: inline-block !important;
+    text-align: center;
+    /* margin: 30px auto 12px auto; */
+    padding: 5px 10px !important;
+    border-radius: 17px !important;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    color: white !important;
+    background-color: #FFCB52 !important;
+    margin-left: 10px;
+    margin-top: 0 !important;
+}
+
+.timepicker__header{
+    padding: 15px 30px;
+    background-color: #FFCB52 importnt !important;
+}
