@@ -89,11 +89,14 @@ def parseCheckCode(code):
 		return "DHTLIB_INVALID_VALUE"
 
 
-def run_dht_loop(dht, delay, callback, stop_event, publish_event, settings):
+def run_dht_loop(dht, delay, callback, stop_event, publish_event, settings, display_values_event, data_queue):
 		while True:
 			check = dht.readDHT11()
 			code = parseCheckCode(check)
 			humidity, temperature = dht.humidity, dht.temperature
+			if parseCheckCode == "DHTLIB_OK" and display_values_event and data_queue:
+				data_queue.put((temperature, humidity))
+				display_values_event.set()
 			callback(humidity, temperature, publish_event, settings, code=code)
 			if stop_event.is_set():
 					GPIO.cleanup()
