@@ -46,11 +46,13 @@ class LCD(object):
     def destroy(self):
         self.lcd.clear()
 
-def run_lcd_loop(data_queue, lcd, delay, callback, stop_event, settings):
+def run_lcd_loop(lcd, delay, callback, stop_event, settings, display_values_event, data_queue):
     while True:
         try:
+            display_values_event.wait()
             temperature, humidity = data_queue.get(timeout=1)
             lcd.show_text(temperature, humidity)
+            display_values_event.clear()
             callback(temperature, humidity, settings)
         except Empty:
             pass

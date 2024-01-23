@@ -56,11 +56,14 @@ def run_user_input_thread(queues_dict : dict, stop_event, threads):
 def get_queues_dict():
     queues_dict = {"door_light_queue" : Queue(), 
                    "buzzer_queue": Queue(),
-                   "rgb_queue": Queue()}
+                   "rgb_queue": Queue(),
+                   "lcd_queue": Queue()}
     return queues_dict
 
 def get_events_dict():
-    events_dict = {"dpir1_dl" : Event()}
+    events_dict = {"dpir1_dl" : Event(),
+                   "gdht_glcd" : Event(),
+                   }
     return events_dict
 
 def run_pi1(settings, events_dict):
@@ -73,14 +76,14 @@ def run_pi1(settings, events_dict):
     # run_dht(rdht3_settings, threads, stop_event)
     # rdht4_settings = settings['RDHT4']
     # run_dht(rdht4_settings, threads, stop_event)
-    # gdht_settings = settings['GDHT']
-    # run_dht(gdht_settings, threads, stop_event)
+    gdht_settings = settings['GDHT']
+    run_dht(gdht_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
 
     # uds1_settings = settings["UDS1"]
     # run_uds(uds1_settings, threads, stop_event)
     
-    dpir1_settings = settings['DPIR1']
-    run_pir(dpir1_settings, threads, stop_event, events_dict["dpir1_dl"])
+    # dpir1_settings = settings['DPIR1']
+    # run_pir(dpir1_settings, threads, stop_event, events_dict["dpir1_dl"])
     # dpir2_settings = settings['DPIR2']
     # run_pir(dpir2_settings, threads, stop_event)
     
@@ -102,8 +105,8 @@ def run_pi1(settings, events_dict):
     # dms_settings = settings["DMS"]
     # run_ms(dms_settings, threads, stop_event)
     
-    dl_settings = settings["DL"]
-    run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
+    # dl_settings = settings["DL"]
+    # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
@@ -116,8 +119,8 @@ def run_pi1(settings, events_dict):
     # bir_settings = settings["BIR"]
     # run_bir(bir_settings, threads, stop_event)
 
-    # lcd_settings = settings["GLCD"]
-    # run_lcd(lcd_settings, threads, stop_event)
+    lcd_settings = settings["GLCD"]
+    run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
     
     # gyro_settings = settings["GSG"]
     # run_gyro(gyro_settings, threads, stop_event)

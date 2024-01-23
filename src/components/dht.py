@@ -82,12 +82,12 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         publish_event.set()
 
 
-def run_dht(settings, threads, stop_event):
+def run_dht(settings, threads, stop_event, display_values_event = None, data_queue = None):
     sensor_name = settings["name"]
     if settings['simulated']:
         with print_lock:    
             print(f"Starting {sensor_name} simulator")
-        dht1_thread = threading.Thread(target = run_dht_simulator, args=(2, dht_callback, stop_event, publish_event, settings))
+        dht1_thread = threading.Thread(target = run_dht_simulator, args=(5, dht_callback, stop_event, publish_event, settings, display_values_event, data_queue))
         dht1_thread.start()
         threads.append(dht1_thread)
         with print_lock: 
@@ -97,7 +97,7 @@ def run_dht(settings, threads, stop_event):
         with print_lock:    
             print(f"Starting {sensor_name} loop")
         dht = DHT(settings['pin'], sensor_name)
-        dht1_thread = threading.Thread(target=run_dht_loop, args=(dht, 2, dht_callback, stop_event, publish_event, settings))
+        dht1_thread = threading.Thread(target=run_dht_loop, args=(dht, 2, dht_callback, stop_event, publish_event, settings, display_values_event, data_queue))
         dht1_thread.start()
         threads.append(dht1_thread)
         with print_lock: 
