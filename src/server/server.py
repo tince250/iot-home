@@ -80,7 +80,9 @@ def save_to_db(data, verbose=True):
         if verbose:
             print("Got message: " + json.dumps(data))
 
+        print("UPDATE FRONT")
         if data["update_front"]:
+            print("DA")
             send_latest_data_to_frontend(data)
     
     except Exception as e:
@@ -100,8 +102,8 @@ def on_message_callback(client, userdata, msg):
             print(str(e))
     else:
         # Handle messages from other topics
-        print('nije tu')
-        #save_to_db(json.loads(msg.payload.decode('utf-8')))
+        #print('nije tu')
+        save_to_db(json.loads(msg.payload.decode('utf-8')))
 
 
 mqtt_client.on_connect = on_connect

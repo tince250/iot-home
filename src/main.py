@@ -76,8 +76,8 @@ def run_pi1(settings, events_dict):
     # run_dht(rdht3_settings, threads, stop_event)
     # rdht4_settings = settings['RDHT4']
     # run_dht(rdht4_settings, threads, stop_event)
-    gdht_settings = settings['GDHT']
-    run_dht(gdht_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
+    # gdht_settings = settings['GDHT']
+    # run_dht(gdht_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
 
     # uds1_settings = settings["UDS1"]
     # run_uds(uds1_settings, threads, stop_event)
@@ -110,17 +110,21 @@ def run_pi1(settings, events_dict):
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
-    # bb_settings = settings['BB']
-    # run_buzzer(bb_settings, threads, stop_event, queues_dict["buzzer_queue"])
+    b4sd_queue = Queue()
+    bb_queue = Queue()
+    alarm_on_event = Event()
+    alarm_off_event = Event()
+    bb_settings = settings['BB']
+    run_buzzer(bb_settings, threads, stop_event, bb_queue, alarm_on_event, alarm_off_event)
 
     b4sd_settings = settings["B4SD"]
-    run_b4sd(b4sd_settings, threads, stop_event)
+    run_b4sd(b4sd_settings, threads, stop_event, b4sd_queue, bb_queue, alarm_on_event, alarm_off_event)
 
     # bir_settings = settings["BIR"]
     # run_bir(bir_settings, threads, stop_event)
 
-    lcd_settings = settings["GLCD"]
-    run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
+    # lcd_settings = settings["GLCD"]
+    # run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
     
     # gyro_settings = settings["GSG"]
     # run_gyro(gyro_settings, threads, stop_event)

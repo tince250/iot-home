@@ -56,7 +56,7 @@ export class CreateClockAlarmDialogComponent implements OnInit{
           console.log(err);
         }
       });
-      //this.dialogRef.close();
+      this.dialogRef.close();
     }
   }
 
