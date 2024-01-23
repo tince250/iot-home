@@ -65,8 +65,10 @@ def motion_detected_callback(publish_event, settings,verbose=False):
 def no_motion_detected_callback(publish_event, settings,verbose=False):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings["name"], end=" ")
@@ -82,6 +84,7 @@ def no_motion_detected_callback(publish_event, settings,verbose=False):
         "value": "stopped",
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"],
+        "datetime": formatted_time
     }
 
     with counter_lock:

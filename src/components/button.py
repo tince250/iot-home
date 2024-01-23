@@ -34,8 +34,10 @@ publisher_thread.start()
 def button_callback(publish_event, settings, is_pressed, verbose=True):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings['name'], end=" ")
@@ -50,7 +52,8 @@ def button_callback(publish_event, settings, is_pressed, verbose=True):
         "name": settings["name"],
         "value": "pressed" if is_pressed else "none",
         "field": settings["influxdb_field"],
-        "bucket": settings["influxdb_bucket"]
+        "bucket": settings["influxdb_bucket"],
+        "datetime": formatted_time
     }
 
     with counter_lock:

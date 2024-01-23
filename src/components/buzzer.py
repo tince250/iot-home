@@ -36,8 +36,10 @@ publisher_thread.start()
 def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings["name"], end=" ")
@@ -52,7 +54,8 @@ def buzzer_print_callback(publish_event, settings, status="ON", verbose=False):
         "name": settings["name"],
         "value": status,
         "field": settings["influxdb_field"],
-        "bucket": settings["influxdb_bucket"]
+        "bucket": settings["influxdb_bucket"],
+        "datetime": formatted_time
     }
 
     with counter_lock:

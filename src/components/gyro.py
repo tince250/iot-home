@@ -21,8 +21,8 @@ def publisher_task(event, gyro_batch):
         try:
             publish.multiple(local_gyro_batch, hostname="localhost", port=1883)
             print(f'Published {publish_data_limit} gyroscope values')
-        except:
-            print("greska")
+        except Exception as e:
+            print(str(e))
         event.clear()
 
 publish_event = threading.Event()
@@ -33,8 +33,10 @@ publisher_thread.start()
 def gyro_callback(angle, publish_event, gyro_settings, verbose=True):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(gyro_settings['name'], end=" ")
@@ -52,7 +54,9 @@ def gyro_callback(angle, publish_event, gyro_settings, verbose=True):
         "value": angle["rotation_x"],
         "field": gyro_settings["influxdb_field"],
         "bucket": gyro_settings["influxdb_bucket"],
-        "axis": "x" 
+        "axis": "x" ,
+        "update_front": False,
+        "datetime": formatted_time
     }
 
     angle_payload_y = {
@@ -63,7 +67,9 @@ def gyro_callback(angle, publish_event, gyro_settings, verbose=True):
         "value": angle["rotation_y"],
         "field": gyro_settings["influxdb_field"],
         "bucket": gyro_settings["influxdb_bucket"],
-        "axis": "y" 
+        "axis": "y" ,
+        "update_front": False,
+        "datetime": formatted_time
     }
 
 
@@ -75,10 +81,16 @@ def gyro_callback(angle, publish_event, gyro_settings, verbose=True):
         "value": angle["rotation_z"],
         "field": gyro_settings["influxdb_field"],
         "bucket": gyro_settings["influxdb_bucket"],
-        "axis": "z" 
+        "axis": "z" ,
+        "update_front": False,
+        "datetime": formatted_time
     }
 
     with counter_lock:
+        if publish_data_counter == publish_data_limit - 1:
+            angle_payload_x["update_front"] = True
+            angle_payload_y["update_front"] = True
+            angle_payload_z["update_front"] = True
         gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload_x), 0, True))
         gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload_y), 0, True))
         gyro_batch.append(('topic/gyro/angles', json.dumps(angle_payload_z), 0, True))

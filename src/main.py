@@ -97,8 +97,8 @@ def run_pi1(settings):
     # dms_settings = settings["DMS"]
     # run_ms(dms_settings, threads, stop_event)
     
-    # dl_settings = settings["DL"]
-    # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
+    dl_settings = settings["DL"]
+    run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"])
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
@@ -117,8 +117,8 @@ def run_pi1(settings):
     # gyro_settings = settings["GSG"]
     # run_gyro(gyro_settings, threads, stop_event)
 
-    rgb_settings = settings["BRGB"]
-    run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])
+    # rgb_settings = settings["BRGB"]
+    # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])
 
     # dus2_settings = settings["DUS2"]
     # run_uds(dus2_settings, threads, stop_event)

@@ -11,6 +11,7 @@ export class Pi2DashboardComponent implements OnInit{
   
   dht3: UpdateDTO[] = [];
   gdht: UpdateDTO[] = [];
+  gyro: UpdateDTO[] = [];
   ds2: UpdateDTO = {} as UpdateDTO;
   rpir3: UpdateDTO = {} as UpdateDTO;
   dpir2: UpdateDTO = {} as UpdateDTO;
@@ -46,10 +47,23 @@ export class Pi2DashboardComponent implements OnInit{
           this.dus2 = data;
           this.dus2.time = new Date().toLocaleTimeString();
           break
+        case "Gun Safe Gyro":
+          this.updateGyro(data);
+          break
       }
       // Handle received data
       console.log('Received Socket.IO message:', data);
     });
+  }
+
+  updateGyro(data: UpdateDTO) {
+    if (data["axis"] == "x") {
+      this.gyro[0] = data;
+    } else if (data["axis"] == "y") {
+      this.gyro[1] = data;
+    } else {
+      this.gyro[2] = data;
+    }
   }
 
   updateDHT(data: UpdateDTO, dht: UpdateDTO[]) {

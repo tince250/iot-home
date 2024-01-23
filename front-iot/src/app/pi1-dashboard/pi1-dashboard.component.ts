@@ -84,5 +84,7 @@ export interface UpdateDTO {
   field: string,
   bucket: string,
   update_front: boolean,
-  time: string
+  time: string,
+  datetime: string,
+  axis: string | undefined
 }

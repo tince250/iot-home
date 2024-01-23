@@ -3,17 +3,17 @@
         <div class="group-container" style="justify-content: right;">
             <div class="circle rectangular-container light-blue-border" style="margin-right: 40px;">
                 <p class="device-tag">GSG</p>
-                <p class="value">35</p>
+                <p class="value">{{ gyro[0] ? gyro[0].value : "" }}</p>
                 <p class="value-2">x axis</p>
             </div>
             <div class="circle rectangular-container green-border" style="margin-right: 35px;">
                 <p class="device-tag">GSG</p>
-                <p class="value">3</p>
+                <p class="value">{{ gyro[1] ? gyro[1].value : "" }}</p>
                 <p class="value-2">y axis</p>
             </div>
             <div class="circle rectangular-container">
                 <p class="device-tag">GSG</p>
-                <p class="value">-5</p>
+                <p class="value">{{ gyro[2] ? gyro[2].value : "" }}</p>
                 <p class="value-2">z axis</p>
             </div>
         </div>
@@ -47,14 +47,14 @@
         <div class="group-container">
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">{{  dpir2.time }}</p>
+                <p class="timestamp">{{  dpir2.datetime }}</p>
                 <p class="value">{{ dpir2.value ? dpir2.value : "none" }}</p>
                 
                 <p class="device-tag">DPIR2</p>
             </div>
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="yellow fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">{{  rpir3.time }}</p>
+                <p class="timestamp">{{  rpir3.datetime }}</p>
                 <p class="value">{{ rpir3.value ? rpir3.value : "none" }}</p>
                 <p class="device-tag" style="background-color: #FFCB52 !important;">PIR3</p>
             </div>
