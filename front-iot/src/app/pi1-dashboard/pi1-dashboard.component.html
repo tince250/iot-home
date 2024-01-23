@@ -2,7 +2,7 @@
     <div class="dashboard-row">
         <div class="rectangular-container">
             <div class="cont-icon"><i class="yellow fa-solid fa-lightbulb"></i></div>
-            <p class="timestamp">13:00 25.1.2024.</p>
+            <p class="timestamp">{{  dl.datetime }}</p>
             <p class="value">{{ dl ? dl.value : "" }}</p>
             <p class="device-tag">DL</p>
         </div>
@@ -25,6 +25,7 @@
         <div class="group-container">
             <div class="circle rectangular-container">
                 <p class="device-tag">DHT1</p>
+                <!-- <p class="timestamp">{{ dht1[0].datetime }}</p> -->
                 <p class="value">{{ dht1[0] ? dht1[0].value : "" }}C</p>
                 <p class="value-2">{{ dht1[1] ? dht1[1].value : ""  }}%</p>
             </div>
@@ -40,21 +41,21 @@
         <div class="group-container">
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="light-blue fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">MOVED</p>
-                <p class="device-tag" style="background-color: #FFCB52 !important;">PIR1</p>
+                <p class="timestamp">{{  rpir1.datetime }}</p>
+                <p class="value">{{ rpir1.value ? rpir1.value : "none" }}</p>
+                <p class="device-tag" style="background-color: #FFCB52 !important;">RPIR1</p>
             </div>
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="light-blue fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">MOVED</p>
-                <p class="device-tag" style="background-color: #FFCB52 !important;">PIR2</p>
+                <p class="timestamp">{{  rpir2.datetime }}</p>
+                <p class="value">{{ rpir2.value ? rpir2.value : "none" }}</p>
+                <p class="device-tag" style="background-color: #FFCB52 !important;">RPIR2</p>
             </div>
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="light-blue fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">MOVED</p>
-                <p class="device-tag" style="background-color: #FFCB52 !important;">PIR3</p>
+                <p class="timestamp">{{  dpir1.datetime }}</p>
+                <p class="value">{{ dpir1.value ? dpir1.value : "none" }}</p>
+                <p class="device-tag" style="background-color: #FFCB52 !important;">DPIR1</p>
             </div>
         </div>
         
@@ -70,7 +71,7 @@
 
         <div class="rectangular-container wider bigger-rectangular-width">
             <!-- <p class="timestamp">13:00 25.1.2024.</p> -->
-            <p class="value font-size-64">CLOSED</p>
+            <p class="value font-size-64">{{ "ENTERED" ? ds1.value == "pressed" : "CLOSED"}}</p>
             <p class="device-tag bigger-device-tag">DS1</p>
             <div class="bigger-icon-right"><i class="yellow fa-solid fa-door-open"></i></div>
             <!-- <div class="bigger-icon"><i class="yellow fa-solid fa-door-closed"></i></div> -->
@@ -81,8 +82,8 @@
         <div class="group-container">
             <div class="green-border rectangular-container wider">
                 <div class="cont-icon"><i class="green fa-solid fa-music"></i></div>
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">BUZZING</p>
+                <p class="timestamp">{{  db.datetime }}</p>
+                <p class="value">{{ db.value }}</p>
                 <p class="device-tag" style="background-color: #2C87D7 !important;">BB</p>
             </div>
         </div>
@@ -102,7 +103,7 @@
             <div class="bigger-icon-left"><i class="light-blue fa-solid fa-person-walking"></i></div>
             <p class="device-tag bigger-device-tag" style="background-color: #FFCB52 !important;">DUS1</p>
             <div style="display: flex; flex-direction: column; padding: 12px 20px; align-items: center;">
-                <p class="timestamp">13:00 25.1.2024.</p>
+                <p class="timestamp">{{  uds1.datetime }}</p>
                 <p class="value font-size-64">{{ uds1.value ? uds1.value + " cm" : "none" }} </p>
             </div>
             <!-- <p class="device-tag bigger-device-tag">DS1</p> -->

@@ -12,7 +12,12 @@ export class Pi1DashboardComponent implements OnInit {
   dht2: UpdateDTO[] = [];
   dl: UpdateDTO = {} as UpdateDTO;
   uds1: UpdateDTO = {} as UpdateDTO;
- 
+  rpir1: UpdateDTO = {} as UpdateDTO;
+  rpir2: UpdateDTO = {} as UpdateDTO;
+  dpir1: UpdateDTO = {} as UpdateDTO;
+  db: UpdateDTO = {} as UpdateDTO;
+  ds1: UpdateDTO = {} as UpdateDTO;
+
   constructor(private socket: Socket) {
   }
 
@@ -32,6 +37,21 @@ export class Pi1DashboardComponent implements OnInit {
           break;
         case "Door Ultrasonic Sensor":
           this.uds1 = data;
+          break;
+        case "Room PIR1":
+          this.rpir1 = data;
+          break;
+        case "Room PIR2":
+          this.rpir2 = data;
+          break;
+        case "Door Motion Sensor 1":
+          this.dpir1 = data;
+          break;
+        case "Door Buzzer":
+          this.db = data;
+          break;
+        case "Door Sensor 1":
+          this.ds1 = data;
           break;
       }
       // Handle received data
@@ -56,5 +76,7 @@ export interface UpdateDTO {
   value: string,
   field: string,
   bucket: string,
-  update_front: boolean
+  update_front: boolean,
+  datetime: string,
+  axis: string | undefined
 }

@@ -33,8 +33,10 @@ publisher_thread.start()
 def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLIB_OK", verbose=True):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(dht_settings['name'], end=" ")
@@ -52,7 +54,8 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         "value": temperature,
         "field": dht_settings["influxdb_field"],
         "bucket": dht_settings["influxdb_bucket"],
-        "update_front": False
+        "update_front": False,
+        "datetime": formatted_time
     }
 
     humidity_payload = {
@@ -63,7 +66,8 @@ def dht_callback(humidity, temperature, publish_event, dht_settings, code="DHTLI
         "value": humidity,
         "field": dht_settings["influxdb_field"],
         "bucket": dht_settings["influxdb_bucket"],
-        "update_front": False
+        "update_front": False,
+        "datetime": formatted_time
     }
 
     with counter_lock:

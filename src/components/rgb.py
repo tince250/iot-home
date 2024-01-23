@@ -7,7 +7,7 @@ import json
 
 rgb_batch = []
 publish_data_counter = 0
-publish_data_limit = 2
+publish_data_limit = 1
 counter_lock = threading.Lock()
 
 def publisher_task(event, rgb_batch):
@@ -33,8 +33,10 @@ publisher_thread.start()
 def rgb_callback(status, publish_event, settings, verbose=False):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings['name'], end=" ")
@@ -49,7 +51,9 @@ def rgb_callback(status, publish_event, settings, verbose=False):
         "name": settings["name"],
         "value": status,
         "field": settings["influxdb_field"],
-        "bucket": settings["influxdb_bucket"]
+        "bucket": settings["influxdb_bucket"],
+        "update_front": True,
+        "datetime": formatted_time
     }
 
     with counter_lock:

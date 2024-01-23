@@ -4,7 +4,7 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import json
 import paho.mqtt.client as mqtt
-from env import INFLUXDB_TOKEN
+# from env import INFLUXDB_TOKEN
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ def send_latest_data_to_frontend(data):
     except Exception as e:
         print(str(e))
 
-token = INFLUXDB_TOKEN
+token = "7HPyHiQ_zy7TDUrO7p-i1POQsIt1ydQn-PZhUjnYzdKpPxn3jyaWdaWrQxuyO-glMHyfO9rp_mhh1vqJ2kMavA=="
 org = "iot"
 url = "http://localhost:8086"
 bucket = "measurements"
