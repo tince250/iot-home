@@ -27,15 +27,12 @@ export class Pi3DashboardComponent {
           break;
         case "Room PIR4":
           this.rpir4 = data;
-          this.rpir4.time = new Date().toLocaleTimeString();
           break;
         case "Bedroom Buzzer":
           this.bb = data;
-          this.bb.time = new Date().toLocaleTimeString();
           break;
         case "Bedroom RGB diode":
           this.rgb = data;
-          this.rgb.time = new Date().toLocaleTimeString();
           break;
           
       }

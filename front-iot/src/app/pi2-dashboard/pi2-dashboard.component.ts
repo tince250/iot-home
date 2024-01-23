@@ -33,19 +33,15 @@ export class Pi2DashboardComponent implements OnInit{
           break;
         case "Door Sensor 2":
           this.ds2 = data;
-          this.ds2.time = new Date().toLocaleTimeString();
           break;
         case "Door Motion Sensor 2":
             this.dpir2 = data;
-            this.dpir2.time = new Date().toLocaleTimeString();
             break;
         case "Room PIR3":
             this.rpir3 = data;
-            this.rpir3.time = new Date().toLocaleTimeString();
             break;
         case "Door Ultrasonic Sensor":
           this.dus2 = data;
-          this.dus2.time = new Date().toLocaleTimeString();
           break
         case "Gun Safe Gyro":
           this.updateGyro(data);

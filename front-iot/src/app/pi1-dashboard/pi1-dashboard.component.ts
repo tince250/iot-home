@@ -34,31 +34,24 @@ export class Pi1DashboardComponent implements OnInit {
           break;
         case "Door Light":
           this.dl = data;
-          this.dl.time = new Date().toLocaleTimeString();
           break;
         case "Door Ultrasonic Sensor":
           this.uds1 = data;
-          this.uds1.time = new Date().toLocaleTimeString();
           break;
         case "Room PIR1":
           this.rpir1 = data;
-          this.rpir1.time = new Date().toLocaleTimeString();
           break;
         case "Room PIR2":
           this.rpir2 = data;
-          this.rpir2.time = new Date().toLocaleTimeString();
           break;
         case "Door Motion Sensor 1":
           this.dpir1 = data;
-          this.dpir1.time = new Date().toLocaleTimeString();
           break;
         case "Door Buzzer":
           this.db = data;
-          this.db.time = new Date().toLocaleTimeString();
           break;
         case "Door Sensor 1":
           this.ds1 = data;
-          this.ds1.time = new Date().toLocaleTimeString();
           break;
       }
       // Handle received data
@@ -84,7 +77,6 @@ export interface UpdateDTO {
   field: string,
   bucket: string,
   update_front: boolean,
-  time: string,
   datetime: string,
   axis: string | undefined
 }
