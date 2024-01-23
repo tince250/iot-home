@@ -112,7 +112,7 @@ def run_pir(settings, threads, stop_event, motion_detected_event = None):
         with print_lock:
             print(f"Starting {sensor_name} loop")
         # pir = run_pir_loop(settings['pin'], motion_detected_callback, no_motion_callback)
-        pir = PIR(settings['port'], motion_detected_callback, no_motion_detected_callback, motion_detected_event, sensor_name)
+        pir = PIR(settings['port'], motion_detected_callback, no_motion_detected_callback, motion_detected_event, publish_event, settings)
         pir_thread = threading.Thread(target=run_pir_loop, args=(pir, stop_event, motion_detected_event))
         pir_thread.start()
         threads.append(pir_thread)

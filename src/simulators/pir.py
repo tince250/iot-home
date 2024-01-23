@@ -20,14 +20,14 @@ def run_pir_simulator(delay, motion_detected_callback, no_motion_detected_callba
         is_move_detected = value > threshold
         if is_move_detected:
             # proveriti ovu lgoiku, sad kad gledamo samo move, ne i stop move
-            if not previous_move:
-                if motion_detected_event:
-                    motion_detected_event.set()
-                motion_detected_callback(publish_event, settings, True)
-                previous_move = True
-        else:
-            if previous_move:
-                no_motion_detected_callback(publish_event, settings, True)
-                previous_move = False
+            #if not previous_move:
+            if motion_detected_event:
+                motion_detected_event.set()
+            motion_detected_callback(publish_event, settings, True)
+            previous_move = True
+        # else:
+        #     if previous_move:
+        #         no_motion_detected_callback(publish_event, settings, True)
+        #         previous_move = False
         if stop_event.is_set():
                   break
