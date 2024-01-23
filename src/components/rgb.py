@@ -64,12 +64,12 @@ def rgb_callback(status, publish_event, settings, verbose=False):
             publish_event.set()
 
 
-def run_rgb(settings, threads, stop_event, input_queue):
+def run_rgb(settings, threads, stop_event, data_queue, change_color_event):
     sensor_name = settings["name"]
     if settings['simulated']:
         with print_lock:
             print(f"Starting {sensor_name} simulator")
-        rgb_thread = threading.Thread(target = run_rgb_simulator, args=(input_queue, 2, rgb_callback, stop_event, publish_event, settings))
+        rgb_thread = threading.Thread(target = run_rgb_simulator, args=(2, rgb_callback, stop_event, publish_event, settings, data_queue, change_color_event))
         rgb_thread.start()
         threads.append(rgb_thread)
         with print_lock:
@@ -79,7 +79,7 @@ def run_rgb(settings, threads, stop_event, input_queue):
         with print_lock:
             print(f"Starting {sensor_name} loop")
         dl = RGBdiode(RED = settings['RED'], GREEN = settings['GREEN'], BLUE = settings['BLUE'])
-        rgb_thread = threading.Thread(target=run_rgb_loop, args=(input_queue, dl, 2, rgb_callback, stop_event, publish_event, settings))
+        rgb_thread = threading.Thread(target=run_rgb_loop, args=(dl, 2, rgb_callback, stop_event, publish_event, settings, data_queue, change_color_event))
         rgb_thread.start()
         threads.append(rgb_thread)
         with print_lock:

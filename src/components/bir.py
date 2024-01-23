@@ -63,13 +63,13 @@ def bir_callback(clicked_button, publish_event, settings, verbose=True):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
-def run_bir(settings, threads, stop_event):
+def run_bir(settings, threads, stop_event, data_queue, change_color_event, bir_rgb_mappings):
     sensor_name = settings["name"]
     if settings["simulated"]:
         from simulators.bir import run_bir_simulator
         with print_lock:    
             print(f"Starting {sensor_name} simulator")
-        bir_thread = threading.Thread(target=run_bir_simulator, args=(2, bir_callback, stop_event, publish_event, settings))
+        bir_thread = threading.Thread(target=run_bir_simulator, args=(2, bir_callback, stop_event, publish_event, settings, data_queue, change_color_event, bir_rgb_mappings))
         bir_thread.start()
         threads.append(bir_thread)
         with print_lock: 
@@ -79,7 +79,7 @@ def run_bir(settings, threads, stop_event):
         with print_lock: 
             print(f"Starting {sensor_name} loop")
         bir = BIR(settings['pin'], sensor_name)
-        bir_thread = threading.Thread(target=run_bir_loop, args=(bir, bir_callback, stop_event, publish_event, settings))
+        bir_thread = threading.Thread(target=run_bir_loop, args=(bir, bir_callback, stop_event, publish_event, settings, data_queue, change_color_event, bir_rgb_mappings))
         bir_thread.start()
         threads.append(bir_thread)
         with print_lock: 
