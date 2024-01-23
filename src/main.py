@@ -79,9 +79,9 @@ def run_pi1(settings, events_dict):
     # uds1_settings = settings["UDS1"]
     # run_uds(uds1_settings, threads, stop_event)
     
-    dpir1_settings = settings['DPIR1']
-    run_pir(dpir1_settings, threads, stop_event, events_dict["dpir1_dl"])
-    # dpir2_settings = settings['DPIR2']
+    # dpir1_settings = settings['DPIR1']
+    # run_pir(dpir1_settings, threads, stop_event, events_dict["dpir1_dl"])
+    # # dpir2_settings = settings['DPIR2']
     # run_pir(dpir2_settings, threads, stop_event)
     
     # pir1_settings = settings['RPIR1']
@@ -102,16 +102,16 @@ def run_pi1(settings, events_dict):
     # dms_settings = settings["DMS"]
     # run_ms(dms_settings, threads, stop_event)
     
-    dl_settings = settings["DL"]
-    run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
+    # dl_settings = settings["DL"]
+    # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
     
     # db_settings = settings['DB']
     # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
     # bb_settings = settings['BB']
     # run_buzzer(bb_settings, threads, stop_event, queues_dict["buzzer_queue"])
 
-    # b4sd_settings = settings["B4SD"]
-    # run_b4sd(b4sd_settings, threads, stop_event)
+    b4sd_settings = settings["B4SD"]
+    run_b4sd(b4sd_settings, threads, stop_event)
 
     # bir_settings = settings["BIR"]
     # run_bir(bir_settings, threads, stop_event)

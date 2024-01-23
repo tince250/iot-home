@@ -48,6 +48,7 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/bir/button")
     client.subscribe("topic/gyro/angles")
     client.subscribe("topic/rgbdiode/status")
+    client.subscribe("topic/clock-alarm/server")
 
 def get_gyro_point(data):
     return (
@@ -86,10 +87,43 @@ def save_to_db(data, verbose=True):
         print(str(e))
         pass
 
+def on_message_callback(client, userdata, msg):
+    print(f"Received message from topic: {msg.topic}")
+    print(f"Message payload: {msg.payload.decode('utf-8')}")
+
+    # Check the topic and take action accordingly
+    if msg.topic == "topic/clock-alarm/server":
+        data = json.loads(msg.payload.decode('utf-8'))
+        try:
+            socketio.emit('clock-alarm', json.dumps({"action": data["action"]}))
+        except Exception as e:
+            print(str(e))
+    else:
+        # Handle messages from other topics
+        print('nije tu')
+        #save_to_db(json.loads(msg.payload.decode('utf-8')))
+
+
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+# mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+mqtt_client.on_message = lambda client, userdata, msg: on_message_callback(client, userdata, msg)
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
+@app.route('/clock-alarm', methods=['POST'])
+def post_clock_alarm():
+    data = request.get_json()  # Get JSON data from the request body
+    date = data.get('params').get('date')
+    time = data.get('params').get('time')
+    mqtt_client.publish("topic/clock-alarm/device/on", json.dumps(data.get('params')))
+    return jsonify({'message': f'Data received successfully. Date: {date}, Time: {time}'})
+
+@app.route('/clock-alarm/off', methods=['PUT'])
+def clock_alarm_off():
+    data = request.get_json() 
+    print("alarm off")
+    mqtt_client.publish("topic/clock-alarm/device/off", json.dumps({"action": "off"}))
+    return jsonify({'message': f'Turn alarm off'})
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True, port=5001)
+    socketio.run(app, debug=True, port=5001, use_reloader=False)

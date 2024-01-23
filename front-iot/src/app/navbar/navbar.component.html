@@ -5,8 +5,11 @@
                 
     </div>
     <div class="nav-options">
+        <div class="nav-item-clock-on" (click)="turnAlarmOff()" *ngIf="isAlarmOn">
+            <p>turn clock alarm off</p>
+        </div>
         <div class="nav-item-clock" (click)="openCreateClockAlarmDialog()">
-            <i class="fa-solid fa-stopwatch" matTooltip="Create clock alarm"></i>
+            <i [ngClass]="isAlarmOn ? 'fa-solid fa-stopwatch shake' : 'fa-solid fa-stopwatch'" matTooltip="Create clock alarm"></i>
         </div>
         <div class="nav-item" [routerLink]="['/pi1']" [ngClass]="url == '/pi1' ? 'nav-item-selected': ''">
             <p>PI1</p>
