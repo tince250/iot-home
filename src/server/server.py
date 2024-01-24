@@ -188,8 +188,27 @@ def on_message_callback(client, userdata, msg):
             with people_count_lock:
                 if not people_count:
                     print("ALARM!!!")
+                    raise_alarm(data, message=f"Move was detected by {data['name']} but there is 0 people")
         save_to_db(data)
 
+@app.route('/rgb/color', methods=['PUT'])
+def update_rgb_color():
+    try:
+        data = request.get_json()
+        color = data.get('color', None)
+
+        if color is not None:
+            print(f"Received color: {color}")
+
+            mqtt_message = {"color": color}
+            mqtt_client.publish("topic/rgb/color", payload=json.dumps(mqtt_message))
+
+            return jsonify({'message': 'Color updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Color not provided'}), 400
+
+    except Exception as e:
+        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = lambda client, userdata, msg: on_message_callback(client, userdata, msg)

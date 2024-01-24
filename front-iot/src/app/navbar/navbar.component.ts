@@ -1,11 +1,14 @@
+import { ColorService } from './../../services/color.service';
+import { ApiService } from './../../services/api.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { CreateClockAlarmDialogComponent } from '../create-clock-alarm-dialog/create-clock-alarm-dialog.component';
 import { Socket } from 'ngx-socket-io';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuzzerService } from 'src/services/buzzer.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
@@ -21,6 +24,7 @@ export class NavbarComponent {
     private dialog: MatDialog,
     private socket: Socket,
     private buzzerService: BuzzerService,
+    private apiService: ApiService, private colorService: ColorService,
     private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -107,4 +111,18 @@ export class NavbarComponent {
       }
     });
   }
+
+  onRgbSelectionChange(event: any): void {
+    console.log('Selected value:', event.value);
+
+    this.apiService.updateRgbColor(event.value).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error(err) {
+        console.log(err)
+      },
+    })
+  }
+
 }

@@ -72,13 +72,20 @@ class BIR(object):
         return hex(tmpB2)
 
 
-def run_dht_loop(bir, callback, stop_event, publish_event, settings):
+def run_bir_loop(bir, callback, stop_event, publish_event, settings, data_queue, change_color_event, bir_rgb_mappings):
     while True:
         inData = bir.convert_hex(bir.get_binary())
+        
+        clicked_button = None
         for button in range(len(bir.buttons)):
             if hex(bir.buttons[button]) == inData:
                 clicked_button = bir.button_names[button]
-        callback(clicked_button, publish_event, settings)
+        
+        if clicked_button:
+            if clicked_button in  bir_rgb_mappings.keys():
+                data_queue.put(bir_rgb_mappings[clicked_button])
+                change_color_event.set()
+            callback(clicked_button, publish_event, settings)
         if stop_event.is_set():
             GPIO.cleanup()
             break # Delay between readings

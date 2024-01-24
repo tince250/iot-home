@@ -63,8 +63,21 @@ def get_queues_dict():
 def get_events_dict():
     events_dict = {"dpir1_dl" : Event(),
                    "gdht_glcd" : Event(),
+                   "bir_rgb" : Event(),
                    }
     return events_dict
+
+def get_bir_rgb_mappings_dict():
+    bir_rgb_mappings = {"0": "off",
+                        "1": "red",
+                        "2": "green",
+                        "3": "blue",
+                        "4": "purple",
+                        "5": "white",
+                        "6": "yellow",
+                        "7": "light blue"
+                        }
+    return bir_rgb_mappings
 
 def run_pi1(settings, events_dict):
     # rdht1_settings = settings['RDHT1']
@@ -120,8 +133,8 @@ def run_pi1(settings, events_dict):
     # b4sd_settings = settings["B4SD"]
     # run_b4sd(b4sd_settings, threads, stop_event, b4sd_queue, bb_queue, alarm_on_event, alarm_off_event)
 
-    # bir_settings = settings["BIR"]
-    # run_bir(bir_settings, threads, stop_event)
+    bir_settings = settings["BIR"]
+    run_bir(bir_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"], bir_rgb_mappings)
 
     # lcd_settings = settings["GLCD"]
     # run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
@@ -129,8 +142,8 @@ def run_pi1(settings, events_dict):
     gyro_settings = settings["GSG"]
     run_gyro(gyro_settings, threads, stop_event)
 
-    # rgb_settings = settings["BRGB"]
-    # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"])
+    rgb_settings = settings["BRGB"]
+    run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"])
 
     # dus2_settings = settings["DUS2"]
     # run_uds(dus2_settings, threads, stop_event)
@@ -151,6 +164,7 @@ if __name__ == "__main__":
     stop_event = threading.Event()
     queues_dict = get_queues_dict()
     events_dict = get_events_dict()
+    bir_rgb_mappings = get_bir_rgb_mappings_dict()
 
     try:
         run_pi1(settings, events_dict)
