@@ -97,7 +97,7 @@ def run_pi1(settings, events_dict):
     
     # dpir1_settings = settings['DPIR1']
     # run_pir(dpir1_settings, threads, stop_event, events_dict["dpir1_dl"])
-    # dpir2_settings = settings['DPIR2']
+    # # dpir2_settings = settings['DPIR2']
     # run_pir(dpir2_settings, threads, stop_event)
     
     # pir1_settings = settings['RPIR1']
@@ -120,26 +120,30 @@ def run_pi1(settings, events_dict):
     
     # dl_settings = settings["DL"]
     # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
-    
-    # db_settings = settings['DB']
-    # run_buzzer(db_settings, threads, stop_event, queues_dict["buzzer_queue"])
-    # bb_settings = settings['BB']
-    # run_buzzer(bb_settings, threads, stop_event, queues_dict["buzzer_queue"])
+    alarm_on_event = Event()
+    db_settings = settings['DB']
+    run_buzzer(db_settings, threads, stop_event, alarm_on_event=alarm_on_event)
+    b4sd_queue = Queue()
+    bb_queue = Queue()
+    alarm_clock_on_event = Event()
+    alarm_clock_off_event = Event()
+    bb_settings = settings['BB']
+    run_buzzer(bb_settings, threads, stop_event, alarm_on_event, bb_queue,  alarm_clock_on_event, alarm_clock_off_event)
 
     # b4sd_settings = settings["B4SD"]
-    # run_b4sd(b4sd_settings, threads, stop_event)
+    # run_b4sd(b4sd_settings, threads, stop_event, b4sd_queue, bb_queue, alarm_on_event, alarm_off_event)
 
-    bir_settings = settings["BIR"]
-    run_bir(bir_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"], bir_rgb_mappings)
+    # bir_settings = settings["BIR"]
+    # run_bir(bir_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"], bir_rgb_mappings)
 
     # lcd_settings = settings["GLCD"]
     # run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
     
-    # gyro_settings = settings["GSG"]
-    # run_gyro(gyro_settings, threads, stop_event)
+    gyro_settings = settings["GSG"]
+    run_gyro(gyro_settings, threads, stop_event)
 
-    rgb_settings = settings["BRGB"]
-    run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"])
+    # rgb_settings = settings["BRGB"]
+    # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"])
 
     # dus2_settings = settings["DUS2"]
     # run_uds(dus2_settings, threads, stop_event)

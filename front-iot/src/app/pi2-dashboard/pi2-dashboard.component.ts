@@ -2,6 +2,7 @@ import { ApiService } from './../../services/api.service';
 import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { UpdateDTO } from '../pi1-dashboard/pi1-dashboard.component';
+import { BuzzerService } from 'src/services/buzzer.service';
 
 @Component({
   selector: 'app-pi2-dashboard',
@@ -18,10 +19,20 @@ export class Pi2DashboardComponent implements OnInit{
   dpir2: UpdateDTO = {} as UpdateDTO;
   dus2: UpdateDTO = {} as UpdateDTO;
 
-  constructor(private socket: Socket) {
+  constructor(private socket: Socket,
+    private buzzerService: BuzzerService) {
   }
 
   ngOnInit(): void {
+    this.buzzerService.receivedDoorBuzzerUpdate().subscribe({
+      next: (value) => {
+        console.log(value);
+        let buzzerData : UpdateDTO = value;
+      },
+      error(err) {
+        console.log(err);
+      },
+    })
     this.socket.on('update/PI2', (data: any) => {
       data = JSON.parse(data);
       
