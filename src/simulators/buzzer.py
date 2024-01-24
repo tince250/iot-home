@@ -13,7 +13,7 @@ from locks import print_lock
 #                 break
 
 def run_buzzer_simulator(alarm_clock_queue, pitch, duration,
-                         ass, alarm_clock_on_event, alarm_clock_off_event, 
+                         ass, alarm_on_event, alarm_clock_on_event, alarm_clock_off_event, 
                          buzzer_print_callback, stop_event, publish_event, settings):
     current_clock_alarm = None
     called_callback = False
@@ -22,6 +22,12 @@ def run_buzzer_simulator(alarm_clock_queue, pitch, duration,
             return
         if alarm_clock_on_event:
             while not alarm_clock_off_event.is_set():
+                if alarm_on_event.is_set():
+                    buzzer_print_callback(publish_event, settings, status="ON")
+                    while alarm_on_event.is_set():
+                        time.sleep(1)
+                    buzzer_print_callback(publish_event, settings, status="OFF")
+            
                 try:
                     current_clock_alarm = alarm_clock_queue.get(timeout=1)
                 except Empty:
@@ -34,23 +40,24 @@ def run_buzzer_simulator(alarm_clock_queue, pitch, duration,
                         called_callback = True
                     delay = 1.0 / (pitch*2)
                     time.sleep(delay)
-                    # period = 1.0 / pitch
-                    # delay = period / 2
-                    # cycles = int(duration * pitch) 
-                    
-                    # with print_lock:
-                    #     for _ in range(cycles):
-                    #         start = time.time()
-                    #         while True:
-                    #             if time.time()-start > delay:
-                    #                 break
-                    #         # print("\n")
-                    #         time.sleep(delay)
-                # with print_lock:
-            if current_clock_alarm:
-                called_callback = False
+                
+            if alarm_on_event.is_set():
+                buzzer_print_callback(publish_event, settings, status="ON")
+                while alarm_on_event.is_set():
+                    time.sleep(1)
                 buzzer_print_callback(publish_event, settings, status="OFF")
-            current_clock_alarm = None
+            else:
+                if current_clock_alarm:
+                    called_callback = False
+                    buzzer_print_callback(publish_event, settings, status="OFF")
+                current_clock_alarm = None
+        else:
+            if alarm_on_event.is_set():
+                buzzer_print_callback(publish_event, settings, status="ON")
+                while alarm_on_event.is_set():
+                    time.sleep(1)
+                buzzer_print_callback(publish_event, settings, status="OFF")
+
             
 
 def is_after_current_time(date_str, time_str):

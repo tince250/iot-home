@@ -105,7 +105,7 @@ def run_gyro(settings, threads, stop_event):
     if settings['simulated']:
         with print_lock:    
             print(f"Starting {sensor_name} simulator")
-        gyro_thread = threading.Thread(target = run_gyro_simulator, args=(2, gyro_callback, stop_event, publish_event, settings))
+        gyro_thread = threading.Thread(target = run_gyro_simulator, args=(5, gyro_callback, stop_event, publish_event, settings))
         gyro_thread.start()
         threads.append(gyro_thread)
         with print_lock: 
@@ -115,7 +115,7 @@ def run_gyro(settings, threads, stop_event):
         with print_lock:    
             print(f"Starting {sensor_name} loop")
         gyro = Gyroscope()
-        gyro_thread = threading.Thread(target=run_gyro_loop, args=(gyro, 2, gyro_callback, stop_event, publish_event, settings))
+        gyro_thread = threading.Thread(target=run_gyro_loop, args=(gyro, 5, gyro_callback, stop_event, publish_event, settings))
         gyro_thread.start()
         threads.append(gyro_thread)
         with print_lock: 

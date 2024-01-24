@@ -23,12 +23,18 @@ class Buzzer(object):
             #     GPIO.cleanup()
             # break
 
-def run_buzzer_loop(alarm_clock_queue, buzzer, pitch, duration, delay, alarm_clock_on_event, alarm_clock_off_event, buzzer_print_callback, stop_event, publish_event, settings):
+def run_buzzer_loop(alarm_clock_queue, buzzer, pitch, duration, delay, alarm_on_event, alarm_clock_on_event, alarm_clock_off_event, buzzer_print_callback, stop_event, publish_event, settings):
     current_clock_alarm = None
     called_callback = False
     while True:
         if alarm_clock_on_event:
             while not alarm_clock_off_event.is_set():
+                if alarm_on_event.is_set():
+                    buzzer_print_callback(publish_event, settings, status="ON")
+                    while alarm_on_event.is_set():
+                        time.sleep(1)
+                    buzzer_print_callback(publish_event, settings, status="OFF")
+            
                 try:
                     current_clock_alarm = alarm_clock_queue.get(timeout=1)
                 except Empty:
@@ -41,11 +47,23 @@ def run_buzzer_loop(alarm_clock_queue, buzzer, pitch, duration, delay, alarm_clo
                         called_callback = True
                     buzzer.buzz(pitch, duration)
 
-            if current_clock_alarm:
-                called_callback = False
+            if alarm_on_event.is_set():
+                    buzzer_print_callback(publish_event, settings, status="ON")
+                    while alarm_on_event.is_set():
+                        time.sleep(1)
+                    buzzer_print_callback(publish_event, settings, status="OFF")
+            else:
+                if current_clock_alarm:
+                    called_callback = False
+                    buzzer_print_callback(publish_event, settings, status="OFF")
+                current_clock_alarm = None
+        else:
+            if alarm_on_event.is_set():
+                buzzer_print_callback(publish_event, settings, status="ON")
+                while alarm_on_event.is_set():
+                    time.sleep(1)
                 buzzer_print_callback(publish_event, settings, status="OFF")
-            current_clock_alarm = None
-        
+
         if stop_event.is_set():
             GPIO.cleanup()
             break

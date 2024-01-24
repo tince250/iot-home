@@ -7,6 +7,8 @@ import paho.mqtt.client as mqtt
 # from env import INFLUXDB_TOKEN
 from flask_cors import CORS
 
+import time
+
 app = Flask(__name__)
 CORS(app) 
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:4200")
@@ -23,6 +25,13 @@ def send_latest_data_to_frontend(data):
     print("emitting ****************")
     try:
         socketio.emit('update/' + data['runs_on'], json.dumps(data))
+    except Exception as e:
+        print(str(e))
+
+def send_alarm_data_to_frontend(data):
+    print("emitting ****************")
+    try:
+        socketio.emit('alarm', json.dumps(data))
     except Exception as e:
         print(str(e))
 
@@ -49,6 +58,13 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/gyro/angles")
     client.subscribe("topic/rgbdiode/status")
     client.subscribe("topic/clock-alarm/server")
+
+def check_gyro_alarms(data):
+    allowed_angle_range = [-8.5, 8.5]
+    if data["value"] < allowed_angle_range[0]:
+        raise_alarm(data, message=f"Rotation per {data['axis']} axis is lower then {allowed_angle_range[0]} with value = {data['value']}")
+    elif data["value"] > allowed_angle_range[1]:
+        raise_alarm(data, message=f"Rotation per {data['axis']} axis is greater then {allowed_angle_range[1]} with value = {data['value']}")
 
 def get_gyro_point(data):
     return (
@@ -89,6 +105,36 @@ def save_to_db(data, verbose=True):
         print(str(e))
         pass
 
+def get_current_time():
+    t = time.localtime()
+    return time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
+def raise_alarm(data, message="", verbose=True):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    try:
+        point = (
+                Point("alarm")
+                .tag("caused_by", data["name"])
+                .tag("message", message)
+                .field("status", "ON")
+            ) 
+        
+        write_api.write(bucket="events", org=org, record=point)
+        alarm_data = {
+            "caused_by": data["name"],
+            "message": message,
+            "status": "ON",
+            "timestamp": get_current_time()
+        }
+        if verbose:
+            print("Sound the alarm")
+        send_alarm_data_to_frontend(alarm_data)
+        mqtt_client.publish("topic/alarm/buzzer/on", json.dumps(alarm_data))
+    
+    except Exception as e:
+        print(str(e))
+        pass
+
 def on_message_callback(client, userdata, msg):
     print(f"Received message from topic: {msg.topic}")
     print(f"Message payload: {msg.payload.decode('utf-8')}")
@@ -100,9 +146,10 @@ def on_message_callback(client, userdata, msg):
             socketio.emit('clock-alarm', json.dumps({"action": data["action"]}))
         except Exception as e:
             print(str(e))
-    else:
-        # Handle messages from other topics
-        #print('nije tu')
+    elif msg.topic == "topic/gyro/angles":
+        check_gyro_alarms(json.loads(msg.payload.decode('utf-8')))
+        save_to_db(json.loads(msg.payload.decode('utf-8')))
+    else:         
         save_to_db(json.loads(msg.payload.decode('utf-8')))
 
 
@@ -123,9 +170,40 @@ def post_clock_alarm():
 @app.route('/clock-alarm/off', methods=['PUT'])
 def clock_alarm_off():
     data = request.get_json() 
-    print("alarm off")
+    print("clock alarm off")
     mqtt_client.publish("topic/clock-alarm/device/off", json.dumps({"action": "off"}))
-    return jsonify({'message': f'Turn alarm off'})
+    return jsonify({'message': f'Turn clock alarm off'})
+
+@app.route('/alarm/off', methods=['PUT'])
+def alarm_off():
+    data = request.get_json() 
+    print("alarm off")
+    #mqtt_client.publish("topic/clock-alarm/device/off", json.dumps({"action": "off"}))
+    
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    try:
+        point = (
+                Point("alarm")
+                .tag("caused_by", "web")
+                .tag("message", "Alarms turned of by web app")
+                .field("status", "OFF")
+            ) 
+        alarm_data = {
+            "caused_by": "web",
+            "message": "Alarms turned of by web app",
+            "status": "OFF"
+        }
+
+        write_api.write(bucket="events", org=org, record=point)
+        mqtt_client.publish("topic/alarm/buzzer/off", json.dumps(alarm_data))
+
+        return jsonify({'message': f'SUCCESS'}), 200
+    
+    except Exception as e:
+        print(str(e))
+        pass
+    
+    return jsonify({'message': "ERROR"}), 400
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5001, use_reloader=False)

@@ -16,7 +16,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { Pi1DashboardComponent } from './pi1-dashboard/pi1-dashboard.component';
 import { Pi2DashboardComponent } from './pi2-dashboard/pi2-dashboard.component';
 import { Pi3DashboardComponent } from './pi3-dashboard/pi3-dashboard.component';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { SocketIoModule, SocketIoConfig, Socket } from 'ngx-socket-io';
 import { CreateClockAlarmDialogComponent } from './create-clock-alarm-dialog/create-clock-alarm-dialog.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
@@ -56,4 +56,5 @@ const config: SocketIoConfig = { url: 'localhost:5001', options: {} };
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

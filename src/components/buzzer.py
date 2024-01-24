@@ -68,35 +68,35 @@ def buzzer_print_callback(publish_event, settings, status="ON", verbose=True):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
-# def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
-#     print("Connected with result code "+str(result_code))
-#     client.subscribe("topic/clock-alarm/device/on")
-#     client.subscribe("topic/clock-alarm/device/off")
+def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
+    print("Connected with result code "+str(result_code))
+    client.subscribe("topic/alarm/buzzer/on")
+    client.subscribe("topic/alarm/buzzer/off")
 
-# def on_receive(msg, b4sd_queue, alarm_clock_on_event, alarm_clock_off_event):
-#     print(msg.topic)
-#     if msg.topic == "topic/clock-alarm/device/off":
-#         alarm_clock_off_event.set()
-#     elif msg.topic == "topic/clock-alarm/device/on":
-#         data = json.loads(msg.payload.decode('utf-8'))
-#         alarm_clock_off_event.clear()
-#         b4sd_queue.put(data)
+def on_receive(msg, alarm_on_event):
+    # print(msg.topic)
+    if msg.topic == "topic/alarm/buzzer/on":
+        alarm_on_event.set()
+    elif msg.topic == "topic/alarm/buzzer/off":
+        #data = json.loads(msg.payload.decode('utf-8'))
+        alarm_on_event.clear()
 
-def run_buzzer(settings, threads, stop_event, alarm_clock_queue=None, alarm_clock_on_event=None, alarm_clock_off_event=None):
+def run_buzzer(settings, threads, stop_event, alarm_on_event, alarm_clock_queue=None, alarm_clock_on_event=None, alarm_clock_off_event=None):
     delay, pitch, duration = 1, 1000, 0.1
 
     sensor_name = settings["name"]
-    # mqtt_client = mqtt.Client()
-    # mqtt_client.on_connect = on_connect
-    # mqtt_client.on_message = lambda client, userdata, msg: on_receive(msg, alarm_clock_queue, alarm_clock_on_event, alarm_clock_off_event)
-    # mqtt_client.connect("localhost", 1883, 60)
-    # mqtt_client.loop_start()
+    mqtt_client = mqtt.Client()
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = lambda client, userdata, msg: on_receive(msg, alarm_on_event)
+    mqtt_client.connect("localhost", 1883, 60)
+    mqtt_client.loop_start()
     
     if settings["simulated"]:
         with print_lock:
             print(f"Starting {sensor_name} simulator")
         buzzer_thread = threading.Thread(target=run_buzzer_simulator, args=(alarm_clock_queue, pitch, duration,
-                                                                            alarm_clock_queue, alarm_clock_on_event, alarm_clock_off_event,
+                                                                            alarm_clock_queue, alarm_on_event,
+                                                                              alarm_clock_on_event, alarm_clock_off_event,
                                                                              buzzer_print_callback, stop_event,
                                                                             publish_event, settings))
         buzzer_thread.start()
@@ -110,7 +110,7 @@ def run_buzzer(settings, threads, stop_event, alarm_clock_queue=None, alarm_cloc
         buzzer = Buzzer(settings['pin'], sensor_name)
         buzzer_queue = 0
         buzzer_thread = threading.Thread(target=run_buzzer_loop, args=(alarm_clock_queue, buzzer, pitch, duration,
-                                                                        delay, alarm_clock_on_event, alarm_clock_off_event,
+                                                                        delay, alarm_on_event, alarm_clock_on_event, alarm_clock_off_event,
                                                                         buzzer_print_callback, stop_event,
                                                                         publish_event, settings))
         buzzer_thread.start()

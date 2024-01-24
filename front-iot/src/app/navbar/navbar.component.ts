@@ -5,6 +5,7 @@ import { filter } from 'rxjs';
 import { CreateClockAlarmDialogComponent } from '../create-clock-alarm-dialog/create-clock-alarm-dialog.component';
 import { Socket } from 'ngx-socket-io';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BuzzerService } from 'src/services/buzzer.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,11 +14,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class NavbarComponent {
   url = "/pi1";
+  isClockAlarmOn: boolean = false;
   isAlarmOn: boolean = false;
 
   constructor(private router: Router,
     private dialog: MatDialog,
     private socket: Socket,
+    private buzzerService: BuzzerService,
     private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -31,19 +34,41 @@ export class NavbarComponent {
       
       switch (data["action"]) {
         case "on" :
-          this.isAlarmOn = true;
+          this.isClockAlarmOn = true;
           break;
         case "off":
-          this.isAlarmOn = false;
+          this.isClockAlarmOn = false;
           break;
       }});
+    this.socket.on('alarm', (data: any) => {
+        data = JSON.parse(data);
+        console.log('Received Socket.IO message:', data);
+        if (data["status"] == "ON")
+            this.isAlarmOn = true;
+        else
+            this.isAlarmOn = false;
+
+      });
+    this.socket.on('update/PI1', (data: any) => {
+        data = JSON.parse(data);
+        console.log('Received Socket.IO message:', data);
+        if (data["name"] == "Door Buzzer") {
+            this.buzzerService.updateDoorBuzzerStatus(data);
+        }
+      });
+    this.socket.on('update/PI3', (data: any) => {
+        data = JSON.parse(data);
+        console.log('Received Socket.IO message:', data);
+        if (data["name"] == "Bedroom Buzzer")
+            this.buzzerService.updateBedroomBuzzerStatus(data);
+      });
   }
 
   openCreateClockAlarmDialog() {
     this.dialog.open(CreateClockAlarmDialogComponent);
   }
 
-  turnAlarmOff(){
+  turnClockAlarmOff(){
     const environment = {
       production: false,
       apiGateway: 'http://localhost:5001', // Replace this with your API Gateway URL
@@ -56,6 +81,26 @@ export class NavbarComponent {
     this.http.put<any>(environment.apiGateway + "/clock-alarm/off", options).subscribe({
       next: (value: any) => {
         console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  turnAlarmOff(){
+    const environment = {
+      production: false,
+      apiGateway: 'http://localhost:5001', // Replace this with your API Gateway URL
+    };
+    const options: any = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    this.http.put<any>(environment.apiGateway + "/alarm/off", options).subscribe({
+      next: (value: any) => {
+        this.isAlarmOn = false;
       },
       error: (err) => {
         console.log(err);
