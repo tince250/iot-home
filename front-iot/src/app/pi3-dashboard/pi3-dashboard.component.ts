@@ -1,3 +1,4 @@
+import { ColorService } from './../../services/color.service';
 import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { UpdateDTO } from '../pi1-dashboard/pi1-dashboard.component';
@@ -14,7 +15,7 @@ export class Pi3DashboardComponent {
   rpir4: UpdateDTO = {} as UpdateDTO;
   rgb: UpdateDTO = {} as UpdateDTO;
 
-  constructor(private socket: Socket) {
+  constructor(private socket: Socket, private colorService: ColorService) {
   }
 
   ngOnInit(): void {
@@ -33,6 +34,7 @@ export class Pi3DashboardComponent {
           break;
         case "Bedroom RGB diode":
           this.rgb = data;
+          this.colorService.updateRgbColor(this.rgb.value);
           break;
           
       }

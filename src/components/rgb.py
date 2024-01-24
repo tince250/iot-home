@@ -4,6 +4,7 @@ from simulators.rgb import run_rgb_simulator
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+import paho.mqtt.client as mqtt
 
 rgb_batch = []
 publish_data_counter = 0
@@ -63,9 +64,30 @@ def rgb_callback(status, publish_event, settings, verbose=False):
         if publish_data_counter >= publish_data_limit:
             publish_event.set()
 
+def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
+    print("Connected with result code "+str(result_code))
+    client.subscribe("topic/rgb/color")
+
+def on_receive(msg, data_queue, change_color_event):
+    data = json.loads(msg.payload.decode('utf-8'))
+    
+    color = data["color"]
+    if color:
+        data_queue.put(color.lower())
+        change_color_event.set()
+    else:
+        print(f"Color not provided: {data}")
+
 
 def run_rgb(settings, threads, stop_event, data_queue, change_color_event):
     sensor_name = settings["name"]
+
+    mqtt_client = mqtt.Client()
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = lambda client, userdata, msg: on_receive(msg, data_queue, change_color_event)
+    mqtt_client.connect("localhost", 1883, 60)
+    mqtt_client.loop_start()
+
     if settings['simulated']:
         with print_lock:
             print(f"Starting {sensor_name} simulator")

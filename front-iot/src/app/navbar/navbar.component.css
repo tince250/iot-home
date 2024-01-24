@@ -30,6 +30,7 @@
     flex-direction: row;
 }
 
+
 .nav-item {
     cursor: pointer;
     margin-left: 15px;
@@ -54,4 +55,6 @@
 .nav-item-selected {
     border: 2px solid #FFCB52 !important;
 }
+
+
 
