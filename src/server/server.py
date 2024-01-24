@@ -6,6 +6,8 @@ import json
 import paho.mqtt.client as mqtt
 # from env import INFLUXDB_TOKEN
 from flask_cors import CORS
+import threading
+import time
 
 app = Flask(__name__)
 CORS(app) 
@@ -91,5 +93,22 @@ mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
+
+door_sensor_lock = threading.Lock()
+last_press_ds1 = 0
+last_press_ds2 = 0
+
+def door_sensor_update():
+    global door_sensor_lock, last_press_ds1, last_press_ds2
+    while True:
+        time.sleep(1)
+        if last_press_ds1 and time.time() - last_press_ds1 > 5:
+            pass
+        if last_press_ds2 and time.time() - last_press_ds2 > 5:
+            pass
+
+
+
 if __name__ == '__main__':
+    door_sensor_detection = threading.Thread(target=door_sensor_update)
     socketio.run(app, debug=True, port=5001)
