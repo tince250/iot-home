@@ -50,7 +50,7 @@ def button_callback(publish_event, settings, is_pressed, verbose=True):
         "simulated": settings['simulated'],
         "runs_on": settings["runs_on"],
         "name": settings["name"],
-        "value": "open" if is_pressed else "close",
+        "value": "open" if is_pressed else "closed",
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"],
         "datetime": formatted_time
