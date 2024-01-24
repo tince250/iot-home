@@ -9,6 +9,8 @@ from flask_cors import CORS
 import threading
 import time
 
+import time
+
 app = Flask(__name__)
 CORS(app) 
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:4200")
@@ -25,6 +27,13 @@ def send_latest_data_to_frontend(data):
     print("emitting ****************")
     try:
         socketio.emit('update/' + data['runs_on'], json.dumps(data))
+    except Exception as e:
+        print(str(e))
+
+def send_alarm_data_to_frontend(data):
+    print("emitting ****************")
+    try:
+        socketio.emit('alarm', json.dumps(data))
     except Exception as e:
         print(str(e))
 
@@ -50,6 +59,14 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/bir/button")
     client.subscribe("topic/gyro/angles")
     client.subscribe("topic/rgbdiode/status")
+    client.subscribe("topic/clock-alarm/server")
+
+def check_gyro_alarms(data):
+    allowed_angle_range = [-8.5, 8.5]
+    if data["value"] < allowed_angle_range[0]:
+        raise_alarm(data, message=f"Rotation per {data['axis']} axis is lower then {allowed_angle_range[0]} with value = {data['value']}")
+    elif data["value"] > allowed_angle_range[1]:
+        raise_alarm(data, message=f"Rotation per {data['axis']} axis is greater then {allowed_angle_range[1]} with value = {data['value']}")
 
 def get_gyro_point(data):
     return (
@@ -81,15 +98,122 @@ def save_to_db(data, verbose=True):
         if verbose:
             print("Got message: " + json.dumps(data))
 
+        print("UPDATE FRONT")
         if data["update_front"]:
+            print("DA")
             send_latest_data_to_frontend(data)
     
     except Exception as e:
         print(str(e))
         pass
 
+def get_current_time():
+    t = time.localtime()
+    return time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
+def raise_alarm(data, message="", verbose=True):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    try:
+        point = (
+                Point("alarm")
+                .tag("caused_by", data["name"])
+                .tag("message", message)
+                .field("status", "ON")
+            ) 
+        
+        write_api.write(bucket="events", org=org, record=point)
+        alarm_data = {
+            "caused_by": data["name"],
+            "message": message,
+            "status": "ON",
+            "timestamp": get_current_time()
+        }
+        if verbose:
+            print("Sound the alarm")
+        send_alarm_data_to_frontend(alarm_data)
+        mqtt_client.publish("topic/alarm/buzzer/on", json.dumps(alarm_data))
+    
+    except Exception as e:
+        print(str(e))
+        pass
+
+import threading
+people_count = 0
+people_count_lock = threading.Lock()
+
+def check_door_entrance(runs_on):
+    query = f'from(bucket: "measurements") |> range(start: -15s) |> filter(fn: (r) => r._measurement == "Distance" and r.runs_on == "{runs_on}")'
+
+    result = influxdb_client.query_api().query(org=org, query=query)
+    records = []
+
+    for table in result:
+        for record in table.records:
+            records.append((record.get_time(), record.get_value()))
+    if len(records) < 2:
+        return
+    
+    sorted_records = sorted(records, key=lambda record: record[0], reverse=True)
+    sorted_records = sorted_records if len(sorted_records) < 3 else sorted_records[:3]
+    entering_order = all(sorted_records[i][1] < sorted_records[i + 1][1] for i in range(len(sorted_records) - 1))
+    exiting_order = all(sorted_records[i][1] > sorted_records[i + 1][1] for i in range(len(sorted_records) - 1))
+    
+    global people_count
+    with people_count_lock:
+        if entering_order:
+            people_count += 1
+            print(f"Someone entered the house. People count: {people_count}")
+        elif exiting_order:
+            people_count -= 1
+            print(f"Someone left the house. People count: {people_count}")
+
+            
+def on_message_callback(client, userdata, msg):
+    print(f"Received message from topic: {msg.topic}")
+    print(f"Message payload: {msg.payload.decode('utf-8')}")
+
+    # Check the topic and take action accordingly
+    if msg.topic == "topic/clock-alarm/server":
+        data = json.loads(msg.payload.decode('utf-8'))
+        try:
+            socketio.emit('clock-alarm', json.dumps({"action": data["action"]}))
+        except Exception as e:
+            print(str(e))
+    elif msg.topic == "topic/gyro/angles":
+        check_gyro_alarms(json.loads(msg.payload.decode('utf-8')))
+        save_to_db(json.loads(msg.payload.decode('utf-8')))
+    else:         
+        data = json.loads(msg.payload.decode('utf-8'))
+        if data["name"] == "Door Motion Sensor 1" or data["name"] == "Door Motion Sensor 2":
+            check_door_entrance(data["runs_on"])
+        if "Room PIR" in data["name"]:
+            with people_count_lock:
+                if not people_count:
+                    print("ALARM!!!")
+                    raise_alarm(data, message=f"Move was detected by {data['name']} but there is 0 people")
+        save_to_db(data)
+
+@app.route('/rgb/color', methods=['PUT'])
+def update_rgb_color():
+    try:
+        data = request.get_json()
+        color = data.get('color', None)
+
+        if color is not None:
+            print(f"Received color: {color}")
+
+            mqtt_message = {"color": color}
+            mqtt_client.publish("topic/rgb/color", payload=json.dumps(mqtt_message))
+
+            return jsonify({'message': 'Color updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Color not provided'}), 400
+
+    except Exception as e:
+        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
+
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+mqtt_client.on_message = lambda client, userdata, msg: on_message_callback(client, userdata, msg)
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
@@ -108,7 +232,52 @@ def door_sensor_update():
             pass
 
 
+@app.route('/clock-alarm', methods=['POST'])
+def post_clock_alarm():
+    data = request.get_json()  # Get JSON data from the request body
+    date = data.get('params').get('date')
+    time = data.get('params').get('time')
+    mqtt_client.publish("topic/clock-alarm/device/on", json.dumps(data.get('params')))
+    return jsonify({'message': f'Data received successfully. Date: {date}, Time: {time}'})
+
+@app.route('/clock-alarm/off', methods=['PUT'])
+def clock_alarm_off():
+    data = request.get_json() 
+    print("clock alarm off")
+    mqtt_client.publish("topic/clock-alarm/device/off", json.dumps({"action": "off"}))
+    return jsonify({'message': f'Turn clock alarm off'})
+
+@app.route('/alarm/off', methods=['PUT'])
+def alarm_off():
+    data = request.get_json() 
+    print("alarm off")
+    #mqtt_client.publish("topic/clock-alarm/device/off", json.dumps({"action": "off"}))
+    
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    try:
+        point = (
+                Point("alarm")
+                .tag("caused_by", "web")
+                .tag("message", "Alarms turned of by web app")
+                .field("status", "OFF")
+            ) 
+        alarm_data = {
+            "caused_by": "web",
+            "message": "Alarms turned of by web app",
+            "status": "OFF"
+        }
+
+        write_api.write(bucket="events", org=org, record=point)
+        mqtt_client.publish("topic/alarm/buzzer/off", json.dumps(alarm_data))
+
+        return jsonify({'message': f'SUCCESS'}), 200
+    
+    except Exception as e:
+        print(str(e))
+        pass
+    
+    return jsonify({'message': "ERROR"}), 400
 
 if __name__ == '__main__':
     door_sensor_detection = threading.Thread(target=door_sensor_update)
-    socketio.run(app, debug=True, port=5001)
+    socketio.run(app, debug=True, port=5001, use_reloader=False)

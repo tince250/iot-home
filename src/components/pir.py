@@ -7,7 +7,7 @@ from simulators.pir import run_pir_simulator
 
 pir_batch = []
 publish_data_counter = 0
-publish_data_limit = 2
+publish_data_limit = 1
 counter_lock = threading.Lock()
 
 def publisher_task(event, pir_batch):
@@ -65,8 +65,10 @@ def motion_detected_callback(publish_event, settings,verbose=False):
 def no_motion_detected_callback(publish_event, settings,verbose=False):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings["name"], end=" ")
@@ -82,6 +84,7 @@ def no_motion_detected_callback(publish_event, settings,verbose=False):
         "value": "stopped",
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"],
+        "datetime": formatted_time
     }
 
     with counter_lock:
@@ -93,13 +96,13 @@ def no_motion_detected_callback(publish_event, settings,verbose=False):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
-def run_pir(settings, threads, stop_event):
+def run_pir(settings, threads, stop_event, motion_detected_event = None):
     sensor_name = settings["name"]
     if settings["simulated"]:
         with print_lock:
             print(f"Starting {sensor_name} simulator")
         pir_thread = threading.Thread(target=run_pir_simulator, args=(2,  motion_detected_callback, no_motion_detected_callback, stop_event,
-                                                                      publish_event, settings))
+                                                                      publish_event, settings, motion_detected_event))
         pir_thread.start()
         threads.append(pir_thread)
         with print_lock:
@@ -109,8 +112,8 @@ def run_pir(settings, threads, stop_event):
         with print_lock:
             print(f"Starting {sensor_name} loop")
         # pir = run_pir_loop(settings['pin'], motion_detected_callback, no_motion_callback)
-        pir = PIR(settings['port'], motion_detected_callback, no_motion_detected_callback, sensor_name)
-        pir_thread = threading.Thread(target=run_pir_loop, args=(pir, stop_event))
+        pir = PIR(settings['port'], motion_detected_callback, no_motion_detected_callback, motion_detected_event, publish_event, settings)
+        pir_thread = threading.Thread(target=run_pir_loop, args=(pir, stop_event, motion_detected_event))
         pir_thread.start()
         threads.append(pir_thread)
         with print_lock:

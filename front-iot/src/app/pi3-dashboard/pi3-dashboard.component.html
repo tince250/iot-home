@@ -21,7 +21,7 @@
         <div class="group-container">
             <div class="light-blue-border rectangular-container wider">
                 <div class="cont-icon"><i class="light-blue fa-solid fa-person-walking"></i></div>
-                <p class="timestamp">{{  rpir4.time }}</p>
+                <p class="timestamp">{{  rpir4.datetime }}</p>
                 <p class="value">{{ rpir4.value ? rpir4.value : "none" }}</p>
                 <p class="device-tag" style="background-color: #FFCB52 !important;">RPIR4</p>
             </div>
@@ -35,8 +35,9 @@
     <div class="dashboard-row">
         <div class="group-container">
             <div class="yellow-border rectangular-container wider">
-                <p class="timestamp">13:00 25.1.2024.</p>
-                <p class="value">YELLOW</p>
+                <div class="cont-icon"><i class="yellow fa-solid fa-lightbulb"></i></div>
+                <p class="timestamp">{{ rgb.datetime }}</p>
+                <p class="value">{{ rgb.value? rgb.value.toUpperCase(): "" }}</p>
                 <p class="device-tag">BRGB</p>
             </div>
         </div>
@@ -51,7 +52,7 @@
         <div class="group-container">
             <div class="green-border rectangular-container wider">
                 <div class="cont-icon"><i class="green fa-solid fa-music"></i></div>
-                <p class="timestamp">{{  bb.time }}</p>
+                <p class="timestamp">{{  bb.datetime }}</p>
                 <p class="value">{{ bb.value }}</p>
                 <p class="device-tag" style="background-color: #2C87D7 !important;">BB</p>
             </div>

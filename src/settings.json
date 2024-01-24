@@ -209,7 +209,7 @@
         "simulated": true,
         "echo": 14,
         "trig": 15,
-        "name": "Door Ultrasonic Sensor",
+        "name": "Door Ultrasonic Sensor 2",
         "runs_on": "PI2",
         "influxdb_field": "measurement",
         "influxdb_bucket": "measurements"

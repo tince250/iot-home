@@ -1,0 +1,27 @@
+<div id="create-dialog-container">
+    <h1 class="purple" style="font-size: 1.3em; font-weight: 600;" align="center" style="color: #171A20 !important">Create alarm clock</h1>
+    <form [formGroup]="clockForm" (ngSubmit)="createClockAlarm()" fxLayout="column">
+        <mat-form-field>
+            <mat-label>Schedule date (mm/dd/yyyy)</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" >
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="clockForm.get('date')?.errors?.['required']">entering date is required</mat-error>
+            <mat-error *ngIf="clockForm.get('date')?.errors?.['dateBeforeOfToday']  && !clockForm.get('date')?.errors?.['required']">invalid date format</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Schedule time</mat-label>
+            <input matInput [ngxTimepicker]="pickers" [format]="24" formControlName="time" name="time" >
+            <mat-icon style="color: #FFCB52 !important" matPrefix>watch_later</mat-icon>
+            <ngx-material-timepicker #pickers></ngx-material-timepicker>
+            <mat-error *ngIf="clockForm.get('time')?.errors?.['required']">entering time is required</mat-error>
+            <mat-error *ngIf="clockForm.get('time')?.errors?.['timeFormatError']">expected format: hh:mm, 24h clock</mat-error>
+            <mat-error *ngIf="clockForm.get('time')?.errors?.['timePassed']">schedule only in advance</mat-error>
+        </mat-form-field>
+        <div id="btns" mat-dialog-actions align="center">
+            <button class="cancel-button" (click)="closeDialog()">Cancel</button>
+            <button class="conf-button back-yellow" type="submit">Create</button>
+        </div>
+    </form>
+</div>

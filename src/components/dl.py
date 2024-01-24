@@ -33,8 +33,10 @@ publisher_thread.start()
 def dl_callback(status, publish_event, settings, verbose=False):
     global publish_data_counter, publish_data_limit
 
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings['name'], end=" ")
@@ -50,7 +52,8 @@ def dl_callback(status, publish_event, settings, verbose=False):
         "value": status,
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"],
-        "update_front": True
+        "update_front": True,
+        "datetime": formatted_time
     }
 
     with counter_lock:
@@ -61,12 +64,12 @@ def dl_callback(status, publish_event, settings, verbose=False):
             publish_event.set()
 
 
-def run_dl(settings, threads, stop_event, input_queue):
+def run_dl(settings, threads, stop_event, input_queue, motion_detected_event=None):
     sensor_name = settings["name"]
     if settings['simulated']:
         with print_lock:
             print(f"Starting {sensor_name} simulator")
-        dl_thread = threading.Thread(target = run_dl_dimulator, args=(input_queue, 2, dl_callback, stop_event, publish_event, settings))
+        dl_thread = threading.Thread(target = run_dl_dimulator, args=(input_queue, 2, dl_callback, stop_event, publish_event, settings, motion_detected_event))
         dl_thread.start()
         threads.append(dl_thread)
         with print_lock:
@@ -76,7 +79,7 @@ def run_dl(settings, threads, stop_event, input_queue):
         with print_lock:
             print(f"Starting {sensor_name} loop")
         dl = DL(settings['port'], sensor_name)
-        dl_thread = threading.Thread(target=run_dl_loop, args=(input_queue, dl, 2, dl_callback, stop_event, publish_event, settings))
+        dl_thread = threading.Thread(target=run_dl_loop, args=(input_queue, dl, 2, dl_callback, stop_event, publish_event, settings, motion_detected_event))
         dl_thread.start()
         threads.append(dl_thread)
         with print_lock:

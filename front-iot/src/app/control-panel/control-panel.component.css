@@ -1,0 +1,77 @@
+.control-container {
+    border: 3px solid gray;
+    border-radius: 25px;
+    display: flex;
+    width: calc(100% - 40px);
+    margin: 10px 20px;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    color: white !important;
+    padding: 5px 15px;
+}
+
+::ng-deep .mat-mdc-select-value-text {
+    color: white;
+}
+
+::ng-deep .ng-tns-c9-0{
+    color: #2C87D7;
+}
+
+.commands {
+    float: right;
+}
+
+::ng-deep mat-option.blue {
+    background-color: #256ca9 !important;
+    color: white !important;
+}
+
+::ng-deep mat-option.light-blue {
+    background-color: #2C87D7 !important;
+    color: white !important;
+}
+
+::ng-deep mat-option.orange {
+    background-color: #EC9A29 !important;
+    color: white !important;
+}
+
+::ng-deep mat-option.purple {
+    background-color: #de25e4 !important;
+    color: white !important;
+}
+
+::ng-deep mat-option.yellow {
+    background-color: #FFCB52 !important;
+    color: #383838 !important; /* Set text color to a contrasting color */
+}
+
+::ng-deep mat-option.off {
+    background-color: #777777 !important;
+    color: white !important;
+}
+
+::ng-deep mat-option.red {
+    background-color: #ef476f !important;
+    color: white !important;
+}
+
+::ng-deep mat-option.green {
+    background-color: #06d6a0 !important;
+    color: white !important;
+}
+
+::ng-deep .mat-mdc-form-field {
+    flex-direction: row !important;
+}
+
+.control-title {
+    display: flex;
+    direction: row;
+    color: lightgray;
+    align-items: center;
+    gap: 7px;
+}

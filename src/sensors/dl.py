@@ -18,20 +18,29 @@ class DL(object):
         GPIO.output(self.pin, GPIO.LOW)
         self.status = "OFF"
 
-def run_dl_loop(input_queue, dl, delay, callback, stop_event, publish_event, settings):
+def run_dl_loop(input_queue, dl, delay, callback, stop_event, publish_event, settings, motion_detected_event):
     while True:
         try:
-            action = input_queue.get(timeout=1)
-            status_changed = False
-            if action == "turn_on" and dl.status == "OFF":
-                dl.turn_on()
-                status_changed = True
-            elif action == "turn_off" and dl.status == "ON":
-                dl.turn_off()
-                status_changed = True
+            motion_detected_event.wait()
+            dl.turn_on()
+            callback(dl.status, publish_event, settings)
+            time.sleep(10)
+            dl.turn_off()
+            motion_detected_event.clear()
+            callback(dl.status, publish_event, settings)
+            
+            
+            # action = input_queue.get(timeout=1)
+            # status_changed = False
+            # if action == "turn_on" and dl.status == "OFF":
+            #     dl.turn_on()
+            #     status_changed = True
+            # elif action == "turn_off" and dl.status == "ON":
+            #     dl.turn_off()
+            #     status_changed = True
 
-            if status_changed:
-                callback(dl.status, publish_event, settings)
+            # if status_changed:
+            #     callback(dl.status, publish_event, settings)
         except Empty:
             pass
 

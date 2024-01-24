@@ -32,9 +32,11 @@ publisher_thread.start()
 
 def uds_callback(distance, publish_event, settings, verbose=True):
     global publish_data_counter, publish_data_limit
+
+    t = time.localtime()
+    formatted_time = time.strftime('%d.%m.%Y. %H:%M:%S', t)
     
     if verbose:
-        t = time.localtime()
         with print_lock:
             print("="*10, end=" ")
             print(settings["name"], end=" ")
@@ -53,7 +55,8 @@ def uds_callback(distance, publish_event, settings, verbose=True):
         "value": distance,
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"],
-        "update_front": False
+        "update_front": False,
+        "datetime": formatted_time
     }
 
     with counter_lock:
