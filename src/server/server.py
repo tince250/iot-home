@@ -86,6 +86,25 @@ def save_to_db(data, verbose=True):
         print(str(e))
         pass
 
+@app.route('/rgb/color', methods=['PUT'])
+def update_rgb_color():
+    try:
+        data = request.get_json()
+        color = data.get('color', None)
+
+        if color is not None:
+            print(f"Received color: {color}")
+
+            mqtt_message = {"color": color}
+            mqtt_client.publish("topic/rgb/color", payload=json.dumps(mqtt_message))
+
+            return jsonify({'message': 'Color updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Color not provided'}), 400
+
+    except Exception as e:
+        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
+
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
 mqtt_client.connect("localhost", 1883, 60)
