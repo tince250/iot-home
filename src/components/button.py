@@ -8,7 +8,7 @@ import json
 
 button_batch = []
 publish_data_counter = 0
-publish_data_limit = 2
+publish_data_limit = 1
 counter_lock = threading.Lock()
 
 def publisher_task(event, button_batch):
@@ -50,7 +50,7 @@ def button_callback(publish_event, settings, is_pressed, verbose=True):
         "simulated": settings['simulated'],
         "runs_on": settings["runs_on"],
         "name": settings["name"],
-        "value": "pressed" if is_pressed else "none",
+        "value": "open" if is_pressed else "closed",
         "field": settings["influxdb_field"],
         "bucket": settings["influxdb_bucket"],
         "datetime": formatted_time

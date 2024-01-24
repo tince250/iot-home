@@ -6,6 +6,8 @@ import json
 import paho.mqtt.client as mqtt
 # from env import INFLUXDB_TOKEN
 from flask_cors import CORS
+import threading
+import time
 
 import time
 
@@ -180,6 +182,15 @@ def on_message_callback(client, userdata, msg):
     elif msg.topic == "topic/gyro/angles":
         check_gyro_alarms(json.loads(msg.payload.decode('utf-8')))
         save_to_db(json.loads(msg.payload.decode('utf-8')))
+    elif msg.topic == "topic/button/press":
+        data = json.loads(msg.payload.decode('utf-8'))
+        global door_sensor_lock, last_press_ds1, last_press_ds2
+        if data["name"] == "Door Sensor 1":
+            with door_sensor_lock:
+                last_press_ds1 = time.time() if data["value"] == "open" else 0
+        if data["name"] == "Door Sensor 2":
+            with door_sensor_lock:
+                last_press_ds2 = time.time() if data["value"] == "open" else 0
     else:         
         data = json.loads(msg.payload.decode('utf-8'))
         if data["name"] == "Door Motion Sensor 1" or data["name"] == "Door Motion Sensor 2":
@@ -214,6 +225,24 @@ mqtt_client.on_connect = on_connect
 mqtt_client.on_message = lambda client, userdata, msg: on_message_callback(client, userdata, msg)
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
+
+
+door_sensor_lock = threading.Lock()
+last_press_ds1 = 0
+last_press_ds2 = 0
+
+def door_sensor_update():
+    global door_sensor_lock, last_press_ds1, last_press_ds2
+    while True:
+        time.sleep(1)
+        with door_sensor_lock:
+            if last_press_ds1 and time.time() - last_press_ds1 > 5:
+                data = {"name": "Door Sensor 1"}
+                raise_alarm(json.dumps(data), message=f"Door 1 has been opened for more than 5 seconds")
+        if last_press_ds2 and time.time() - last_press_ds2 > 5:
+            data = {"name": "Door Sensor 2"}
+            raise_alarm(json.dumps(data), message=f"Door 2 has been opened for more than 5 seconds")
+
 
 @app.route('/clock-alarm', methods=['POST'])
 def post_clock_alarm():
@@ -262,4 +291,7 @@ def alarm_off():
     return jsonify({'message': "ERROR"}), 400
 
 if __name__ == '__main__':
+    door_sensor_detection = threading.Thread(target=door_sensor_update)
+    door_sensor_detection.daemon = True
+    door_sensor_detection.start()
     socketio.run(app, debug=True, port=5001, use_reloader=False)
