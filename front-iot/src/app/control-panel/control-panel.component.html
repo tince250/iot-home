@@ -1,0 +1,20 @@
+<div class="control-container">
+    <div class="control-title">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        <p>control panel:</p>
+    </div>
+    <mat-form-field>
+        <mat-label>Select RGB color</mat-label>
+        <mat-select (selectionChange)="onRgbSelectionChange($event)" [formControl]="rgbColorSelect">
+          <mat-option class="off" value="OFF">OFF</mat-option>
+          <mat-option class="red" value="RED">RED</mat-option>
+          <mat-option class="green" value="GREEN">GREEN</mat-option>
+          <mat-option class="blue" value="BLUE">BLUE</mat-option>
+          <mat-option class="purple" value="PURPLE">PURPLE</mat-option>
+          <mat-option class="white" value="WHITE">WHITE</mat-option>
+          <mat-option class="orange" value="YELLOW">YELLOW</mat-option>
+          <mat-option class="light-blue" value="LIGHT BLUE">LIGHT BLUE</mat-option>
+          <!-- Add more options as needed -->
+        </mat-select>
+    </mat-form-field>
+</div>

@@ -81,12 +81,14 @@ class RGBdiode(object):
 
         return False
 
-def run_RGB_loop(input_queue, rgb: RGBdiode, delay, callback, stop_event, publish_event, settings):
+def run_rgb_loop(rgb: RGBdiode, delay, callback, stop_event, publish_event, settings, data_queue, change_color_event):
     while True:
         try:
-            action = input_queue.get(timeout=1)
+            change_color_event.wait()
+            action = data_queue.get(timeout=1)
             status_changed = rgb.resolve_command(action)
 
+            change_color_event.clear()
             if status_changed:
                 callback(rgb.status, publish_event, settings)
         except Empty:

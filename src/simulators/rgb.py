@@ -18,14 +18,16 @@ class RGB(object):
 
             return False
 
-def run_rgb_simulator(input_queue, delay, callback, stop_event, publish_event, settings):
+def run_rgb_simulator(delay, callback, stop_event, publish_event, settings, data_queue, change_color_event):
     rgb = RGB()
     
     while not stop_event.is_set():
         try:
-            action = input_queue.get(timeout=1)
+            change_color_event.wait()
+            action = data_queue.get(timeout=1)
             status_changed = rgb.resolve_command(action)
-
+            
+            change_color_event.clear()
             if status_changed:
                 print("BRGB lights are " + action)
                 callback(rgb.status, publish_event, settings, True)

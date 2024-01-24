@@ -16,8 +16,15 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { Pi1DashboardComponent } from './pi1-dashboard/pi1-dashboard.component';
 import { Pi2DashboardComponent } from './pi2-dashboard/pi2-dashboard.component';
 import { Pi3DashboardComponent } from './pi3-dashboard/pi3-dashboard.component';
+<<<<<<< HEAD
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { AlarmsComponent } from './alarms/alarms.component';
+=======
+import { CreateClockAlarmDialogComponent } from './create-clock-alarm-dialog/create-clock-alarm-dialog.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { SocketIoModule, SocketIoConfig, Socket } from 'ngx-socket-io';
+import { ControlPanelComponent } from './control-panel/control-panel.component';
+>>>>>>> 03b83de32f447e71519780bee7752f74c642918e
 
 const config: SocketIoConfig = { url: 'localhost:5001', options: {} };
 
@@ -28,7 +35,12 @@ const config: SocketIoConfig = { url: 'localhost:5001', options: {} };
     Pi1DashboardComponent,
     Pi2DashboardComponent,
     Pi3DashboardComponent,
+<<<<<<< HEAD
     AlarmsComponent
+=======
+    CreateClockAlarmDialogComponent,
+    ControlPanelComponent
+>>>>>>> 03b83de32f447e71519780bee7752f74c642918e
   ],
   imports: [
     BrowserModule,
@@ -41,6 +53,7 @@ const config: SocketIoConfig = { url: 'localhost:5001', options: {} };
     MatSnackBarModule,
     CommonModule,
     MatFormFieldModule,
+    NgxMaterialTimepickerModule,
     SocketIoModule.forRoot(config)
   ],
   providers: [
@@ -54,4 +67,5 @@ const config: SocketIoConfig = { url: 'localhost:5001', options: {} };
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

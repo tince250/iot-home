@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { BuzzerService } from 'src/services/buzzer.service';
 
 @Component({
   selector: 'app-pi1-dashboard',
@@ -17,11 +18,28 @@ export class Pi1DashboardComponent implements OnInit {
   dpir1: UpdateDTO = {} as UpdateDTO;
   db: UpdateDTO = {} as UpdateDTO;
   ds1: UpdateDTO = {} as UpdateDTO;
+  past1m: number = {} as number;
+  past5m: number = {} as number;
 
-  constructor(private socket: Socket) {
+  iframeBaseUrl = "http://localhost:3000/d-solo/b478d5b9-13b0-4b97-a14e-07ec4b5df704/new-dashboard?orgId=1";
+  iframeUrls: string[] = [];
+
+  constructor(private socket: Socket,
+    private buzzerService: BuzzerService) {
   }
 
   ngOnInit(): void {
+    this.buzzerService.receivedDoorBuzzerUpdate().subscribe({
+      next: (value) => {
+        console.log(value);
+        let buzzerData : UpdateDTO = value;
+        if (this.db.datetime != buzzerData.datetime)
+          this.db = buzzerData
+      },
+      error(err) {
+        console.log(err);
+      },
+    })
     this.socket.on('update/PI1', (data: any) => {
       data = JSON.parse(data);
       
@@ -57,6 +75,29 @@ export class Pi1DashboardComponent implements OnInit {
       // Handle received data
       console.log('Received Socket.IO message:', data);
     });
+  }
+
+  
+
+  // Function to calculate timestamp based on the relative time
+  private calculateTimestamp(amount: number, unit: string): number {
+    const currentDate = new Date();
+    switch (unit) {
+      case 'minutes':
+        currentDate.setMinutes(currentDate.getMinutes() + amount);
+        break;
+      case 'hours':
+        currentDate.setHours(currentDate.getHours() + amount);
+        break;
+      case 'days':
+        currentDate.setDate(currentDate.getDate() + amount);
+        break;
+      case 'months':
+        currentDate.setMonth(currentDate.getMonth() + amount);
+        break;
+      // Add more cases as needed
+    }
+    return currentDate.getTime();
   }
 
   updateDHT(data: UpdateDTO, dht: UpdateDTO[]) {
