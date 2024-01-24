@@ -133,8 +133,8 @@ def run_pi1(settings, events_dict):
     # b4sd_settings = settings["B4SD"]
     # run_b4sd(b4sd_settings, threads, stop_event, b4sd_queue, bb_queue, alarm_on_event, alarm_off_event)
 
-    bir_settings = settings["BIR"]
-    run_bir(bir_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"], bir_rgb_mappings)
+    # bir_settings = settings["BIR"]
+    # run_bir(bir_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"], bir_rgb_mappings)
 
     # lcd_settings = settings["GLCD"]
     # run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
@@ -142,8 +142,8 @@ def run_pi1(settings, events_dict):
     gyro_settings = settings["GSG"]
     run_gyro(gyro_settings, threads, stop_event)
 
-    rgb_settings = settings["BRGB"]
-    run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"])
+    # rgb_settings = settings["BRGB"]
+    # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"])
 
     # dus2_settings = settings["DUS2"]
     # run_uds(dus2_settings, threads, stop_event)
