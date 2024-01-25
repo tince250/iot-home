@@ -8,7 +8,8 @@ import traceback
 
 ms_batch = []
 publish_data_counter = 0
-publish_data_limit = 5
+publish_data_limit = 6
+code_sequence = ""
 counter_lock = threading.Lock()
 
 def publisher_task(event, ms_batch):
@@ -20,7 +21,8 @@ def publisher_task(event, ms_batch):
             publish_data_counter = 0
             ms_batch.clear()
         try:
-            publish.multiple(local_dht_batch, hostname="10.1.121.69", port=1883)
+            # publish.multiple(local_dht_batch, hostname="10.1.121.69", port=1883)
+            publish.multiple(local_dht_batch, hostname="localhost", port=1883)
             print(f'Published {publish_data_limit} ms values')
         except:
             traceback.print_exc() 
@@ -32,7 +34,7 @@ publisher_thread.daemon = True
 publisher_thread.start()
 
 def ms_callback(pressed_key, settings, publish_event, verbose=False):
-    global publish_data_counter, publish_data_limit
+    global publish_data_counter, publish_data_limit, code_sequence
 
     if verbose:
         t = time.localtime()
@@ -59,6 +61,16 @@ def ms_callback(pressed_key, settings, publish_event, verbose=False):
     with counter_lock:
         ms_batch.append(('topic/ms/key-pressed', json.dumps(ms_payload), 0, True))
         publish_data_counter += 1
+
+    if pressed_key == "*":
+        code_sequence = ""
+        code_sequence += pressed_key
+    elif pressed_key != "#" and len(code_sequence) > 0 and len(code_sequence) < 5:
+        code_sequence += pressed_key
+    elif pressed_key == "#" and len(code_sequence) == 5:
+        publish.single('topic/ms/code', payload=json.dumps({"code": code_sequence[1:]}), qos=0, retain=True, hostname="localhost", port=1883)
+        print("published code seqeunce: " + code_sequence)
+        code_sequence = ""
 
     if publish_data_counter >= publish_data_limit:
         publish_event.set()

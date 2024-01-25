@@ -5,6 +5,8 @@ import threading
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+from settings import IP_ADDRESS
+
 
 button_batch = []
 publish_data_counter = 0
@@ -20,7 +22,7 @@ def publisher_task(event, button_batch):
             publish_data_counter = 0
             button_batch.clear()
         try:
-            publish.multiple(local_button_batch, hostname="localhost", port=1883)
+            publish.multiple(local_button_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} button values')
         except:
             print("greska")
@@ -43,7 +45,10 @@ def button_callback(publish_event, settings, is_pressed, verbose=True):
             print(settings['name'], end=" ")
             print("="*10)
             print(f"Timestamp: {time.strftime('%H:%M:%S', t)}")
-            print(f"{settings['name']} is pressed!\n")
+            if is_pressed:
+                print(f"{settings['name']} is pressed!\n")
+            else:
+                print(f"{settings['name']} is released!\n")
 
     press_payload = {
         "measurement": "button_press",
@@ -81,7 +86,7 @@ def run_button(settings, threads, stop_event):
         with print_lock: 
             print(f"Starting {sensor_name} loop")
         button = Button(settings['port'], sensor_name)
-        button_thread = threading.Thread(target=run_button_loop, args=(button, stop_event, publish_event, settings))
+        button_thread = threading.Thread(target=run_button_loop, args=(button, stop_event, button_callback, publish_event, settings))
         button_thread.start()
         threads.append(button_thread)
         with print_lock: 

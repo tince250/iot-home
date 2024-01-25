@@ -4,6 +4,7 @@ import time
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+from settings import IP_ADDRESS
 
 gyro_batch = []
 publish_data_counter = 0
@@ -19,7 +20,7 @@ def publisher_task(event, gyro_batch):
             publish_data_counter = 0
             gyro_batch.clear()
         try:
-            publish.multiple(local_gyro_batch, hostname="localhost", port=1883)
+            publish.multiple(local_gyro_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} gyroscope values')
         except Exception as e:
             print(str(e))

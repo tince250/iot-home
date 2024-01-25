@@ -71,8 +71,9 @@
         </div>
 
         <div class="rectangular-container wider bigger-rectangular-width">
-            <!-- <p class="timestamp">13:00 25.1.2024.</p> -->
-            <p class="value font-size-64">{{ "ENTERED" ? ds2.value == "pressed" : "CLOSED"}}</p>
+            <p class="timestamp">{{ds2.datetime}}</p>
+            <p class="value font-size-64" *ngIf="ds2.value=='open'">"OPEN"</p>
+            <p class="value font-size-64" *ngIf="ds2.value=='closed'">"OPEN"</p>
             <p class="device-tag bigger-device-tag">DS2</p>
             <div class="bigger-icon-right"><i class="yellow fa-solid fa-door-open"></i></div>
             <!-- <div class="bigger-icon"><i class="yellow fa-solid fa-door-closed"></i></div> -->

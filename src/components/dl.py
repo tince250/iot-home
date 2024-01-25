@@ -4,6 +4,8 @@ from simulators.dl import run_dl_dimulator
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+from settings import IP_ADDRESS
+
 
 dl_batch = []
 publish_data_counter = 0
@@ -19,7 +21,7 @@ def publisher_task(event, dl_batch):
             publish_data_counter = 0
             dl_batch.clear()
         try:
-            publish.multiple(local_dl_batch, hostname="localhost", port=1883)
+            publish.multiple(local_dl_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} door light values')
         except:
             print("greska")
@@ -30,7 +32,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def dl_callback(status, publish_event, settings, verbose=False):
+def dl_callback(status, publish_event, settings, verbose=True):
     global publish_data_counter, publish_data_limit
 
     t = time.localtime()

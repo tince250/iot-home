@@ -4,6 +4,8 @@ import time
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+from settings import IP_ADDRESS
+
 
 dht_batch = []
 publish_data_counter = 0
@@ -19,7 +21,7 @@ def publisher_task(event, dht_batch):
             publish_data_counter = 0
             dht_batch.clear()
         try:
-            publish.multiple(local_dht_batch, hostname="localhost", port=1883)
+            publish.multiple(local_dht_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} dht values')
         except:
             print("greska")

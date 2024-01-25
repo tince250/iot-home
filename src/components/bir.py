@@ -5,6 +5,7 @@ import threading
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+from settings import IP_ADDRESS
 
 bir_batch = []
 publish_data_counter = 0
@@ -20,7 +21,7 @@ def publisher_task(event, bir_batch):
             publish_data_counter = 0
             bir_batch.clear()
         try:
-            publish.multiple(local_bir_batch, hostname="localhost", port=1883)
+            publish.multiple(local_bir_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} bir values')
         except:
             print("greska")

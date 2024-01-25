@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ApiService } from 'src/services/api.service';
 import { ColorService } from 'src/services/color.service';
 
@@ -9,7 +9,10 @@ import { ColorService } from 'src/services/color.service';
   styleUrls: ['./control-panel.component.css']
 })
 export class ControlPanelComponent implements OnInit {
-  rgbColorSelect = new FormControl('',[]);
+  controPanelGroup = new FormGroup({
+    rgbColorSelect: new FormControl('', []),
+    dmsCode: new FormControl('', []),
+  })
 
   constructor(private apiService: ApiService, private colorService: ColorService) { }
 
@@ -17,9 +20,9 @@ export class ControlPanelComponent implements OnInit {
     this.colorService.receivedColorUpdate().subscribe({
       next: (value) => {
         let color = value.toUpperCase();
-        console.log(this.rgbColorSelect.value);
-        if (color != this.rgbColorSelect.value)
-          this.rgbColorSelect.setValue(color);
+        console.log(this.controPanelGroup.value.rgbColorSelect);
+        if (color != this.controPanelGroup.value.rgbColorSelect)
+          this.controPanelGroup.value.rgbColorSelect = color;
       },
       error(err) {
         console.log(err);
@@ -38,5 +41,19 @@ export class ControlPanelComponent implements OnInit {
         console.log(err)
       },
     })
+  }
+
+  sendDMSInput() {
+    console.log(this.controPanelGroup.value.dmsCode)
+    if (this.controPanelGroup.value.dmsCode) {
+      this.apiService.sendDmsCode(this.controPanelGroup.value.dmsCode).subscribe({
+        next: (value) => {
+          console.log(value);
+        },
+        error(err) {
+          console.log(err)
+        },
+      })
+    }
   }
 }
