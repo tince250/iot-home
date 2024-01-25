@@ -71,11 +71,11 @@
 
         <div class="rectangular-container wider bigger-rectangular-width">
             <p class="timestamp">{{ ds1.datetime }} </p>
-            <p class="value font-size-64" *ngIf="ds1.value=='open'">"OPEN"</p>
-            <p class="value font-size-64" *ngIf="ds1.value=='closed'">"OPEN"</p>
+            <p class="value font-size-64" *ngIf="ds1.value=='open'">OPEN</p>
+            <p class="value font-size-64" *ngIf="ds1.value=='closed'">CLOSED</p>
             <p class="device-tag bigger-device-tag">DS1</p>
-            <div class="bigger-icon-right"><i class="yellow fa-solid fa-door-open"></i></div>
-            <div class="bigger-icon"><i class="yellow fa-solid fa-door-closed"></i></div>
+            <div class="bigger-icon-right" *ngIf="ds1.value=='open'"><i class="yellow fa-solid fa-door-open"></i></div>
+            <div class="bigger-icon-right" *ngIf="ds1.value=='closed'"><i class="yellow fa-solid fa-door-closed"></i></div>
         </div>
     </div>
 
