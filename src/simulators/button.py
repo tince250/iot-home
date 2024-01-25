@@ -20,8 +20,14 @@ def generate_values(delay, initial_value=0):
         # yield value
 
 def run_button_simulator(delay, callback, stop_event, publish_event, settings, threshold=0.6):
-    for value in generate_values(delay=1):
-        # print(value)
-        callback(publish_event, settings, value == 1)
+    # for value in generate_values(delay=1):
+    #     # print(value)
+    #     callback(publish_event, settings, value == 1)
+    #     if stop_event.is_set():
+    #         break
+
+    callback(publish_event, settings, False)
+
+    while True:
         if stop_event.is_set():
             break

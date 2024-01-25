@@ -115,8 +115,8 @@ def run_pi1(settings, events_dict):
     # ds2_settings = settings['DS2']
     # run_button(ds2_settings, threads, stop_event)
     
-    # dms_settings = settings["DMS"]
-    # run_ms(dms_settings, threads, stop_event)
+    dms_settings = settings["DMS"]
+    run_ms(dms_settings, threads, stop_event)
     
     # dl_settings = settings["DL"]
     # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
@@ -139,8 +139,8 @@ def run_pi1(settings, events_dict):
     # lcd_settings = settings["GLCD"]
     # run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
     
-    gyro_settings = settings["GSG"]
-    run_gyro(gyro_settings, threads, stop_event)
+    # gyro_settings = settings["GSG"]
+    # run_gyro(gyro_settings, threads, stop_event)
 
     # rgb_settings = settings["BRGB"]
     # run_rgb(rgb_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"])

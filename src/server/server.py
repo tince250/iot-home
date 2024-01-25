@@ -9,7 +9,16 @@ from flask_cors import CORS
 import threading
 import time
 
-import time
+dms_alarm_activation_code = "1234"
+dms_alarm_deactivation_code = "4321"
+
+dms_alarm_timeout = 10
+dms_alarm_is_active = False
+
+dms_pin_arrived_event = [threading.Event(), threading.Event()]
+start_countdown_event = [threading.Event(), threading.Event()]
+dms_alarm_ringing = [False, False]
+dms_alarm_lock = threading.Lock()
 
 app = Flask(__name__)
 CORS(app) 
@@ -48,6 +57,7 @@ mqtt_client = mqtt.Client()
 
 def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     print("Connected with result code "+str(result_code))
+    client.subscribe("topic/ms/code")
     client.subscribe("topic/dht/temperature")
     client.subscribe("topic/dht/humidity")
     client.subscribe("topic/button/press")
@@ -60,6 +70,7 @@ def on_connect(client: mqtt.Client, userdata: any, flags, result_code):
     client.subscribe("topic/gyro/angles")
     client.subscribe("topic/rgbdiode/status")
     client.subscribe("topic/clock-alarm/server")
+    
 
 def check_gyro_alarms(data):
     allowed_angle_range = [-8.5, 8.5]
@@ -167,12 +178,41 @@ def check_door_entrance(runs_on):
             people_count -= 1
             print(f"Someone left the house. People count: {people_count}")
 
+def wait_for_dms_event(indx: int):
+    global dms_alarm_ringing, dms_pin_arrived_event, start_countdown_event, dms_alarm_timeout
+    print(indx)
+    while True:
+        start_countdown_event[indx].wait()
+
+        if not dms_pin_arrived_event[indx].wait(timeout=dms_alarm_timeout):
+            print("DMS ALARM ON ****************")
+            with dms_alarm_lock:
+                dms_alarm_ringing[indx] = True
+            raise_alarm({"name": "server"}, f"DMS pin not inputed within DS timeout, for DS{indx+1}.", True)
+        else:
+            print("DMS CODE ARRIVED ON TIME ****************")
+            dms_pin_arrived_event[indx].clear()
+
+        start_countdown_event[indx].clear()
             
 def on_message_callback(client, userdata, msg):
+    global dms_pin_arrived_event, start_countdown_event
+
     print(f"Received message from topic: {msg.topic}")
     print(f"Message payload: {msg.payload.decode('utf-8')}")
 
+
     # Check the topic and take action accordingly
+    if msg.topic == "topic/ms/code":
+        try:
+            message = json.loads(msg.payload.decode('utf-8'))
+            code = message["code"]
+        except Exception as e:
+            print(str(e))
+            return
+        
+        process_dms_code_received(code)
+        return
     if msg.topic == "topic/clock-alarm/server":
         data = json.loads(msg.payload.decode('utf-8'))
         try:
@@ -187,10 +227,20 @@ def on_message_callback(client, userdata, msg):
         global door_sensor_lock, last_press_ds1, last_press_ds2
         if data["name"] == "Door Sensor 1":
             with door_sensor_lock:
-                last_press_ds1 = time.time() if data["value"] == "open" else 0
+                if data["value"] == "open":
+                    last_press_ds1 = time.time() 
+                else:
+                    last_press_ds1 = 0
+                    if dms_alarm_is_active:
+                        start_countdown_event[0].set()
         if data["name"] == "Door Sensor 2":
             with door_sensor_lock:
-                last_press_ds2 = time.time() if data["value"] == "open" else 0
+                if data["value"] == "open":
+                    last_press_ds2 = time.time() 
+                else:
+                    last_press_ds2 = 0
+                    if dms_alarm_is_active:
+                        start_countdown_event[1].set()
     else:         
         data = json.loads(msg.payload.decode('utf-8'))
         if data["name"] == "Door Motion Sensor 1" or data["name"] == "Door Motion Sensor 2":
@@ -201,6 +251,69 @@ def on_message_callback(client, userdata, msg):
                     print("ALARM!!!")
                     raise_alarm(data, message=f"Move was detected by {data['name']} but there is 0 people")
         save_to_db(data)
+
+def turn_dms_alarm_off():
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    try:
+        point = (
+                Point("alarm")
+                .tag("caused_by", "dms")
+                .tag("message", "Alarms turned of by dms pin input")
+                .field("status", "OFF")
+            ) 
+        alarm_data = {
+            "caused_by": "dms",
+            "message": "Alarms turned of dms pin input",
+            "status": "OFF"
+        }
+
+        write_api.write(bucket="events", org=org, record=point)
+        mqtt_client.publish("topic/alarm/buzzer/off", json.dumps(alarm_data))
+        socketio.emit('alarm', json.dumps({"status": "OFF"}))
+
+    except Exception as e:
+        print(str(e))
+
+def process_dms_code_received(code: str):
+    global dms_alarm_activation_code, dms_alarm_is_active, dms_pin_arrived_event, dms_alarm_ringing
+
+    if code == dms_alarm_activation_code and not dms_alarm_is_active:
+        with dms_alarm_lock:
+            print("DMS ALARM ACTIVATED **************")
+            dms_alarm_is_active = True
+    elif code == dms_alarm_deactivation_code:
+        with dms_alarm_lock:
+            dms_alarm_is_active = False
+        print("DMS ALARM DEACTIVATED **************")
+        if dms_alarm_ringing[0] or dms_alarm_ringing[1]:
+            #TODO: na front posalji da prestane alarm
+            print("DMS ALARM OFF **************")
+            with dms_alarm_lock:
+                dms_alarm_ringing[0] = False
+                dms_alarm_ringing[1] = False
+            turn_dms_alarm_off()
+        else:
+            dms_pin_arrived_event[0].set()
+            dms_pin_arrived_event[1].set()
+
+@app.route('/dms/code', methods=['PUT'])
+def update_dms_code():
+    global dms_alarm_activation_code, dms_alarm_is_active, dms_pin_arrived_event, dms_alarm_ringing
+    try:
+        data = request.get_json()
+        code = data.get('code', None)
+
+        if code is not None:
+            print(f"Received code: {code}")
+
+            process_dms_code_received(code)
+
+            return jsonify({'message': 'Code updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Code not provided'}), 400
+
+    except Exception as e:
+        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
 
 @app.route('/rgb/color', methods=['PUT'])
 def update_rgb_color():
@@ -238,10 +351,10 @@ def door_sensor_update():
         with door_sensor_lock:
             if last_press_ds1 and time.time() - last_press_ds1 > 5:
                 data = {"name": "Door Sensor 1"}
-                raise_alarm(json.dumps(data), message=f"Door 1 has been opened for more than 5 seconds")
+                raise_alarm(data, message=f"Door 1 has been opened for more than 5 seconds")
         if last_press_ds2 and time.time() - last_press_ds2 > 5:
             data = {"name": "Door Sensor 2"}
-            raise_alarm(json.dumps(data), message=f"Door 2 has been opened for more than 5 seconds")
+            raise_alarm(data, message=f"Door 2 has been opened for more than 5 seconds")
 
 
 @app.route('/clock-alarm', methods=['POST'])
@@ -261,9 +374,10 @@ def clock_alarm_off():
 
 @app.route('/alarm/off', methods=['PUT'])
 def alarm_off():
+    global dms_alarm_ringing, dms_alarm_is_active
+
     data = request.get_json() 
     print("alarm off")
-    #mqtt_client.publish("topic/clock-alarm/device/off", json.dumps({"action": "off"}))
     
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     try:
@@ -282,6 +396,13 @@ def alarm_off():
         write_api.write(bucket="events", org=org, record=point)
         mqtt_client.publish("topic/alarm/buzzer/off", json.dumps(alarm_data))
 
+        if dms_alarm_ringing:
+            dms_alarm_ringing[0] = False
+            dms_alarm_ringing[1] = False
+            dms_alarm_is_active = False
+            print("DMS ALARM DEACTIVATED **************")
+            print("DMS ALARM OFF **************")
+
         return jsonify({'message': f'SUCCESS'}), 200
     
     except Exception as e:
@@ -294,4 +415,14 @@ if __name__ == '__main__':
     door_sensor_detection = threading.Thread(target=door_sensor_update)
     door_sensor_detection.daemon = True
     door_sensor_detection.start()
+
+    dms_alarm_countdown_ds1 = threading.Thread(target=wait_for_dms_event, args=(0,))
+    dms_alarm_countdown_ds1.daemon = True
+    dms_alarm_countdown_ds1.start()
+
+    dms_alarm_countdown_ds2 = threading.Thread(target=wait_for_dms_event, args=(1,))
+    dms_alarm_countdown_ds2.daemon = True
+    dms_alarm_countdown_ds2.start()
+
+
     socketio.run(app, debug=True, port=5001, use_reloader=False)

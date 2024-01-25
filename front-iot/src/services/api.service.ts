@@ -19,4 +19,14 @@ export class ApiService {
     const endpoint = `${environment.apiHost}/rgb/color`;
     return this.http.put(endpoint, { color }, options);
   }
+
+  sendDmsCode(code: string): Observable<any> {
+    const options: any = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+    const endpoint = `${environment.apiHost}/dms/code`;
+    return this.http.put(endpoint, { code }, options);
+  }
 }
