@@ -5,6 +5,7 @@ from locks import print_lock
 import paho.mqtt.publish as publish
 import json
 import paho.mqtt.client as mqtt
+from settings import IP_ADDRESS
 
 rgb_batch = []
 publish_data_counter = 0
@@ -20,7 +21,7 @@ def publisher_task(event, rgb_batch):
             publish_data_counter = 0
             rgb_batch.clear()
         try:
-            publish.multiple(local_rgb_batch, hostname="localhost", port=1883)
+            publish.multiple(local_rgb_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} rgb diode values')
         except:
             print("greska")
@@ -85,7 +86,7 @@ def run_rgb(settings, threads, stop_event, data_queue, change_color_event):
     mqtt_client = mqtt.Client()
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = lambda client, userdata, msg: on_receive(msg, data_queue, change_color_event)
-    mqtt_client.connect("localhost", 1883, 60)
+    mqtt_client.connect(IP_ADDRESS, 1883, 60)
     mqtt_client.loop_start()
 
     if settings['simulated']:

@@ -13,6 +13,8 @@ buzzer_batch = []
 publish_data_counter = 0
 publish_data_limit = 1
 counter_lock = threading.Lock()
+from settings import IP_ADDRESS
+
 
 def publisher_task(event, buzzer_batch):
     global publish_data_counter, publish_data_limit
@@ -23,7 +25,7 @@ def publisher_task(event, buzzer_batch):
             publish_data_counter = 0
             buzzer_batch.clear()
         try:
-            publish.multiple(local_buzzer_batch, hostname="localhost", port=1883)
+            publish.multiple(local_buzzer_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} buzzer values')
         except:
             print("greska")
@@ -88,7 +90,7 @@ def run_buzzer(settings, threads, stop_event, alarm_on_event, alarm_clock_queue=
     mqtt_client = mqtt.Client()
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = lambda client, userdata, msg: on_receive(msg, alarm_on_event)
-    mqtt_client.connect("localhost", 1883, 60)
+    mqtt_client.connect(IP_ADDRESS, 1883, 60)
     mqtt_client.loop_start()
     
     if settings["simulated"]:
