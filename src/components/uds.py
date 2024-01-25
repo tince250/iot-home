@@ -4,6 +4,7 @@ from simulators.uds import run_uds_simulator
 from locks import print_lock
 import paho.mqtt.publish as publish
 import json
+from settings import IP_ADDRESS
 
 uds_batch = []
 publish_data_counter = 0
@@ -19,7 +20,7 @@ def publisher_task(event, uds_batch):
             publish_data_counter = 0
             uds_batch.clear()
         try:
-            publish.multiple(local_dht_batch, hostname="localhost", port=1883)
+            publish.multiple(local_dht_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} uds values')
         except:
             print("greska")

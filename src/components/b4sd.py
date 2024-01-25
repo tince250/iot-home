@@ -8,6 +8,7 @@ import json
 import paho.mqtt.client as mqtt
 from queue import Queue
 from threading import Event
+from settings import IP_ADDRESS
 
 def user_input_thread(mqtt_client, alarm_on_event, alarm_off_event, stop_event):
     alarm_on_set = False
@@ -75,7 +76,7 @@ def run_b4sd(settings, threads, stop_event, b4sd_queue, bb_queue, alarm_on_event
     mqtt_client = mqtt.Client()
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = lambda client, userdata, msg: on_receive(msg, b4sd_queue, bb_queue, alarm_off_event)
-    mqtt_client.connect("localhost", 1883, 60)
+    mqtt_client.connect(IP_ADDRESS, 1883, 60)
     mqtt_client.loop_start()
     
 

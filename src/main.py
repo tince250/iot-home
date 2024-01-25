@@ -80,8 +80,8 @@ def get_bir_rgb_mappings_dict():
     return bir_rgb_mappings
 
 def run_pi1(settings, events_dict):
-    # rdht1_settings = settings['RDHT1']
-    # run_dht(rdht1_settings, threads, stop_event)
+    rdht1_settings = settings['RDHT1']
+    run_dht(rdht1_settings, threads, stop_event)
 
     # rdht2_settings = settings['RDHT2']
     # run_dht(rdht2_settings, threads, stop_event)
@@ -89,8 +89,8 @@ def run_pi1(settings, events_dict):
     # run_dht(rdht3_settings, threads, stop_event)
     # rdht4_settings = settings['RDHT4']
     # run_dht(rdht4_settings, threads, stop_event)
-    # gdht_settings = settings['GDHT']
-    # run_dht(gdht_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
+    #gdht_settings = settings['GDHT']
+    #run_dht(gdht_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
 
     # uds1_settings = settings["UDS1"]
     # run_uds(uds1_settings, threads, stop_event)
@@ -118,26 +118,26 @@ def run_pi1(settings, events_dict):
     dms_settings = settings["DMS"]
     run_ms(dms_settings, threads, stop_event)
     
-    # dl_settings = settings["DL"]
-    # run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
+    #dl_settings = settings["DL"]
+    #run_dl(dl_settings, threads, stop_event, queues_dict["door_light_queue"], events_dict["dpir1_dl"])
     alarm_on_event = Event()
-    db_settings = settings['DB']
-    run_buzzer(db_settings, threads, stop_event, alarm_on_event=alarm_on_event)
-    b4sd_queue = Queue()
-    bb_queue = Queue()
-    alarm_clock_on_event = Event()
-    alarm_clock_off_event = Event()
-    bb_settings = settings['BB']
-    run_buzzer(bb_settings, threads, stop_event, alarm_on_event, bb_queue,  alarm_clock_on_event, alarm_clock_off_event)
+    #db_settings = settings['DB']
+    #run_buzzer(db_settings, threads, stop_event, alarm_on_event=alarm_on_event)
+    # b4sd_queue = Queue()
+    # bb_queue = Queue()
+    # alarm_clock_on_event = Event()
+    # alarm_clock_off_event = Event()
+    # bb_settings = settings['BB']
+    # run_buzzer(bb_settings, threads, stop_event, alarm_on_event, bb_queue,  alarm_clock_on_event, alarm_clock_off_event)
 
     # b4sd_settings = settings["B4SD"]
-    # run_b4sd(b4sd_settings, threads, stop_event, b4sd_queue, bb_queue, alarm_on_event, alarm_off_event)
+    # run_b4sd(b4sd_settings, threads, stop_event, b4sd_queue, bb_queue, alarm_clock_on_event, alarm_clock_off_event)
 
     # bir_settings = settings["BIR"]
     # run_bir(bir_settings, threads, stop_event, queues_dict["rgb_queue"], events_dict["bir_rgb"], bir_rgb_mappings)
 
-    # lcd_settings = settings["GLCD"]
-    # run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
+    #lcd_settings = settings["GLCD"]
+    #run_lcd(lcd_settings, threads, stop_event, events_dict["gdht_glcd"], queues_dict["lcd_queue"])
     
     # gyro_settings = settings["GSG"]
     # run_gyro(gyro_settings, threads, stop_event)

@@ -4,6 +4,7 @@ from locks import print_lock
 import paho.mqtt.publish as publish
 import json
 from simulators.pir import run_pir_simulator
+from settings import IP_ADDRESS
 
 pir_batch = []
 publish_data_counter = 0
@@ -19,7 +20,7 @@ def publisher_task(event, pir_batch):
             publish_data_counter = 0
             pir_batch.clear()
         try:
-            publish.multiple(local_pir_batch, hostname="localhost", port=1883)
+            publish.multiple(local_pir_batch, hostname=IP_ADDRESS, port=1883)
             print(f'Published {publish_data_limit} pir values')
         except:
             print("greska")
@@ -30,7 +31,7 @@ publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, 
 publisher_thread.daemon = True
 publisher_thread.start()
 
-def motion_detected_callback(publish_event, settings,verbose=False):
+def motion_detected_callback(publish_event, settings,verbose=True):
     global publish_data_counter, publish_data_limit
 
     if verbose:
@@ -62,7 +63,7 @@ def motion_detected_callback(publish_event, settings,verbose=False):
         publish_event.set()
 
 
-def no_motion_detected_callback(publish_event, settings,verbose=False):
+def no_motion_detected_callback(publish_event, settings,verbose=True):
     global publish_data_counter, publish_data_limit
 
     t = time.localtime()

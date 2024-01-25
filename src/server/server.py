@@ -37,6 +37,7 @@ def send_latest_data_to_frontend(data):
     try:
         socketio.emit('update/' + data['runs_on'], json.dumps(data))
     except Exception as e:
+        print("31")
         print(str(e))
 
 def send_alarm_data_to_frontend(data):
@@ -44,6 +45,7 @@ def send_alarm_data_to_frontend(data):
     try:
         socketio.emit('alarm', json.dumps(data))
     except Exception as e:
+        print("39")
         print(str(e))
 
 token = "7HPyHiQ_zy7TDUrO7p-i1POQsIt1ydQn-PZhUjnYzdKpPxn3jyaWdaWrQxuyO-glMHyfO9rp_mhh1vqJ2kMavA=="
@@ -115,12 +117,42 @@ def save_to_db(data, verbose=True):
             send_latest_data_to_frontend(data)
     
     except Exception as e:
+        print("109")
         print(str(e))
         pass
 
 def get_current_time():
     t = time.localtime()
     return time.strftime('%d.%m.%Y. %H:%M:%S', t)
+
+def turn_ds_alarm_off(sensor_name):
+    with app.app_context():
+        print("UGASEN ALARM")
+        global last_press_ds2, is_ds1_alarm_on, is_ds2_alarm_on
+        if sensor_name == "Door Sensor 1":
+            is_ds1_alarm_on = False
+        else:
+            is_ds2_alarm_on = False
+        write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+        try:
+            point = (
+                    Point("alarm")
+                    .tag("caused_by", sensor_name)
+                    .tag("message", "Alarms turned off by closing door")
+                    .field("status", "OFF")
+                ) 
+            alarm_data = {
+                "caused_by": sensor_name,
+                "message": "Alarms turned off by closing door",
+                "status": "OFF"
+            }
+            send_alarm_data_to_frontend({"status": "OFF"})
+
+            write_api.write(bucket="events", org=org, record=point)
+            mqtt_client.publish("topic/alarm/buzzer/off", json.dumps(alarm_data))
+
+        except Exception as e:
+            print(str(e))
 
 def raise_alarm(data, message="", verbose=True):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -145,12 +177,27 @@ def raise_alarm(data, message="", verbose=True):
         mqtt_client.publish("topic/alarm/buzzer/on", json.dumps(alarm_data))
     
     except Exception as e:
+        print("139")
         print(str(e))
         pass
 
 import threading
 people_count = 0
 people_count_lock = threading.Lock()
+
+def write_people_count(count_no, verbose=True):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    try:
+        point = (
+                Point("people_count")
+                .field("count", count_no)
+            ) 
+        write_api.write(bucket="measurements", org=org, record=point)
+        
+    except Exception as e:
+        print("160")
+        print(str(e))
+        pass
 
 def check_door_entrance(runs_on):
     query = f'from(bucket: "measurements") |> range(start: -15s) |> filter(fn: (r) => r._measurement == "Distance" and r.runs_on == "{runs_on}")'
@@ -165,6 +212,7 @@ def check_door_entrance(runs_on):
         return
     
     sorted_records = sorted(records, key=lambda record: record[0], reverse=True)
+    print(sorted_records)
     sorted_records = sorted_records if len(sorted_records) < 3 else sorted_records[:3]
     entering_order = all(sorted_records[i][1] < sorted_records[i + 1][1] for i in range(len(sorted_records) - 1))
     exiting_order = all(sorted_records[i][1] > sorted_records[i + 1][1] for i in range(len(sorted_records) - 1))
@@ -173,9 +221,13 @@ def check_door_entrance(runs_on):
     with people_count_lock:
         if entering_order:
             people_count += 1
+            write_people_count(people_count)
             print(f"Someone entered the house. People count: {people_count}")
         elif exiting_order:
+            if people_count == 0:
+                return
             people_count -= 1
+            write_people_count(people_count)
             print(f"Someone left the house. People count: {people_count}")
 
 def wait_for_dms_event(indx: int):
@@ -218,6 +270,7 @@ def on_message_callback(client, userdata, msg):
         try:
             socketio.emit('clock-alarm', json.dumps({"action": data["action"]}))
         except Exception as e:
+            print("184")
             print(str(e))
     elif msg.topic == "topic/gyro/angles":
         check_gyro_alarms(json.loads(msg.payload.decode('utf-8')))
@@ -241,6 +294,7 @@ def on_message_callback(client, userdata, msg):
                     last_press_ds2 = 0
                     if dms_alarm_is_active:
                         start_countdown_event[1].set()
+        save_to_db(data)
     else:         
         data = json.loads(msg.payload.decode('utf-8'))
         if data["name"] == "Door Motion Sensor 1" or data["name"] == "Door Motion Sensor 2":
@@ -343,19 +397,33 @@ mqtt_client.loop_start()
 door_sensor_lock = threading.Lock()
 last_press_ds1 = 0
 last_press_ds2 = 0
+is_ds1_alarm_on = False
+is_ds2_alarm_on = False
 
 def door_sensor_update():
-    global door_sensor_lock, last_press_ds1, last_press_ds2
+    global door_sensor_lock, last_press_ds1, last_press_ds2, is_ds1_alarm_on, is_ds2_alarm_on
     while True:
         time.sleep(1)
         with door_sensor_lock:
+            if not last_press_ds1 and is_ds1_alarm_on:
+                turn_ds_alarm_off(data["name"])
+                print("neca")
             if last_press_ds1 and time.time() - last_press_ds1 > 5:
                 data = {"name": "Door Sensor 1"}
-                raise_alarm(data, message=f"Door 1 has been opened for more than 5 seconds")
-        if last_press_ds2 and time.time() - last_press_ds2 > 5:
-            data = {"name": "Door Sensor 2"}
-            raise_alarm(data, message=f"Door 2 has been opened for more than 5 seconds")
-
+                if not is_ds1_alarm_on:
+                    raise_alarm(data, message=f"Door 1 has been opened for more than 5 seconds")
+                is_ds1_alarm_on = True
+        with door_sensor_lock:
+            if not last_press_ds2 and is_ds2_alarm_on:
+                print("neca2")
+                turn_ds_alarm_off(data["name"])
+            if last_press_ds2 and time.time() - last_press_ds2 > 5:
+                data = {"name": "Door Sensor 2"}
+                print("251")
+                if not is_ds2_alarm_on:
+                    raise_alarm(data, message=f"Door 2 has been opened for more than 5 seconds")
+                is_ds2_alarm_on = True
+                
 
 @app.route('/clock-alarm', methods=['POST'])
 def post_clock_alarm():
@@ -374,8 +442,12 @@ def clock_alarm_off():
 
 @app.route('/alarm/off', methods=['PUT'])
 def alarm_off():
-    global dms_alarm_ringing, dms_alarm_is_active
+    global dms_alarm_ringing, dms_alarm_is_active, door_sensor_lock, last_press_ds1, last_press_ds2
 
+    with door_sensor_lock:
+        last_press_ds1 = 0
+        last_press_ds2 = 0
+    
     data = request.get_json() 
     print("alarm off")
     
@@ -406,6 +478,7 @@ def alarm_off():
         return jsonify({'message': f'SUCCESS'}), 200
     
     except Exception as e:
+        print("293")
         print(str(e))
         pass
     

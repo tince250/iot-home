@@ -70,8 +70,9 @@
         </div>
 
         <div class="rectangular-container wider bigger-rectangular-width">
-            <p class="timestamp">13:00 25.1.2024.</p>
-            <p class="value font-size-64">{{ "ENTERED" ? ds1.value == "pressed" : "CLOSED"}}</p>
+            <p class="timestamp">{{ ds1.datetime }} </p>
+            <p class="value font-size-64" *ngIf="ds1.value=='open'">"OPEN"</p>
+            <p class="value font-size-64" *ngIf="ds1.value=='closed'">"OPEN"</p>
             <p class="device-tag bigger-device-tag">DS1</p>
             <div class="bigger-icon-right"><i class="yellow fa-solid fa-door-open"></i></div>
             <div class="bigger-icon"><i class="yellow fa-solid fa-door-closed"></i></div>
@@ -110,9 +111,13 @@
             <!-- <div class="bigger-icon"><i class="white fa-solid fa-door-closed"></i></div> -->
 
         </div>
-        
-        
+    </div>
 
+    <!-- people count -->
+    <div class="dashboard-row">
+        <div class="iframe-cont">
+            <iframe class=" frame-wider" src="http://localhost:3000/d-solo/fbbb7394-4fa6-4bc7-9a7b-7bd062439d90/iot?orgId=1&from=1705852566267&to=1705874166267&panelId=5" width="450" height="200" frameborder="0"></iframe>
+        </div>
     </div>
 
 </div>
