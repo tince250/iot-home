@@ -10,9 +10,9 @@ def generate_values():
 
       
 
-def run_uds_simulator(delay, callback, stop_event):
+def run_uds_simulator(delay, callback, settings, publish_event, stop_event):
         for dist in generate_values():
             time.sleep(delay)  # Delay between readings (adjust as needed)
-            callback(dist)
+            callback(dist, publish_event, settings)
             if stop_event.is_set():
                   break

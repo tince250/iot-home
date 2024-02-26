@@ -1,0 +1,134 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+// The warn palette is optional (defaults to red).
+
+$purple: (
+    50: #ffeab9,
+    100: #ffdf97,
+    200: #ffda85,
+    300: #ffd574,
+    400: #ffd063,
+    500: #FFCB52,
+    600: #e5b649,
+    700: #cca241,
+    800: #b28e39,
+    900: #997931,
+    A100: #ffdf97,
+    A200: #ffda85,
+    A400: #FFCB52,
+    A700: #cca241,
+    contrast: (
+        50: #171A20,
+        100: #171A20,
+        200: #171A20,
+        300: #171A20,
+        400: #171A20,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: #171A20,
+        A200: #171A20,
+        A400: #171A20,
+        A700: white,
+    )
+);
+
+$light-purple: (
+    50: #82eacf,
+    100: #69e6c6,
+    200: #50e2bc,
+    300: #37deb3,
+    400: #1edaa9,
+    500: #06d6a0,
+    600: #05c090,
+    700: #04ab80,
+    800: #049570,
+    900: #049570,
+    A100: #69e6c6,
+    A200: #50e2bc,
+    A400: #1edaa9,
+    A700: #04ab80,
+    contrast: (
+        50: #171A20,
+        100: #171A20,
+        200: #171A20,
+        300: #171A20,
+        400: #171A20,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: #171A20,
+        A200: #171A20,
+        A400: #171A20,
+        A700: white,
+    )
+);
+
+$red: (
+    50: #fb97c5,
+    100: #fa84ba,
+    200: #fa71af,
+    300: #f84b9a,
+    400: #f83890,
+    500: #ef476f,
+    600: #ef476f,
+    700: #ef476f,
+    800: #ef476f,
+    900: #ef476f,
+    A100: #fa84ba,
+    A200: #fa71af,
+    A400: #ef476f,
+    A700: #ef476f,
+    contrast: (
+        50: #171A20,
+        100: #171A20,
+        200: #171A20,
+        300: #171A20,
+        400: #171A20,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: #171A20,
+        A200: #171A20,
+        A400: #171A20,
+        A700: white,
+    )
+);
+
+
+$cloud-drive-primary: mat.define-palette($purple);
+$cloud-drive-accent: mat.define-palette($light-purple);
+
+$cloud-drive-warn: mat.define-palette($red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$cloud-drive-theme: mat.define-light-theme((
+  color: (
+    primary: $cloud-drive-primary,
+    accent: $cloud-drive-accent,
+    warn: $cloud-drive-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($cloud-drive-theme);

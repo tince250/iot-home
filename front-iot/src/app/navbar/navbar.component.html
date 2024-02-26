@@ -1,0 +1,31 @@
+<div class="navbar-container">
+    <div [ngClass]="isAlarmOn ? 'nav-logo-alarm red-border' : 'nav-logo-alarm'">
+        <p class="nav-title" style="margin-bottom: -5px;" >IoT-Home Dashboard</p>
+        <div *ngIf="isAlarmOn" class="cont-icon shake-alarm" style="margin-left: 10px; margin-bottom: 13px;"><i class="red fa-solid fa-bell"></i></div>
+    </div>
+    <div class="nav-item-clock-on" (click)="turnAlarmOff()" style="background-color: #FFCB52 !important; float: left;"*ngIf="isAlarmOn">
+        <p>turn alarm off</p>
+    </div>
+    
+    <div class="nav-options">
+        <div class="nav-item-clock-on" (click)="turnClockAlarmOff()" *ngIf="isClockAlarmOn">
+            <p>turn clock alarm off</p>
+        </div>
+        <div class="nav-item-clock" (click)="openCreateClockAlarmDialog()">
+            <i [ngClass]="isClockAlarmOn ? 'fa-solid fa-stopwatch shake' : 'fa-solid fa-stopwatch'" matTooltip="Create clock alarm"></i>
+        </div>
+        <div class="nav-item" [routerLink]="['/pi1']" [ngClass]="url == '/pi1' ? 'nav-item-selected': ''">
+            <p>PI1</p>
+        </div>
+        <div class="nav-item" [routerLink]="['/pi2']" [ngClass]="url == '/pi2' ? 'nav-item-selected': ''">
+            <p>PI2</p>
+        </div>
+        <div class="nav-item" [routerLink]="['/pi3']" [ngClass]="url == '/pi3' ? 'nav-item-selected': ''">
+            <p>PI3</p>
+        </div>
+        <div class="nav-item" [routerLink]="['/alarms']" [ngClass]="url == '/alarms' ? 'nav-item-selected': ''">
+            <p>Alarms</p>
+        </div>
+    </div>
+    
+</div>
